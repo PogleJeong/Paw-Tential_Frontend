@@ -9,11 +9,12 @@ const Nav = () =>{
         <ul>
             <li><Link className="nav-link" to="/">로그인</Link></li>
             <br />
-            <li><Link className="nav-link" to="/">포텐플레이스</Link></li>
+            <li><Link className="nav-link" to="../router/place/Place">포텐플레이스</Link></li>
             <li><Link className="nav-link" to="/">마켓</Link></li>
             <li><Link className="nav-link" to="/">포텐스</Link></li>
+            <li><Link className="nav-link" to="/">포텐콘테스트</Link></li>
             <li><Link className="nav-link" to="/">그룹</Link></li>
-            <li><Link className="nav-link" to="/">마이피드</Link></li>
+            <li><Link className="nav-link" to="../router/myfeed/Myfeed">마이피드</Link></li>
             <li><Link className="nav-link" to="/">관리자페이지</Link></li>
         </ul>
     </div>
