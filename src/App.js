@@ -11,6 +11,11 @@ import Regi from './router/login/Regi.js';
 import Pet_info from './router/login/Pet_info.js';
 import Pet_info_detail from './router/login/Pet_info_detail.js';
 
+import Myfeed from '/router/myfeed/Myfeed';
+import User_update from '/router/myfeed/User_update';
+import Pet_update from '/router/myfeed/Pet_update';
+
+
 function App() {
   return (
     <div>
@@ -83,8 +88,8 @@ function App() {
 
         {/* 마이피드 */}
         <Route path="/router/myfeed" element={<Myfeed />} />
-        <Route path="/router/regi" element={<Regi />} />
-        <Route path="/router/regi" element={<Regi />} />
+        <Route path="/router/user_update" element={<User_update />} />
+        <Route path="/router/pet_update" element={<Pet_update />} />
         
 
 
