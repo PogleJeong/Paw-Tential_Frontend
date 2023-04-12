@@ -11,9 +11,13 @@ import Regi from './router/login/Regi.js';
 import Pet_info from './router/login/Pet_info.js';
 import Pet_info_detail from './router/login/Pet_info_detail.js';
 
+import Place from './router/place/Place.js';
+import Place_Detail from './router/place/Place_Detail.js';
+
 import Myfeed from '/router/myfeed/Myfeed';
 import User_update from '/router/myfeed/User_update';
 import Pet_update from '/router/myfeed/Pet_update';
+
 
 
 function App() {
@@ -70,8 +74,8 @@ function App() {
         <Route path="/router/regi" element={<Regi />} />
 
         {/* 플레이스 */}
-        <Route path="/router/regi" element={<Regi />} />
-        <Route path="/router/regi" element={<Regi />} />
+        <Route path="/router/place/Place" element={<Place />} />
+        <Route path="/router/place/Place-detail" element={<Place_Detail />} />
 
         {/* 그룹 */}
         <Route path="/router/regi" element={<Regi />} />
