@@ -14,9 +14,9 @@ import Pet_info_detail from './router/login/Pet_info_detail.js';
 import Place from './router/place/Place.js';
 import Place_Detail from './router/place/Place_Detail.js';
 
-import Myfeed from '/router/myfeed/Myfeed';
-import User_update from '/router/myfeed/User_update';
-import Pet_update from '/router/myfeed/Pet_update';
+import Myfeed from './router/myfeed/Myfeed';
+import User_update from './router/myfeed/User_update';
+import Pet_update from './router/myfeed/Pet_update';
 
 
 
