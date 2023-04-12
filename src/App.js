@@ -46,10 +46,10 @@ function App() {
         <Route path="/" element={<Home />} />
 
         {/* 로그인/회원가입 */}
-        <Route path="/router/login" element={<Login />} />
-        <Route path="/router/regi" element={<Regi />} />
-        <Route path="/router/pet_info" element={<Pet_info />} />
-        <Route path="/router/pet_info_detail" element={<Pet_info_detail />} />
+        <Route path="/login/login" element={<Login />} />
+        <Route path="/login/regi" element={<Regi />} />
+        <Route path="/login/pet_info" element={<Pet_info />} />
+        <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
 
         {/* 피드 */}
         <Route path="/router/feed" element={<Feed />} />
