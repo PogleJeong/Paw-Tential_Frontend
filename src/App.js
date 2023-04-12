@@ -35,20 +35,14 @@ function App() {
       </main>
       </div>
     </BrowserRouter>
-
-    
-
     {/* footer */}
     <footer>
         <div>
-
-
           <p>
             <small>Copyright &copy;Paw-Tential</small>
           </p>
         </div>
       </footer>
-
   </div>
   );
 
