@@ -74,8 +74,8 @@ function App() {
         <Route path="/router/regi" element={<Regi />} />
 
         {/* 플레이스 */}
-        <Route path="/router/place/Place" element={<Place />} />
-        <Route path="/router/place/Place-detail" element={<Place_Detail />} />
+        <Route path="/place/place" element={<Place />} />
+        <Route path="/place/place-detail" element={<Place_Detail />} />
 
         {/* 그룹 */}
         <Route path="/router/regi" element={<Regi />} />
@@ -91,9 +91,9 @@ function App() {
         <Route path="/router/regi" element={<Regi />} />
 
         {/* 마이피드 */}
-        <Route path="/router/myfeed" element={<Myfeed />} />
-        <Route path="/router/user_update" element={<User_update />} />
-        <Route path="/router/pet_update" element={<Pet_update />} />
+        <Route path="/myfeed/myfeed" element={<Myfeed />} />
+        <Route path="/myfeed/user_update" element={<User_update />} />
+        <Route path="/myfeed/pet_update" element={<Pet_update />} />
         
 
 
