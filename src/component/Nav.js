@@ -7,7 +7,7 @@ const Nav = () =>{
         <div className="Nav">
         <label><div>메뉴</div></label>
         <ul>
-            <li><Link className="nav-link" to="/router/login">로그인</Link></li>
+            <li><Link className="nav-link" to="/login/login">로그인</Link></li>
             <br />
             <li><Link className="nav-link" to="/place/place">포텐플레이스</Link></li>
             <li><Link className="nav-link" to="/">마켓</Link></li>
