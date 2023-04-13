@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
-import MarketHome from "../router/market/market-home";
+import MarketHome from "../router/market/Market_home";
 
 // 특정 스크롤 위치에 따라 market list 가 추가됨. 
 

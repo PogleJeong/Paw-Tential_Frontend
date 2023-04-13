@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './component/Home.js';
 import Nav from './component/Nav.js';
-import MarketHome from './router/market/market-home';
 
 
 import Login from './router/login/Login.js';
@@ -17,8 +16,10 @@ import Place_Detail from './router/place/Place_Detail.js';
 import Myfeed from './router/myfeed/Myfeed';
 import User_update from './router/myfeed/User_update';
 import Pet_update from './router/myfeed/Pet_update';
-
-
+import MarketHome from './router/market/Market_home';
+import MarketWrite from './router/market/Market_write';
+import MarketUpdate from './router/market/Market_update';
+import MarketDetail from './router/market/Market_detail';
 
 function App() {
   return (
@@ -61,10 +62,10 @@ function App() {
             <Route path="/router/regi" element={<Regi />} />
 
             {/* 마켓 */}
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/market" element={<MarketHome />} />
+            <Route path="/market/write" element={<MarketWrite />} />
+            <Route path="/market/update" element={<MarketUpdate />} />
+            <Route path="/market/detail" element={<MarketDetail />} />
 
             {/* 채팅 */}
             <Route path="/router/regi" element={<Regi />} />
