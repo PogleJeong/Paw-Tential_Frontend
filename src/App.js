@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-
 import './App.css';
 import Home from './component/Home.js';
 import Nav from './component/Nav.js';
+import MarketHome from './router/market/market-home';
 
 
 import Login from './router/login/Login.js';
@@ -23,15 +23,12 @@ import Pet_update from './router/myfeed/Pet_update';
 function App() {
   return (
     <div>
-    {/* 헤더 */}
-    <header>
-    <div>
-    <h1>PAW-TENTIAL</h1>
-    </div>
-    </header>
-
-
-    
+      {/* 헤더 */}
+      <header>
+        <div>
+          <h1>PAW-TENTIAL</h1>
+        </div>
+      </header>
     <BrowserRouter>
     <div>
     <nav>
@@ -105,14 +102,14 @@ function App() {
       </div>
     </BrowserRouter>
     {/* footer */}
-    <footer>
+      <footer>
         <div>
           <p>
             <small>Copyright &copy;Paw-Tential</small>
           </p>
         </div>
       </footer>
-  </div>
+    </div>
   );
 
 }
