@@ -18,6 +18,13 @@ import Myfeed from './router/myfeed/Myfeed';
 import User_update from './router/myfeed/User_update';
 import Pet_update from './router/myfeed/Pet_update';
 
+import Admin from './router/admin/Admin';
+import User from './router/admin/Users';
+import Reports from './router/admin/Reports';
+import Service from './router/admin/Services';
+import Data from './router/admin/Data';
+
+
 
 
 function App() {
@@ -52,7 +59,7 @@ function App() {
         <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
 
         {/* 피드 */}
-        <Route path="/router/feed" element={<Feed />} />
+        <Route path="/router/regi" element={<Regi />} />
         <Route path="/router/regi" element={<Regi />} />
         <Route path="/router/regi" element={<Regi />} />
         <Route path="/router/regi" element={<Regi />} />
@@ -87,8 +94,12 @@ function App() {
         <Route path="/router/regi" element={<Regi />} />
 
         {/* 관리자 */}
-        <Route path="/router/regi" element={<Regi />} />
-        <Route path="/router/regi" element={<Regi />} />
+        <Route path="/admin/admin" element={<Admin />} />
+        <Route path="/admin/users" element={<User />} />
+        <Route path="/admin/reports" element={<Reports />} />
+        <Route path="/admin/services" element={<Service />} />
+        <Route path="/admin/data" element={<Data />} />
+
 
         {/* 마이피드 */}
         <Route path="/myfeed/myfeed" element={<Myfeed />} />
