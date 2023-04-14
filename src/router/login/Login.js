@@ -1,10 +1,14 @@
 import React from 'react';
+import { LinkToPage, LoginForm, SimpleSNSLogin } from '../../component/Login';
 
 function Login(){
 
   return (
     <div>
-      로그인 페이지
+      <h1>Paw-Tential LOGIN</h1>
+      <LoginForm />
+      <SimpleSNSLogin />
+      <LinkToPage />
     </div>
   )
 

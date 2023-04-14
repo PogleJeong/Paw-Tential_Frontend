@@ -10,7 +10,7 @@ const Nav = () =>{
             <li><Link className="nav-link" to="/login/login">로그인</Link></li>
             <br />
             <li><Link className="nav-link" to="/place/place">포텐플레이스</Link></li>
-            <li><Link className="nav-link" to="/">마켓</Link></li>
+            <li><Link className="nav-link" to="/market">마켓</Link></li>
             <li><Link className="nav-link" to="/">포텐스</Link></li>
             <li><Link className="nav-link" to="/">포텐콘테스트</Link></li>
             <li><Link className="nav-link" to="/">그룹</Link></li>
