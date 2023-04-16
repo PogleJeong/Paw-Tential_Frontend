@@ -1,50 +1,54 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
-
-const login = async() => {
-    const id = document.getElementById("id").value;
-    const password = document.getElementById("password").value;
-    const remember = document.getElementById("remember").checked;
-    if ( !id ) {
-        alert("아이디를 입력해주세요");
-        return;
-    } 
-    if ( !password ) {
-        alert("비밀번호를 입력해주세요");
-        return;
-    }
-    remember ? localStorage.setItem("user_id", id) : localStorage.removeItem("user_id");
-
-    await axios.get("http://localhost:3000/login", {params: {
-        "id" : id,
-        "password" : password,
-    }}).then((response) => {
-
-    });
-};
-
-/*
-const changeRemember = (event) => {
-    const isChecked = event.target.checked;
-    if (!isChecked) localStorage.removeItem("user_id");
-}
-*/
+import session from "react-session-api";
 
 export const LoginForm = () => {
+    const idRef = useRef();
+    const pwdRef = useRef();
+    const rememberRef = useRef();
     useEffect(()=>{
         const rememberId = localStorage.getItem("user_id");
         if (rememberId) {
-            document.getElementById("id").value = rememberId;
-            document.getElementById("remember").checked = true;
+            idRef.current.value = rememberId;
+            rememberRef.current.checked = true;
         }
     },[]);
 
+    const login = async() => {
+        const id = idRef.current.value;
+        const password = pwdRef.current.value;
+        const remember = rememberRef.current.checked;
+        if ( !id ) {
+            alert("아이디를 입력해주세요");
+            return;
+        } 
+        if ( !password ) {
+            alert("비밀번호를 입력해주세요");
+            return;
+        }
+        remember ? localStorage.setItem("user_id", id) : localStorage.removeItem("user_id");
+    
+        await axios.post("http://localhost:3000/login", null,{params: {
+            "id" : id,
+            "password" : password
+        }}).then((response) => {
+            response = response.data;
+            if (!response) {
+                alert("회원정보가 없습니다.")
+                return;
+            }
+            alert(response);
+            const user = response;
+            session.set("user",user);
+            console.log("api : ",session.get("user"));
+        });
+    };
     return(
         <div>
-            <input id="id" type="text" placeholder='아이디를 입력해주세요' required /><br/>
-            <input id="password" type="text" placeholder='아이디를 입력해주세요' required /><br/>
-            <label><input id="remember" type="checkbox" />id 저장</label>
+            <input ref={idRef}id="id" type="text" placeholder="아이디를 입력해주세요" required /><br/>
+            <input ref={pwdRef} id="password" type="text" placeholder= "비밀번호를 입력해주세요" required /><br/>
+            <label><input ref={rememberRef} id="remember" type="checkbox" />id 저장</label>
             <button id="login" onClick={login}>Login!</button><br/>
         </div>
     );
@@ -78,3 +82,10 @@ export const LinkToPage = () => {
         </div>
     );
 }
+
+/*
+const changeRemember = (event) => {
+    const isChecked = event.target.checked;
+    if (!isChecked) localStorage.removeItem("user_id");
+}
+*/
