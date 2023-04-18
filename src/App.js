@@ -7,6 +7,7 @@ import Nav from './component/Nav.js';
 
 import Login from './router/login/Login.js';
 import Regi from './router/login/Regi.js';
+import KakaoAuth from './router/login/KakaoAuth.js';
 import Pet_info from './router/login/Pet_info.js';
 import Pet_info_detail from './router/login/Pet_info_detail.js';
 
@@ -46,6 +47,7 @@ function App() {
             {/* 로그인/회원가입 */}
             <Route path="/login/login" element={<Login />} />
             <Route path="/login/regi" element={<Regi />} />
+            <Route path="/login/kakaoAuth" element={<KakaoAuth />} />
             <Route path="/login/pet_info" element={<Pet_info />} />
             <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
 
