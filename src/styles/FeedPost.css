@@ -1,0 +1,52 @@
+.feed-post {
+    margin: 20px;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.feed-icon{
+    width: 25px;
+    height: auto;
+    padding: 10px;
+
+}
+
+.feed-post img {
+    width: 100%;
+    height: auto;
+}
+
+.post-info {
+    padding: 10px;
+}
+
+.post-info h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.post-info p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.post-actions {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.post-actions button {
+    border: none;
+    background-color: transparent;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.post-actions button:hover {
+    text-decoration: underline;
+}
