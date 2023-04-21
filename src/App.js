@@ -52,7 +52,7 @@ function App() {
         <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
 
         {/* 피드 */}
-        <Route path="/router/feed" element={<Feed />} />
+        {/* <Route path="/router/feed" element={<Feed />} /> */}
         <Route path="/router/regi" element={<Regi />} />
         <Route path="/router/regi" element={<Regi />} />
         <Route path="/router/regi" element={<Regi />} />
@@ -75,7 +75,8 @@ function App() {
 
         {/* 플레이스 */}
         <Route path="/place/place" element={<Place />} />
-        <Route path="/place/place-detail" element={<Place_Detail />} />
+        <Route path="/place/place/:search?/:category?" element={<Place />} />
+        <Route path="/place/place-detail/:search?/:category?" element={<Place_Detail />} />
 
         {/* 그룹 */}
         <Route path="/router/regi" element={<Regi />} />
@@ -95,10 +96,6 @@ function App() {
         <Route path="/myfeed/user_update" element={<User_update />} />
         <Route path="/myfeed/pet_update" element={<Pet_update />} />
         
-
-
-
-
       </Routes>
 
       </main>
