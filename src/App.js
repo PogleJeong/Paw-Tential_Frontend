@@ -21,6 +21,7 @@ import MarketHome from './router/market/Market_home';
 import MarketWrite from './router/market/Market_write';
 import MarketUpdate from './router/market/Market_update';
 import MarketDetail from './router/market/Market_detail';
+import FindAccount from './router/login/findAccount';
 
 function App() {
   return (
@@ -46,10 +47,12 @@ function App() {
 
             {/* 로그인/회원가입 */}
             <Route path="/login/login" element={<Login />} />
+            <Route path="/login/findAccount" element={<FindAccount />} />
             <Route path="/login/regi" element={<Regi />} />
             <Route path="/login/kakaoAuth" element={<KakaoAuth />} />
             <Route path="/login/pet_info" element={<Pet_info />} />
             <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
+      
 
             {/* 피드 */}
             <Route path="/router/regi" element={<Regi />} />
