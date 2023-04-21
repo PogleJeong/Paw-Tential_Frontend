@@ -1,0 +1,42 @@
+.map_wrap, .map_wrap * {margin:0;padding:0;}
+.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
+.map_wrap {width:100%;}
+#menu_wrap {float: left; width:500px; height: 800px; overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;border-radius: 10px;}
+#menu_wrap::-webkit-scrollbar {display: none;}
+.bg_white {background:#fff;}
+#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+#menu_wrap .option{text-align: center;}
+#menu_wrap .option p {margin:10px 0;}  
+#menu_wrap .option button {margin-left:5px;}
+#placesList li {list-style: none;}
+#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
+#placesList .item span {display: block;margin-top:8px;}
+#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+#placesList .item .info{padding:20px 0 20px 60px;}
+#placesList .info .gray {color:#8a8a8a;}
+#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+#placesList .info .tel {color:#009900;}
+#placesList .item .markerbg {float:left;position:absolute;width:37px; height:40px;margin:50px 0 0 10px;background:url(https://i.imgur.com/sq1Lvy5.png) no-repeat;}
+.marker_food {background:url(https://i.imgur.com/8BSGiMu.png) no-repeat !important;}
+.marker_cafe {background:url(https://i.imgur.com/lmt1poz.png) no-repeat !important;}
+.marker_play {background:url(https://i.imgur.com/bSXM4Te.png) no-repeat !important;}
+.marker_shop {background:url(https://i.imgur.com/AKEWxnR.png) no-repeat !important;}
+.marker_pension {background:url(https://i.imgur.com/SCvEyM0.png) no-repeat !important;}
+.marker_hospital {background:url(https://i.imgur.com/A1PIwCw.png) no-repeat !important;}
+#pagination {margin:10px auto;text-align: center;}
+#pagination a {display:inline-block;margin-right:10px;}
+#pagination .on {font-weight: bold; cursor: default;color:#777;}
+
+.place_detail {
+    width: 460px;
+    height: 800px;
+    float: left;
+}
+#submit_research {
+    position: relative;
+    top: 60px;
+    left: 600px;
+    z-index: 2;
+    font-size: 12pt;
+    padding: 7px;
+}
