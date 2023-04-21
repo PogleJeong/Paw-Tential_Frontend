@@ -1,60 +1,77 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import session from "react-session-api";
+import "https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js";
 
-const login = async() => {
-    const id = document.getElementById("id").value;
-    const password = document.getElementById("password").value;
-    const remember = document.getElementById("remember").checked;
-    if ( !id ) {
-        alert("아이디를 입력해주세요");
-        return;
-    } 
-    if ( !password ) {
-        alert("비밀번호를 입력해주세요");
-        return;
-    }
-    remember ? localStorage.setItem("user_id", id) : localStorage.removeItem("user_id");
-
-    await axios.get("http://localhost:3000/login", {params: {
-        "id" : id,
-        "password" : password,
-    }}).then((response) => {
-
-    });
-};
-
-/*
-const changeRemember = (event) => {
-    const isChecked = event.target.checked;
-    if (!isChecked) localStorage.removeItem("user_id");
-}
-*/
+import kakao from "../image/kakao_login_icon.png";
+import naver from "../image/btnG_naver.png";
 
 export const LoginForm = () => {
+    const idRef = useRef();
+    const pwdRef = useRef();
+    const rememberRef = useRef();
+    const navigator = useNavigate();
     useEffect(()=>{
         const rememberId = localStorage.getItem("user_id");
         if (rememberId) {
-            document.getElementById("id").value = rememberId;
-            document.getElementById("remember").checked = true;
+            idRef.current.value = rememberId;
+            rememberRef.current.checked = true;
         }
     },[]);
 
+    // 로그인 기능
+    const login = async() => {
+        const id = idRef.current.value;
+        const password = pwdRef.current.value;
+        const remember = rememberRef.current.checked;
+        if ( !id ) {
+            alert("아이디를 입력해주세요");
+            return;
+        } 
+        if ( !password ) {
+            alert("비밀번호를 입력해주세요");
+            return;
+        }
+        remember ? localStorage.setItem("user_id", id) : localStorage.removeItem("user_id");
+    
+        await axios.post("http://localhost:3000/login", null,{params: {
+            "id" : id,
+            "password" : password
+        }}).then((response) => {
+            response = response.data;
+            if (!response) {
+                alert("회원정보가 없습니다.")
+                return;
+            }
+            const user = response;
+            session.set("user",user);
+            console.log("api : ",session.get("user"));
+            navigator("/");
+        });
+    };
     return(
         <div>
-            <input id="id" type="text" placeholder='아이디를 입력해주세요' required /><br/>
-            <input id="password" type="text" placeholder='아이디를 입력해주세요' required /><br/>
-            <label><input id="remember" type="checkbox" />id 저장</label>
+            <input ref={idRef}id="id" type="text" placeholder="아이디를 입력해주세요" required /><br/>
+            <input ref={pwdRef} id="password" type="password" placeholder= "비밀번호를 입력해주세요" required /><br/>
+            <label><input ref={rememberRef} id="remember" type="checkbox" />id 저장</label>
             <button id="login" onClick={login}>Login!</button><br/>
         </div>
     );
 };
 
+// 카카오 로그인
+// AUTH_URL 으로 이동하면 KAKAO 로그인창이 뜨고, 로그인창에서 ID, PASSWORD 를 입력하고 로그인하면 AUTH(인가)를 얻는다.
+// 로그인후 REDIRECT_URI 로 이동됨.
 const simpleLoginKakao = () => {
+    const REST_API_KEY = "83e8bb6f53c1f3fcc8901a9678d3eaa3";
+    const REDIRECT_URI = "http://localhost:3000/kakaoAuth";
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
+    window.location.href = KAKAO_AUTH_URL;
 };
 
-const simpleLoginNaver = () => {
+const useSimpleLoginNaver = () => {
 
 };
 
@@ -62,8 +79,8 @@ export const SimpleSNSLogin = () => {
     return(
         <div>
             <p>SNS 간편로그인</p>
-            <button onClick={null} id="kakao">카카오</button>
-            <button onClick={null} id="naver">네이버</button>
+            <input type="button" onClick={simpleLoginKakao} style={{border: "none", width: "200px", height: "50px", background: `url(${kakao}) no-repeat`, backgroundSize: "cover", padding: "10px", borderRadius: "15px"}}/>
+            <input type="button" style={{border: "none", width: "200px", height: "50px", background: `url(${naver}) no-repeat`, backgroundSize: "cover", padding: "10px", borderRadius: "15px"}}/>
         </div>
     );
 };
@@ -78,3 +95,10 @@ export const LinkToPage = () => {
         </div>
     );
 }
+
+/*
+const changeRemember = (event) => {
+    const isChecked = event.target.checked;
+    if (!isChecked) localStorage.removeItem("user_id");
+}
+*/

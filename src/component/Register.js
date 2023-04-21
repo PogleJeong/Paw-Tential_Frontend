@@ -1,13 +1,16 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
+import PetRegi from './PetRegi';
 
+let userInfo;
 
 const RegisterForm = () => {
     const [ idSuccess ,setIdSuccess ] = useState(false);
     const [ passwordSuccess, setPasswordSuccess ] = useState(false);
     const [ nickSuccess, setNickSuccess ] = useState(false);
+    const [ radioValue, setRadioValue ] = useState("");
+    const [ next, setNext ] = useState(false);
 
-    const [ radioValue, setRadioValue ] = useState("man");
     const idRef = useRef();
     const passwordRef = useRef();
     const confirmRef = useRef();
@@ -20,14 +23,14 @@ const RegisterForm = () => {
     const pwdCheckMsgRef = useRef();
     const nickCheckMsgRef = useRef();
     
-    const register = async() => {
+    const nextPage = async() => {
         const id = idRef.current.value;
         const password = passwordRef.current.value;
         const email = emailRef.current.value;
         const nick = nickRef.current.value;
         const number = numberRef.current.value;
-        const birth = birth.current.value;
-
+        const birth = birthRef.current.value;
+        const gender = radioValue;
         if (!id) {
             alert("아이디가 입력되지 않았습니다.");
             idRef.current.focus();
@@ -58,6 +61,11 @@ const RegisterForm = () => {
             birthRef.focus();
             return;
         }
+        if (gender === "") {
+            alert("성별이 입력되지 않았습니다.");
+            return;
+        }
+
         if (!idSuccess) {
             alert("아이디 중복을 확인해주세요.");
             idCheckMsgRef.current.focus();
@@ -73,15 +81,9 @@ const RegisterForm = () => {
             idCheckMsgRef.current.focus();
             return;
         }
-        await axios.post("http://localhost:3000/register", null, {params: {
-            id, password, email, nick, number, birth, gender: radioValue}})
-        .then((response) => {
-            response = JSON.stringify(response.data);
-            if (response) {
-                alert("회원등록이 완료되었습니다.");
-            }
-            //window.location.href="http://localhost:3000/home";
-        });
+        // 유저정보 입력 후 다음 버튼을 통해 반려동물 정보입력가능
+        userInfo = {id, password, email, nick, number, birth, gender};
+        setNext(true);
     }
 
     const checkId = async() => {
@@ -89,7 +91,7 @@ const RegisterForm = () => {
         
         await axios.post("http://localhost:3000/idCheck", null, {params: {id}})
         .then((response) => {
-            response = JSON.stringify(response.data);
+            response = response.data;
             if (response === "exist") {
                 idCheckMsgRef.current.innerText = "이미존재하는 아이디입니다.";
                 setIdSuccess(false);
@@ -102,14 +104,16 @@ const RegisterForm = () => {
 
     const checkNickname =  async() => {
         const nickname = nickRef.current.value;
+
         await axios.post("http://localhost:3000/nicknameCheck", null, {params: {"nickname": nickname}})
         .then((response) => {
-            response = JSON.stringify(response.data);
+            response = response.data;
+            console.log(response);
             if (response === "exist") {
-                nickCheckMsgRef.current.innerText = "이미존재하는 아이디입니다.";
+                nickCheckMsgRef.current.innerText = "이미존재하는 닉네임입니다.";
                 setNickSuccess(false);
             } else {
-                nickCheckMsgRef.current.innerText = "사용가능한 아이디입니다.";
+                nickCheckMsgRef.current.innerText = "사용가능한 닉네임입니다.";
                 setNickSuccess(true);
             }
         });
@@ -130,38 +134,42 @@ const RegisterForm = () => {
             pwdCheckMsgRef.current.innerText = "";
         }
     }
-
+    /*
     const chagneRadio = (event) =>{
-        console.log(event.target.value);
         if (event.target.checked) {
             setRadioValue(event.target.value);
         }
     }
+    */
+
+    console.log(radioValue);
     return(
         <div>
-            <label>아이디<input id="id" type="text" required/></label>
-            <button ref={idRef} onClick={checkId}>중복확인</button><br/>
+            <label>아이디<input ref={idRef} id="id" type="text" required/></label>
+            <button onClick={checkId}>중복확인</button><br/>
             <small ref={idCheckMsgRef}></small><br/>
             <label>비밀번호<input ref={passwordRef} id="password" type="password" required/></label><br/>
             <label>비밀번호 확인<input ref={confirmRef} id="confirm" type="password" onChange={changePassword} required/></label><br/>
             <small ref={pwdCheckMsgRef}></small><br/>
             <label>이메일<input ref={emailRef} id="email" type="email" required /></label><br/>
-            <label>닉네임<input ref={nickRef} id="nickname" type="text" required /></label> <br/>
-            <button onClick={checkNickname}>중복확인</button>
-            <small ref={nickCheckMsgRef}></small>
-           
-            <label>전화번호<input ref={numberRef} id="number" type="text" required /></label><br/>
-            <label>생년월일<input ref={birthRef} id="birth" type="text" required /></label><br/>
+            <label>닉네임<input ref={nickRef} id="nickname" type="text" required /></label>
+            <button onClick={checkNickname}>중복확인</button><br/>
+            <small ref={nickCheckMsgRef}></small><br/>
+            <div>
+                <label>전화번호<input ref={numberRef} id="number" type="text" required /></label><br/>
+                <label>생년월일<input ref={birthRef} id="birth" type="text" required /></label><br/>
+            </div>
             <label>
                 성별
                 <div>
-                    <input type="radio" name="gender" value="0" onChange={chagneRadio} />
+                    <input type="radio" name="gender" onChange={()=>setRadioValue(0)} />
                     <label>남자</label>
-                    <input type="radio" name="gender" value="1" onChange={chagneRadio} />
+                    <input type="radio" name="gender" onChange={()=>setRadioValue(1)} />
                     <label>여자</label>
                 </div>
             </label>
-            <button onClick={register}>회원등록</button>
+            <button onClick={nextPage}>회원등록</button>
+            { next ? <PetRegi userInfo={userInfo}/> : null }
         </div>
     );
 };
