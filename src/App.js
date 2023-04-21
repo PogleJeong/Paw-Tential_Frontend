@@ -1,36 +1,47 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import './App.css';
-import Home from './component/Home.js';
-import Nav from './component/Nav.js';
+import "./App.css";
+import Nav from "./component/Nav.js";
+import "./styles/FeedPost.css";
 
+import Login from "./router/login/Login.js";
+import Regi from "./router/login/Regi.js";
+import KakaoAuth from "./router/login/KakaoAuth.js";
+import Pet_info from "./router/login/Pet_info.js";
+import Pet_info_detail from "./router/login/Pet_info_detail.js";
 
-import Login from './router/login/Login.js';
-import Regi from './router/login/Regi.js';
-import Pet_info from './router/login/Pet_info.js';
-import Pet_info_detail from './router/login/Pet_info_detail.js';
-
-import Place from './router/place/Place.js';
+import FeedPost from "./router/Feed/FeedPost";
 import Place_Detail from './router/place/Place_Detail.js';
 
-import Myfeed from './router/myfeed/Myfeed';
-import User_update from './router/myfeed/User_update';
-import Pet_update from './router/myfeed/Pet_update';
-import MarketHome from './router/market/Market_home';
-import MarketWrite from './router/market/Market_write';
-import MarketUpdate from './router/market/Market_update';
-import MarketDetail from './router/market/Market_detail';
+import Place from "./router/place/Place.js";
+import Place_Detail from "./router/place/Place_Detail.js";
+
+import Myfeed from "./router/myfeed/Myfeed";
+import User_update from "./router/myfeed/User_update";
+import Pet_update from "./router/myfeed/Pet_update";
+import MarketHome from "./router/market/Market_home";
+import MarketWrite from "./router/market/Market_write";
+import MarketUpdate from "./router/market/Market_update";
+import MarketDetail from "./router/market/Market_detail";
+import FindAccount from './router/login/findAccount';
+
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
 
+import NewsFeed from './router/group/NewsFeed';
+import CreateGroup from './router/group/CreateGroup';
+import GroupList from './router/group/GroupList';
+import MyGroup from './router/group/MyGroup';
+import ModifyGroup from './router/group/ModifyGroup';
+import GroupFeed from './router/group/GroupFeed';
 
 
 function App() {
-  return (
-    <div>
+    return (
+        <div>
       {/* 헤더 */}
       <header>
         <div>
@@ -52,9 +63,12 @@ function App() {
 
             {/* 로그인/회원가입 */}
             <Route path="/login/login" element={<Login />} />
+            <Route path="/login/findAccount" element={<FindAccount />} />
             <Route path="/login/regi" element={<Regi />} />
+            <Route path="/login/kakaoAuth" element={<KakaoAuth />} />
             <Route path="/login/pet_info" element={<Pet_info />} />
             <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
+      
 
             {/* 피드 */}
             <Route path="/router/regi" element={<Regi />} />
@@ -82,12 +96,14 @@ function App() {
             <Route path="/place/place-detail" element={<Place_Detail />} />
 
             {/* 그룹 */}
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
+            {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
+            <Route path="/group/NewsFeed" element={<NewsFeed />} />
+            <Route path="/group/CreateGroup" element={<CreateGroup />} />
+            <Route path="/group/GroupList" element={<GroupList />} />
+            <Route path="/group/GroupList/:search" element={<GroupList />} />
+            <Route path="/group/MyGroup" element={<MyGroup />} />
+            <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
+            <Route path="/group/GroupFeed/:grpNo" exact element={<GroupFeed />} />
             <Route path="/router/regi" element={<Regi />} />
 
             {/* 관리자 */}
@@ -122,7 +138,6 @@ function App() {
       </footer>
     </div>
   );
-
 }
 
 export default App;
