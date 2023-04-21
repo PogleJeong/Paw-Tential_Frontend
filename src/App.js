@@ -106,7 +106,8 @@ function App() {
 
             {/* 플레이스 */}
             <Route path="/place/place" element={<Place />} />
-            <Route path="/place/place-detail" element={<Place_Detail />} />
+            <Route path="/place/place/:search?/:category?" element={<Place />} />
+            <Route path="/place/place-detail/:search?/:category?" element={<Place_Detail />} />
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
