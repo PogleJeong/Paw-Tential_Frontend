@@ -13,9 +13,6 @@ K
 src/App.css,a\a\aa7165aefcf8ee3d73539e99ab007daf1aa18d8d
 =
 src/index.css,c\5\c5d38a62d1faae90a2acaa34b79a7ef365c917e4
-:
-
-src/App.js,1\e\1e43fa63aecd2127be034b3fb9d4caa172275714
 F
 src/component/Login.js,c\9\c9abcea14db349298f87393f3bf0ac6291958e49
 H
