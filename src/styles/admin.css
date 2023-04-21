@@ -40,3 +40,19 @@
 .nav-link:hover {
   color: #6c757d;
 }
+
+.admin-page {
+  display: flex;
+  flex-direction: row;
+}
+
+.admin-page-sidebar {
+  width: 20%;
+  min-width: 200px;
+}
+
+.admin-page-main {
+  width: 80%;
+  padding-left: 20px;
+}
+

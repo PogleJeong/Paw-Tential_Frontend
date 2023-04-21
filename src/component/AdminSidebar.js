@@ -29,7 +29,7 @@ const AdminSidebar = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/admin/services" className="nav-link">
+            <Link to="/admin/QnA" className="nav-link">
               문의 관리
             </Link>
           </li>
