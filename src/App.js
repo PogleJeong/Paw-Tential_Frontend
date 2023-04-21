@@ -25,13 +25,19 @@ import MarketDetail from "./router/market/Market_detail";
 import FindAccount from './router/login/findAccount';
 import Home from "./router/home/Home";
 
-import Myfeed from './router/myfeed/Myfeed';
-import User_update from './router/myfeed/User_update';
-import Pet_update from './router/myfeed/Pet_update';
-import MarketHome from './router/market/Market_home';
-import MarketWrite from './router/market/Market_write';
-import MarketUpdate from './router/market/Market_update';
-import MarketDetail from './router/market/Market_detail';
+import NewsFeed from './router/group/NewsFeed';
+import CreateGroup from './router/group/CreateGroup';
+import GroupList from './router/group/GroupList';
+import MyGroup from './router/group/MyGroup';
+import ModifyGroup from './router/group/ModifyGroup';
+import GroupFeed from './router/group/GroupFeed';
+
+import Admin from './router/admin/Admin';
+import QnA from './router/admin/QnA';
+import Reports from './router/admin/Reports';
+import Users from './router/admin/Users';
+import Data from './router/admin/Data';
+
 
 function App() {
     return (
