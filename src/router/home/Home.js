@@ -30,21 +30,8 @@ const Home = () => {
     }
   };
 
-//images
-  const fetchImages = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/images");
-      setImages(response.data);
-    } catch (error) {
-      console.error(error);
-      alert("Failed to fetch images");
-    }
-  };
-
   useEffect(() => {
     fetchFeeds();
-    fetchComments();
-    fetchImages();
   }, []);
 
   return (
@@ -55,16 +42,6 @@ const Home = () => {
           feeds.length > 0 &&
           feeds.map((feed, index) => (
             <HomeFeed key={index} feedData={feed} />
-          ))}
-        {comments &&
-          comments.length > 0 &&
-          comments.map((comment, index) => (
-            <HomeFeed key={index} comment={comment} />
-          ))}
-        {images &&
-          images.length > 0 &&
-          images.map((image, index) => (
-            <HomeFeed key={index} image={image} />
           ))}
       </div>
     </div>
