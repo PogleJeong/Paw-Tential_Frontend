@@ -11,6 +11,7 @@ import Pet_info from "./router/login/Pet_info.js";
 import Pet_info_detail from "./router/login/Pet_info_detail.js";
 
 import FeedPost from "./router/Feed/FeedPost";
+import Place_Detail from './router/place/Place_Detail.js';
 
 import Place from "./router/place/Place.js";
 import Place_Detail from "./router/place/Place_Detail.js";
@@ -23,7 +24,12 @@ import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
 import FindAccount from './router/login/findAccount';
-import Home from "./router/home/Home";
+
+import Admin from './router/admin/Admin';
+import QnA from './router/admin/QnA';
+import Reports from './router/admin/Reports';
+import Users from './router/admin/Users';
+import Data from './router/admin/Data';
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -31,7 +37,14 @@ import GroupList from './router/group/GroupList';
 import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
-
+=========
+import Myfeed from './router/myfeed/Myfeed';
+import User_update from './router/myfeed/User_update';
+import Pet_update from './router/myfeed/Pet_update';
+import MarketHome from './router/market/Market_home';
+import MarketWrite from './router/market/Market_write';
+import MarketUpdate from './router/market/Market_update';
+import MarketDetail from './router/market/Market_detail';
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';

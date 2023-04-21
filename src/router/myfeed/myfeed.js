@@ -1,4 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { FaHeart, FaRegComment, FaShareSquare } from 'react-icons/fa';
+
+<<<<<<<<< Temporary merge branch 1
+const Myfeed = () => {
+    return (
+        <div>
+            <h1>Myfeed</h1>
+        </div>
+    );
+};
+
+export default Myfeed;
+=========
+
 
 function MyFeed() {
   const [posts, setPosts] = useState([]);
@@ -18,3 +32,4 @@ function MyFeed() {
 }
 
 export default MyFeed;
+>>>>>>>>> Temporary merge branch 2
