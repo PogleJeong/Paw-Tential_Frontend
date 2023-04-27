@@ -4,6 +4,8 @@ import "./App.css";
 import Nav from "./component/Nav.js";
 import "./styles/FeedPost.css";
 
+import Home from "./router/home/Home";
+
 import Login from "./router/login/Login.js";
 import Regi from "./router/login/Regi.js";
 import KakaoAuth from "./router/login/KakaoAuth.js";
@@ -11,7 +13,6 @@ import Pet_info from "./router/login/Pet_info.js";
 import Pet_info_detail from "./router/login/Pet_info_detail.js";
 
 import FeedPost from "./router/Feed/FeedPost";
-import Place_Detail from './router/place/Place_Detail.js';
 
 import Place from "./router/place/Place.js";
 import Place_Detail from "./router/place/Place_Detail.js";
@@ -85,8 +86,8 @@ function App() {
             {/* 마켓 */}
             <Route path="/market" element={<MarketHome />} />
             <Route path="/market/write" element={<MarketWrite />} />
-            <Route path="/market/update" element={<MarketUpdate />} />
-            <Route path="/market/detail" element={<MarketDetail />} />
+            <Route path="/market/update/:posting" element={<MarketUpdate />} />
+            <Route path="/market/detail/:posting" element={<MarketDetail />} />
 
             {/* 채팅 */}
             <Route path="/router/regi" element={<Regi />} />
@@ -116,8 +117,6 @@ function App() {
             <Route path="admin/reports" element={<Reports />} />
             <Route path="admin/reports/:choice/:search" element={<Reports />} />
             <Route path="admin/data" element={<Data />} />
-
-            
 
             {/* 마이피드 */}
             <Route path="/myfeed/myfeed" element={<Myfeed />} />

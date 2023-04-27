@@ -39,15 +39,22 @@ export const LoginForm = () => {
             "id" : id,
             "password" : password
         }}).then((response) => {
-            response = response.data;
-            if (!response) {
-                alert("회원정보가 없습니다.")
-                return;
+            if (response.status === 200) {
+                const state = response.data.state;
+                if (state === "LOGIN_NOT_FOUND_ID") {
+                    alert("입력하신 ID 가 존재하지 않습니다.");
+                    return;
+                }
+                if (state === "LOGIN_NOT_MATCH_PASSWORD") {
+                    alert("비밀번호가 일치하지 않습니다.");
+                    return
+                }
+                const loginUser = response.data.userId;
+                console.log(loginUser);
+                session.set("user", loginUser);
+                console.log("api : ",session.get("user"));
+                navigator("/");
             }
-            const user = response;
-            session.set("user",user);
-            console.log("api : ",session.get("user"));
-            navigator("/");
         });
     };
     return(

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import session from "react-session-api";
 
 import MarketList from "../../component/Market";
-import { useNavigate } from "react-router-dom";
 
 
 const saleStateContent = ["전체","나눔","판매"];
@@ -29,12 +30,12 @@ const useInput = (initialValue, validation, valid) => {
     const [ value, setValue ] = useState(initialValue); 
   
     const onChange = (event) => {
-        const value = event.target.value;
+        const value = event.currentTarget.value;
         let willUpdate = true;
         if (typeof validation === "function"){
             willUpdate = validation(value, valid);
             if (willUpdate) {
-                setValue(event.target.value);
+                setValue(value);
             }
         }
     }
@@ -47,7 +48,15 @@ const MarketHome = () => {
     const selectedOption = useSelect("전체");
     const searchWord = useInput("", maxLen, 10);
     const navigator = useNavigate();
-
+    
+    useEffect(()=> {
+        const loginUser = session.get("user") || false;
+        if (!loginUser) {
+            alert("로그인 먼저 해주세요!");
+            navigator("/");
+            return;
+        }
+    })
     const searchMarket = async() => {
         await axios.post("http://localhost:3000/marketSearch", null, {params: {
             tab: activedTab,
@@ -61,7 +70,6 @@ const MarketHome = () => {
     }
     const writeMarketContent = () => {
         navigator("/market/write");
-        
     }
     return(
         <div>

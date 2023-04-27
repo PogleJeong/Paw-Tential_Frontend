@@ -4,14 +4,32 @@ import PetRegi from './PetRegi';
 
 let userInfo;
 
+const useInput = (initialValue, validator, valid) => {
+    const [ value, setValue ] = useState(initialValue);
+
+    const onChange = (event) => {
+        const value = event.currentTarget.value;
+        let willUpdate = true;
+        if (typeof validator === "function") {
+            willUpdate = validator(value, valid);
+            if (willUpdate) {
+                setValue(value);
+            }
+        }
+    }
+    return { value, onChange };
+}
+
+const maxLen = (value, valid) => value.length <= valid;
+
 const RegisterForm = () => {
     const [ idSuccess ,setIdSuccess ] = useState(false);
     const [ passwordSuccess, setPasswordSuccess ] = useState(false);
     const [ nickSuccess, setNickSuccess ] = useState(false);
-    const [ radioValue, setRadioValue ] = useState("");
     const [ next, setNext ] = useState(false);
-
-    const idRef = useRef();
+    
+    const [ radioValue, setRadioValue ] = useState("");
+    const id = useInput("", maxLen, 15);
     const passwordRef = useRef();
     const confirmRef = useRef();
     const emailRef = useRef();
@@ -24,22 +42,23 @@ const RegisterForm = () => {
     const nickCheckMsgRef = useRef();
     
     const nextPage = async() => {
-        const id = idRef.current.value;
         const password = passwordRef.current.value;
         const email = emailRef.current.value;
         const nick = nickRef.current.value;
         const number = numberRef.current.value;
         const birth = birthRef.current.value;
         const gender = radioValue;
-        if (!id) {
+        if (!id.value) {
             alert("아이디가 입력되지 않았습니다.");
-            idRef.current.focus();
             return;
         }
-        if (!password) {
+        if (!password.value) {
             alert("비밀번호가 입력되지 않았습니다.");
             passwordRef.focus();
             return;
+        }
+        if (password.value.length < 8) {
+            alert("비밀번호는 최소 8자 이상이어야합니다.");
         }
         if (!email) {
             alert("이메일이 입력되지 않았습니다.");
@@ -87,17 +106,21 @@ const RegisterForm = () => {
     }
 
     const checkId = async() => {
-        const id = idRef.current.value;
         
-        await axios.post("http://localhost:3000/idCheck", null, {params: {id}})
+        await axios.post("http://localhost:3000/idCheck", null, {params: {id: id.value}})
         .then((response) => {
-            response = response.data;
-            if (response === "exist") {
-                idCheckMsgRef.current.innerText = "이미존재하는 아이디입니다.";
-                setIdSuccess(false);
-            } else {
-                idCheckMsgRef.current.innerText = "사용가능한 아이디입니다.";
-                setIdSuccess(true);
+            console.log("ID Check >> ", response.data);
+            if (response.status === 200){
+                if (response.data === "exist") {
+                    idCheckMsgRef.current.innerText = "이미존재하는 아이디입니다.";
+                    setIdSuccess(false);
+                    return;
+                };
+                if (response.data === "notExist") {
+                    idCheckMsgRef.current.innerText = "사용가능한 아이디입니다.";
+                    setIdSuccess(true);
+                    return;
+                };
             }
         });
     };
@@ -105,21 +128,25 @@ const RegisterForm = () => {
     const checkNickname =  async() => {
         const nickname = nickRef.current.value;
 
-        await axios.post("http://localhost:3000/nicknameCheck", null, {params: {"nickname": nickname}})
+        await axios.post("http://localhost:3000/nicknameCheck", null, {params: {nickname}})
         .then((response) => {
-            response = response.data;
-            console.log(response);
-            if (response === "exist") {
-                nickCheckMsgRef.current.innerText = "이미존재하는 닉네임입니다.";
-                setNickSuccess(false);
-            } else {
-                nickCheckMsgRef.current.innerText = "사용가능한 닉네임입니다.";
-                setNickSuccess(true);
+            console.log("Nick Name Check >> ", response.data);
+            if (response.status === 200) {
+                if (response.data === "exist") {
+                    nickCheckMsgRef.current.innerText = "이미존재하는 닉네임입니다.";
+                    setNickSuccess(false);
+                    return;
+                };
+                if (response.data === "notExist") {
+                    nickCheckMsgRef.current.innerText = "사용가능한 닉네임입니다.";
+                    setNickSuccess(true);
+                    return;
+                };
             }
         });
     };
 
-    const changePassword = (event) => {
+    const changePassword = () => {
         const password = passwordRef.current.value;
         const confirm = confirmRef.current.value;
         if (confirm) {
@@ -134,18 +161,10 @@ const RegisterForm = () => {
             pwdCheckMsgRef.current.innerText = "";
         }
     }
-    /*
-    const chagneRadio = (event) =>{
-        if (event.target.checked) {
-            setRadioValue(event.target.value);
-        }
-    }
-    */
 
-    console.log(radioValue);
     return(
         <div>
-            <label>아이디<input ref={idRef} id="id" type="text" required/></label>
+            <label>아이디<input {...id} placeholder='최대 15자 까지 가능합니다.' required/></label>
             <button onClick={checkId}>중복확인</button><br/>
             <small ref={idCheckMsgRef}></small><br/>
             <label>비밀번호<input ref={passwordRef} id="password" type="password" required/></label><br/>
@@ -162,9 +181,9 @@ const RegisterForm = () => {
             <label>
                 성별
                 <div>
-                    <input type="radio" name="gender" onChange={()=>setRadioValue(0)} />
+                    <input type="radio" name="gender" value="남자" onChange={()=>setRadioValue(0)} />
                     <label>남자</label>
-                    <input type="radio" name="gender" onChange={()=>setRadioValue(1)} />
+                    <input type="radio" name="gender" value="여자" onChange={()=>setRadioValue(1)} />
                     <label>여자</label>
                 </div>
             </label>
