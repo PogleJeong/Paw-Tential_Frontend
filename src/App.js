@@ -30,6 +30,7 @@ import GroupList from './router/group/GroupList';
 import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
+import ThemedExample from "./component/chatbot";
 
 function App() {
     return (
@@ -49,9 +50,14 @@ function App() {
           </div>
         </nav>
         <main>
+          {/*쳇봇*/}
+          <ThemedExample/>
+
           <Routes>
             {/* 메인 홈 */}
             <Route path="/" element={<Home />} />
+
+
 
             {/* 로그인/회원가입 */}
             <Route path="/login/login" element={<Login />} />
