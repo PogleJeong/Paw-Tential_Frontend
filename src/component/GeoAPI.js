@@ -7,6 +7,27 @@ const { kakao } = window;
 let initLat;
 let initLng;
 
+var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+};
+
+function success (pos) {
+    const crd = pos.coords;
+    initLat = crd.latitude;
+    initLng = crd.longitude;
+    
+    console.log('Your current position is:');
+    console.log(`Latitude : ${crd.latitude}`);
+    console.log(`Longitude: ${crd.longitude}`);
+    console.log(`More or less ${crd.accuracy} meters.`);
+}
+
+function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
 // React.memo 를 통해 rerendering 방지
 
 const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
@@ -16,11 +37,9 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
 
     useEffect(()=>{
         // 위치정보 먼저 불러온 후 실행
-        (async()=>await getUserLocation())();
-        console.log("위도: " + initLat + " | 경도 : " + initLng);
-        
         // 추기 : 초기위치 정보 저장 : 지도정보를 사용하지 않은경우
-
+        navigator.geolocation.getCurrentPosition(success, error, options);
+        console.log("위도: " + initLat + " | 경도 : " + initLng);
         const mapOption = {
             center: new kakao.maps.LatLng(initLat, initLng), // 지도의 좌표
             level: 3, // 지도의 확대레벨
@@ -72,20 +91,6 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
                 }   
             });
         });
-        
-        // 현재 위치 좌표 가져오기
-        const success = ({coords, timestamp}) => {
-            initLat = coords.latitude;
-            initLng = coords.longitude;
-        }
-        
-        const getUserLocation = () => {
-            if (!navigator.geolocation) {
-                throw "위치정보가 지원되지 않습니다.";
-            }
-            navigator.geolocation.watchPosition(success);
-        }
-        
 
         // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
         kakao.maps.event.addListener(map, 'idle', function() {
@@ -106,7 +111,7 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
         function displayCenterInfo(result, status) {
             if (status === kakao.maps.services.Status.OK) {
                 var infoDiv = document.getElementById('centerAddr');
-
+                
                 for(var i = 0; i < result.length; i++) {
                     // 행정동의 region_type 값은 'H' 이므로
                     if (result[i].region_type === 'H') {
@@ -122,11 +127,11 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
     
     return(
         <div>
+            <span ref={addressRef}></span>
             <div ref={mapContentRef} style={{width: "500px", height: "500px"}}></div>
             <div>
                 <span id="centerAddr"></span>
             </div>
-            <span ref={addressRef}></span>
         </div>
     )
 }

@@ -52,13 +52,14 @@ const RegisterForm = () => {
             alert("아이디가 입력되지 않았습니다.");
             return;
         }
-        if (!password.value) {
+        if (!password) {
             alert("비밀번호가 입력되지 않았습니다.");
             passwordRef.focus();
             return;
         }
-        if (password.value.length < 8) {
+        if (password.length < 8) {
             alert("비밀번호는 최소 8자 이상이어야합니다.");
+            return;
         }
         if (!email) {
             alert("이메일이 입력되지 않았습니다.");
@@ -101,7 +102,7 @@ const RegisterForm = () => {
             return;
         }
         // 유저정보 입력 후 다음 버튼을 통해 반려동물 정보입력가능
-        userInfo = {id, password, email, nick, number, birth, gender};
+        userInfo = {id: id.value, password, email, nick, number, birth, gender};
         setNext(true);
     }
 

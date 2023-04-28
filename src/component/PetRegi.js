@@ -53,7 +53,6 @@ const PetInfo = ({userId}) => {
     const imgRef = useRef();
     const navigator = useNavigate();
     
-    console.log(petCategory);
     const imgLoad = () => {
         const file = imgRef.current.files[0];
         const reader = new FileReader();
@@ -148,6 +147,7 @@ const PetRegi = ({userInfo}) => {
             if (userHavePet === "0"){
                 alert("회원가입에 성공하였습니다.")
                 navigator("/");
+                return;
             }
         });
     }

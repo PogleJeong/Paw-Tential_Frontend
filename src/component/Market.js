@@ -89,12 +89,13 @@ const MarketInfo = ({marketInfo, imgInfo}) => {
         });
     }
     return(
-        <div>
-            <Link to={`/market/detail/${marketInfo.posting}`} state={marketInfo}>
-                <img src={`data:image/jpeg;base64,${imgInfo}`} style={{width: "300px", height: "300px"}} />
+        <div style={{margin : "10px", border: "5px solid black", borderRadius: "15px"}}>
+            <Link to={`/market/detail/${marketInfo.posting}`} state={{marketInfo, imgInfo}}>
+                <img src={`data:image/jpeg;base64,${imgInfo}`} style={{width: "300px", height: "300px", borderRadius: "15px"}} />
             </Link>
             <div>
-                <h3>{marketInfo.title}</h3>
+                <h4>{marketInfo.title}</h4>
+                <small>{marketInfo.state}/{marketInfo.category}</small>
                 {likeHistroy ? 
                 <img src={activeHeartIcon} onClick={clickLike} alt="" style={{width: "30px", height: "30px"}}/>
                 :
@@ -109,9 +110,7 @@ const MarketInfo = ({marketInfo, imgInfo}) => {
 }
 
 // 특정 스크롤 위치에 따라 market list 가 추가됨. 
-const MarketList = ({tabs, select, search}) => {
-    const [ marketInfoList, setMarketInfoList ] = useState([]);
-
+const MarketList = ({marketInfoList, setMarketInfoList}) => {
     useEffect(()=>{
         callMarketInfo();
     },[]);
@@ -142,9 +141,8 @@ const MarketList = ({tabs, select, search}) => {
         }
     }
     return(
-    
-        <div onScroll={overScroll}>
-            <small>검색 : {tabs}/{select}/{search}</small>
+        <div onScroll={overScroll} style={{display: "flex", width: "1500px", flexWrap: "wrap"}}>
+            
             {marketInfoList.length !== 0 ? 
             (marketInfoList.map((marketInfo, index)=>(
                <MarketInfo key={index} marketInfo={marketInfo[0]} imgInfo={marketInfo[1]} /> 

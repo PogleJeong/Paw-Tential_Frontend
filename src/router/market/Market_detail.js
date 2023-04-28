@@ -4,12 +4,15 @@ import session from "react-session-api";
 import axios from "axios";
 
 import KakaoMapRead from "../../component/GeoAPI2";
+import MarketReport from "../../component/MarketReport";
 
 const MarketDetail = () => {
     const location = useLocation();
-    const navigator = useNavigate();
-    const { title, content, wdate, id, category, state, conditions, productName, productNumber, geoLat, geoLng, posting } = location.state;
+    const { title, content, wdate, id, category, state, conditions, productName, productNumber, geoLat, geoLng, posting } = location.state.marketInfo;
+    const imgInfo  = location.state.imgInfo;
+    const [ activeReportModal, setActiveReportModal ] = useState(false);
     const [ updateActive, setUpdateActive ] = useState(false);
+    const navigator = useNavigate();
 
     useEffect(()=>{
         // 자신이 작성한 글일경우, 수정하기 및 삭제하기 기능 활성화
@@ -44,6 +47,9 @@ const MarketDetail = () => {
         })
     }
 
+    const clickReportBtn = () => {
+        setActiveReportModal(true);
+    }
     return(
         <div>  
             <div>
@@ -55,6 +61,7 @@ const MarketDetail = () => {
                 <p>제품: {productName} {productNumber}개</p>
                 <p>제품상태: {conditions}</p>
             </div>
+            <img src={`data:image/jpeg;base64,${imgInfo}`} alt="대표이미지" />
             <div dangerouslySetInnerHTML={{__html: `${content}`}}></div>
             <KakaoMapRead geoLat={geoLat} geoLng={geoLng}/>
             {updateActive ?
@@ -64,6 +71,12 @@ const MarketDetail = () => {
             }
             {updateActive ?
             <button onClick={marketDelete}>삭제하기</button>
+            :
+            null
+            }
+            <button onClick={clickReportBtn}>신고</button>
+            {activeReportModal ?
+            <MarketReport posting={posting} setActiveReportModal={setActiveReportModal}/>
             :
             null
             }
