@@ -15,7 +15,7 @@ const Nav = () =>{
             {loginState ? 
             null
             : 
-            <li><Link className="nav-link" to="/login/login">로그인</Link></li> 
+            <li><Link className="nav-link" to="/login">로그인</Link></li> 
             }
             <br />
             <li><Link className="nav-link" to="/place/place">포텐플레이스</Link></li>

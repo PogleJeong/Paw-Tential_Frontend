@@ -96,7 +96,7 @@ export const LinkToPage = () => {
     return (
         <div>
             <ul>
-                <li><Link to="/login/regi">Register</Link></li>
+                <li><Link to="/register">Register</Link></li>
                 <li><Link to="/login/findAccount">Find ID / Find PASSWORD</Link></li>
             </ul>
         </div>

@@ -6,11 +6,12 @@ import "./styles/FeedPost.css";
 
 import Home from "./router/home/Home";
 
-import Login from "./router/login/Login.js";
-import Regi from "./router/login/Regi.js";
-import KakaoAuth from "./router/login/KakaoAuth.js";
-import Pet_info from "./router/login/Pet_info.js";
-import Pet_info_detail from "./router/login/Pet_info_detail.js";
+import Login from "./router/login/Login";
+import KakaoAuth from "./router/login/KakaoAuth";
+
+import RegisterPage1 from "./router/register/RegisterPage1";
+import RegisterPage2 from "./router/register/RegisterPage2";
+import RegisterPage3 from "./router/register/RegisterPage3";
 
 import FeedPost from "./router/Feed/FeedPost";
 
@@ -63,25 +64,25 @@ function App() {
             <Route path="/" element={<Home />} />
 
             {/* 로그인/회원가입 */}
-            <Route path="/login/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/login/findAccount" element={<FindAccount />} />
-            <Route path="/login/regi" element={<Regi />} />
+            <Route path="/register" element={<RegisterPage1 />} />
+            <Route path="/register/petHave" element={<RegisterPage2 />} />
+            <Route path="register/petInfo" element={<RegisterPage3 />} />
             <Route path="/login/kakaoAuth" element={<KakaoAuth />} />
-            <Route path="/login/pet_info" element={<Pet_info />} />
-            <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
       
 
             {/* 피드 */}
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
+            <Route path="/router/regi" element={null} />
+            <Route path="/router/regi" element={null} />
 
             {/* 콘테스트 */}
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
+            <Route path="/router/regi" element={null} />
 
             {/* 포텐스 */}
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
 
             {/* 마켓 */}
             <Route path="/market" element={<MarketHome />} />
@@ -90,7 +91,7 @@ function App() {
             <Route path="/market/detail/:posting" element={<MarketDetail />} />
 
             {/* 채팅 */}
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
 
             {/* 플레이스 */}
             <Route path="/place/place" element={<Place />} />
@@ -106,7 +107,7 @@ function App() {
             <Route path="/group/MyGroup" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
             <Route path="/group/GroupFeed/:grpNo" exact element={<GroupFeed />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
 
             {/* 관리자 */}
             <Route path="admin/admin" element={<Admin />} />
