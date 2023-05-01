@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import "./App.css";
 import Nav from "./component/Nav.js";
-import "./styles/FeedPost.css";
 
 import Home from "./router/home/Home";
 
@@ -16,9 +15,9 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_Detail from "./router/place/Place_Detail.js";
+import Place_detail from "./router/place/Place_detail.js";
 
-import Myfeed from "./router/myfeed/Myfeed";
+import Myfeed from "./router/myfeed/myfeed";
 import User_update from "./router/myfeed/User_update";
 import Pet_update from "./router/myfeed/Pet_update";
 import MarketHome from "./router/market/Market_home";
@@ -39,6 +38,14 @@ import GroupList from './router/group/GroupList';
 import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
+
+import Pawtens from "./router/pawtens/Pawtens";
+import Pawtens_detail from "./router/pawtens/Pawtens_detail";
+
+import Contest from "./router/contest/Contest";
+import Contest_detail from "./router/contest/Contest_detail";
+
+import Home from './router/home/Home';
 
 
 function App() {
@@ -78,11 +85,12 @@ function App() {
             <Route path="/router/regi" element={null} />
 
             {/* 콘테스트 */}
-            <Route path="/router/regi" element={null} />
-            <Route path="/router/regi" element={null} />
+            <Route path="/contest" element={<Contest />} />
+            <Route path="/contest/detail" element={<Contest_detail />} />
 
             {/* 포텐스 */}
-            <Route path="/router/regi" element={null} />
+            <Route path="/pawtens" element={<Pawtens />} />
+            <Route path="/pawtens/detail" element={<Pawtens_detail />} />
 
             {/* 마켓 */}
             <Route path="/market" element={<MarketHome />} />
@@ -94,9 +102,9 @@ function App() {
             <Route path="/router/regi" element={null} />
 
             {/* 플레이스 */}
-            <Route path="/place/place" element={<Place />} />
-            <Route path="/place/place/:search?/:category?" element={<Place />} />
-            <Route path="/place/place-detail/:search?/:category?" element={<Place_Detail />} />
+            <Route path="/place" element={<Place />} />
+            <Route path="/place/:search?/:category?" element={<Place />} />
+            <Route path="/place/detail/:search?/:category?" element={<Place_detail />} />
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
@@ -128,7 +136,7 @@ function App() {
         </main>
         </div>
       </BrowserRouter>
-   
+    
       {/* footer */}
       <footer>
         <div>

@@ -18,10 +18,10 @@ const Nav = () =>{
             <li><Link className="nav-link" to="/login">로그인</Link></li> 
             }
             <br />
-            <li><Link className="nav-link" to="/place/place">포텐플레이스</Link></li>
+            <li><Link className="nav-link" to="/place">포텐플레이스</Link></li>
             <li><Link className="nav-link" to="/market">마켓</Link></li>
-            <li><Link className="nav-link" to="/">포텐스</Link></li>
-            <li><Link className="nav-link" to="/">포텐콘테스트</Link></li>
+            <li><Link className="nav-link" to="/pawtens">포텐스</Link></li>
+            <li><Link className="nav-link" to="/contest">포텐콘테스트</Link></li>
             <li><Link className="nav-link" to="/group/newsfeed">그룹</Link></li>
             <li><Link className="nav-link" to="/myfeed/myfeed">마이피드</Link></li>
             <br/><br/>

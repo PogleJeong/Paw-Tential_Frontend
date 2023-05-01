@@ -88,7 +88,7 @@ const Place = () => {
                         submit_category = first_category;
                         searchPlaces("", first_category);
 
-                        navigate("/place/place/_/" + first_category);
+                        navigate("/place/_/" + first_category);
                     }
 
                     // 상세보기 페이지에서 다시 목록으로 돌아올 때 지도 영역과 좌표 설정
@@ -114,7 +114,7 @@ const Place = () => {
                         setSearch(params.search);
                         searchPlaces(params.search, "");
 
-                        navigate("/place/place/" + params.search + "/_");
+                        navigate("/place/" + params.search + "/_");
                     }
                     // 카테고리
                     else if(params.category !== "_" && params.category !== undefined){
@@ -135,7 +135,7 @@ const Place = () => {
                         };
 
                         searchPlaces("", params.category);
-                        navigate("/place/place/_/" + params.category);
+                        navigate("/place/_/" + params.category);
                     }
                 },
                 error => { console.log(error.code, error.message); },
@@ -177,7 +177,7 @@ const Place = () => {
             let keyword = document.getElementById('keyword').value;
             searchPlaces(keyword, "");
 
-            navigate("/place/place/" + keyword + "/_");
+            navigate("/place/" + keyword + "/_");
         });
         // 키워드로 장소를 검색(엔터키)
         const searchFormEnter = document.getElementById("keyword");
@@ -195,7 +195,7 @@ const Place = () => {
                 let keyword = document.getElementById('keyword').value;
                 searchPlaces(keyword, "");
 
-                navigate("/place/place/" + keyword + "/_");
+                navigate("/place/" + keyword + "/_");
             }
         });
 
@@ -221,7 +221,7 @@ const Place = () => {
 
                 searchPlaces("", e.target.value);
 
-                navigate("/place/place/_/" + e.target.value);
+                navigate("/place/_/" + e.target.value);
             }
         });
 
@@ -361,7 +361,7 @@ const Place = () => {
                         }
 
                         // 장소명, 상세페이지 url, 장소 지번 주소, 카테고리, 카테고리 코드, 전화번호, 검색된 지도의 영역과 좌표
-                        navigate(`/place/place-detail/${keyword}/${category}`, {state:{"title":title, "url":url, "address":address, "category": category_name, "categorycode": category_group_code, "phone": phone, "latlng": send_latlng, "bounds": send_bounds}});
+                        navigate(`/place/detail/${keyword}/${category}`, {state:{"title":title, "url":url, "address":address, "category": category_name, "categorycode": category_group_code, "phone": phone, "latlng": send_latlng, "bounds": send_bounds}});
                     };
 
                 })(marker, places[i].place_name, places[i].place_url, places[i].address_name, places[i].category_name, places[i].category_group_code, places[i].phone, places[i].x, places[i].y);
