@@ -5,42 +5,38 @@ import "../../styles/socialv.css";
 
 export default function GroupList() {
     
-    
+    const navigate = useNavigate();
+
+    // 임시 사용자 ID
     const userId = 'test';
+
+    // 검색어 state 변수
     const [search, setSearch] = useState('');
-    
-    // 검색 결과를 담을 state 변수
-    const [result, setResult] = useState([]);
-    
-    useEffect(()=>{
-        getGroupList();
-    },[])
-    
-    // 그룹 검색 결과를 가져오는 함수
-    const getGroupList = async () => {
-        axios.get("http://localhost:3000/group/searchGroup", { params:{"groupName":search, "memberId":userId}})
-        .then(function(res) {
-            if(res.data.groupList.length === 0) {
-                alert(`${search}(으)로 검색한 결과가 존재하지 않습니다.`);
-            } else {
-                setResult(res.data.groupList);
-                console.log(res.data.groupList);
-            }
+
+    const [groupList, setGroupList] = useState([]);
+
+    // 그룹 리스트 호출
+    const getGroupList = async (userId, search) => {
+        axios.get("http://localhost:3000/group/getGroupList", {params:{"memberId":userId, "groupName":search}})
+        .then(function(res){
+            setGroupList(res.data.groupList);
         })
-        .catch(function(err) {
+        .catch(function(err){
             alert(err);
         })
     }
-    
-    const navigate = useNavigate();
-    
+
+    useEffect(()=>{
+        getGroupList(userId, '');
+    },[])
+
     const searchBtn = () => {
         if(search.trim() !== "") {
             navigate('/group/GroupList/' + search);
         } else {
             navigate('/group/GroupList');
         }
-        getGroupList(search);
+        getGroupList(userId, search);
     }
 
     // 그룹 가입 요청 버튼
@@ -72,9 +68,6 @@ export default function GroupList() {
         <h1>그룹 검색</h1>
         <input type="text" value={search} name="search" placeholder="Search here..." onChange={(e)=>{setSearch(e.target.value)}}/>
         <button type="button" onClick={searchBtn}>검색</button>
-
-        {result !== null && result.length !== 0
-        ?
         <table>
             <thead>
                 <tr>
@@ -88,10 +81,10 @@ export default function GroupList() {
             </thead>
             <tbody>
                 {
-                    result.map(function(group, i){
+                    groupList.map(function(group, i) {
                         return (
                             <tr key={i}>
-                                <td><Link to={`/group/GroupFeed/${group.grpNo}`}>{group.grpName}</Link></td>
+                                <td><Link to={`/group/GroupFeed/${group.grpNo}/${group.grpName}`}>{group.grpName}</Link>{group.grpIsOfficial === 1 && <p>*️⃣</p>}</td>
                                 <td><img alt="profile-img" className="rounded-circle img-fluid avatar-120" src={`http://localhost:3000/${group.grpImage}`}/></td>
                                 <td>{group.grpPost}</td>
                                 <td>{group.grpMember}</td>
@@ -100,14 +93,11 @@ export default function GroupList() {
                                 {group.grpStatus === 0 && <td><button type="button" onClick={()=>{groupJoinRequest(group.grpNo, group.grpName)}}>Join</button></td>} 
                                 {group.grpStatus === 2 && <td><button type="button" onClick={()=>{groupJoinCancel(group.grpNo)}}>가입 대기중</button></td>} 
                             </tr>
-                        )
-                })}
+                        ) // end of return
+                    }) // end of map
+                }
             </tbody>
         </table>
-        :
-        <p>
-        </p>
-        }
         </>
     )
     
