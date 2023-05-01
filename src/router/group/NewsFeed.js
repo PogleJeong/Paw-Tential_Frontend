@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 export default function NewsFeed() {
     
     // 테스트 아이디 임시 저장
-    const userId = 'test';
+    const userId = 'example';
 
     // 가입 그룹 존재 여부
     const [groupJoined, setGroupJoined] = useState(false);

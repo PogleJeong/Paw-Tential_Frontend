@@ -74,7 +74,7 @@ const CreateFeedModal = ({show, onHide}) => {
     formData.append("grpFeedContent",content);
     formData.append("grpFeedSetting",setting);
     // 임시
-    formData.append("grpFeedId", "test2");
+    formData.append("grpFeedId", "example");
 
     axios.post("http://localhost:3000/group/createFeed", formData)
     .then(function(res){

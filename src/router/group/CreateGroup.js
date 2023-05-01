@@ -21,7 +21,7 @@ export default function CreateGroup() {
 
     useEffect(()=>{
         // setGrpLeader(json.id);
-        setGrpLeader('test2');
+        setGrpLeader('example');
     },[]);
 
     const submitBtn = (e) => {

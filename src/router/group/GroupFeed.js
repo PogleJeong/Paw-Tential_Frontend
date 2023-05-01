@@ -14,7 +14,7 @@ export default function GroupFeed(){
     
     let params = useParams();
     
-    const userId = 'test2';
+    const userId = 'example';
     
     const [groupFeed, setGroupFeed] = useState([]);
     const [groupLeader, setGroupLeader] = useState('');

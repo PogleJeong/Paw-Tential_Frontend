@@ -4,6 +4,9 @@ import "./App.css";
 import Nav from "./component/Nav.js";
 import "./styles/FeedPost.css";
 
+import Home from "./router/home/Home.js";
+
+
 import Login from "./router/login/Login.js";
 import Regi from "./router/login/Regi.js";
 import KakaoAuth from "./router/login/KakaoAuth.js";
@@ -14,7 +17,6 @@ import FeedPost from "./router/Feed/FeedPost";
 import Place_Detail from './router/place/Place_Detail.js';
 
 import Place from "./router/place/Place.js";
-import Place_Detail from "./router/place/Place_Detail.js";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";
@@ -30,6 +32,9 @@ import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
+import PetChart from './router/admin/PetChart';
+import UserChart from './router/admin/UserChart';
+
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -37,19 +42,8 @@ import GroupList from './router/group/GroupList';
 import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
-=========
-import Myfeed from './router/myfeed/Myfeed';
-import User_update from './router/myfeed/User_update';
-import Pet_update from './router/myfeed/Pet_update';
-import MarketHome from './router/market/Market_home';
-import MarketWrite from './router/market/Market_write';
-import MarketUpdate from './router/market/Market_update';
-import MarketDetail from './router/market/Market_detail';
-import Admin from './router/admin/Admin';
-import QnA from './router/admin/QnA';
-import Reports from './router/admin/Reports';
-import Users from './router/admin/Users';
-import Data from './router/admin/Data';
+
+
 
 
 function App() {
@@ -72,7 +66,7 @@ function App() {
         <main>
           <Routes>
             {/* 메인 홈 */}
-            <Route path="/" element={<Home />} />
+            <Route path="/home/home" element={<Home />} />
 
             {/* 로그인/회원가입 */}
             <Route path="/login/login" element={<Login />} />
@@ -129,6 +123,10 @@ function App() {
             <Route path="admin/reports" element={<Reports />} />
             <Route path="admin/reports/:choice/:search" element={<Reports />} />
             <Route path="admin/data" element={<Data />} />
+            <Route path="admin/petChart" element={<PetChart />} />
+            <Route path="admin/userChart" element={<UserChart />} />
+
+
 
             
 

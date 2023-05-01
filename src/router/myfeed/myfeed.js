@@ -1,35 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { FaHeart, FaRegComment, FaShareSquare } from 'react-icons/fa';
+import axios from "axios";
+import Session from 'react-session-api';
 
-<<<<<<<<< Temporary merge branch 1
-const Myfeed = () => {
-    return (
-        <div>
-            <h1>Myfeed</h1>
-        </div>
-    );
-};
+const MyFeed = () => {
 
-export default Myfeed;
-=========
+  const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [feed, setFeed] = useState([]);
 
 
-function MyFeed() {
-  const [posts, setPosts] = useState([]);
+  const userData = async () => {
+    try {
+      const id = Session.get("user");
+      const res = await axios.get("http://localhost:3000/userInfo", {
+        params: { id },
+      });
+      setUserInfo(res.data);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchFeed = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/mainFeed");
+      setFeed(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    fetch('/api/posts')
-      .then(res => res.json())
-      .then(data => setPosts(data));
+    userData();
+    fetchFeed();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      <h1>My Feed</h1>
-      {/* posts 상태값을 사용하여 게시물 리스트를 렌더링하는 코드를 작성하세요 */}
+      {userInfo && (
+        <h1>{userInfo.id}님의 MYFEED</h1>
+      )}
+      {feed.map((post) => (
+        <div key={post.id}>
+          <img src={post.image} alt={post.caption} />
+          <p>{post.caption}</p>
+        </div>
+      ))}
     </div>
   );
-}
+};
 
 export default MyFeed;
->>>>>>>>> Temporary merge branch 2
