@@ -24,6 +24,22 @@ export default function CreateGroup() {
         setGrpLeader('example');
     },[]);
 
+    // 그룹명 중복 확인
+    const checkExistingGroup = async () => {
+        axios.get("http://localhost:3000/group/checkExistingGroup", {params:{"grpName":grpName}})
+        .then(function(res) {
+            if(res.data === "NO") {
+                alert("이미 존재하는 그룹명입니다.");
+                setGrpName('');
+            } else {
+                alert("사용할 수 있는 그룹명입니다.");
+            }
+        })
+        .catch(function(err){
+            alert(err);
+        })
+    }
+
     const submitBtn = (e) => {
         e.preventDefault();
 
@@ -35,6 +51,9 @@ export default function CreateGroup() {
 
         axios.post("http://localhost:3000/group/createGroup", formData)
         .then(function(res) {
+            if(res.data === "NO") {
+
+            }
             alert('그룹 생성 성공');
             history("/group/NewsFeed");
         })
@@ -49,7 +68,8 @@ export default function CreateGroup() {
         <h3>그룹 생성하기</h3>
             <label htmlFor="GRP_NAME">그룹명 : </label>
             <br />
-            <input type="text" name="grpName" onChange={(e)=>setGrpName(e.target.value)} />
+            <input type="text" name="grpName" value={grpName} onChange={(e)=>setGrpName(e.target.value)} />
+            <button type="button" onClick={checkExistingGroup}>중복 확인</button>
             <br />
             <label htmlFor="GRP_IMAGE">그룹 대표 이미지 : </label>
             <br />

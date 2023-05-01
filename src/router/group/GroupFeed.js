@@ -9,19 +9,34 @@ import axios from 'axios';
 import CreateFeedModal from './modals/CreateFeedModal';
 import ReactHtmlParser from "react-html-parser";
 import ModifyFeedModal from './modals/ModifyFeedModal';
+import ModifyCmtModal from './modals/ModifyCmtModal';
+import CareFeedModal from './modals/CareFeedModal';
+import ModifyCareFeedModal from './modals/ModifyCareFeedModal';
+import moment from 'moment';
+
 
 export default function GroupFeed(){
     
     let params = useParams();
+    let grpName = params.grpName;
     
-    const userId = 'example';
-    
+    const userId = 'test2';
+
+    const [grpCmtNo, setGrpCmtNo] = useState('');
+
+    // 해당 그룹에 가입된 인원인지 확인
+    const [member, setMember] = useState(false);
+
     const [groupFeed, setGroupFeed] = useState([]);
+    const [careGroupFeed, setCareGroupFeed] = useState([]);
     const [groupLeader, setGroupLeader] = useState('');
     const [joinRequest, setJoinRequest] = useState([]);
 
     const [createFeedModal, setCreateFeedModal] = useState(false);
     const [modifyFeedModal, setModifyFeedModal] = useState(false);
+    const [modifyCmtModal, setModifyCmtModal] = useState(false);
+    const [careFeedModal, setCareFeedModal] = useState(false);
+    const [modifyCareFeedModal, setModifyCareFeedModal] = useState(false);
 
     const [selectedGrpFeedId, setSelectedGrpFeedId] = useState('');
 
@@ -48,16 +63,37 @@ export default function GroupFeed(){
     }
 
     useEffect(()=>{
-        getGroupFeed();
+        if(params.grpName === "돌봄") {
+            getCareGroupAllFeed();
+        }
+        isMember();
         getGroupLeader();
         getGroupJoinRequest();
     },[params.grpNo])
 
-    // 특정 그룹의 모든 피드를 가져오는 함수
-    const getGroupFeed = async () => {
-        axios.get("http://localhost:3000/group/groupFeed", {params:{"grpNo":params.grpNo}})
+
+    // 해당 그룹 가입 여부에 따른, 피드 출력 방식 
+    const isMember = async () => {
+        axios.post("http://localhost:3000/group/isMember", null, {params:{"groupId":params.grpNo, "memberId":userId}})
+        .then(function(res) {
+            if(res.data.count !== 0) {
+                setMember(true);
+                setGroupFeed(res.data.groupAllFeed);
+            } else {
+                setGroupFeed(res.data.groupFeed);
+            }
+        })
+        .catch(function(err){
+            alert(err);
+        })
+    }
+
+    // 돌봄 그룹 피드 출력
+    const getCareGroupAllFeed = async () => {
+        axios.get("http://localhost:3000/group/getCareGroupAllFeed", {params:{"grpNo":params.grpNo}})
         .then(function(res){
-            setGroupFeed(res.data.groupFeedList);
+            setCareGroupFeed(res.data.careGroupFeedList);
+            console.log(res.data.careGroupFeedList);
         })
         .catch(function(err){
             alert(err);
@@ -120,12 +156,13 @@ export default function GroupFeed(){
         })
     }
 
-    {/*피드 및 해당 피드 댓글 출력 component*/}
+    {/*일반 그룹 피드 및 해당 피드 댓글 출력 component*/}
     const FeedWithComments = ((props)=>{
         const commentList = useCommentList(props.feed.grpFeedNo);
 
         const [count, setCount] = useState('');
         const [comment, setComment]= useState('');
+        
 
         // 댓글 카운트
         axios.get("http://localhost:3000/group/getCommentList", {params:{"grpFeedNo":props.feed.grpFeedNo}})
@@ -224,6 +261,13 @@ export default function GroupFeed(){
                     </tr>
                     <tr>
                         <td colSpan={2}>{cmt.grpFeedCmtContent}</td>
+                        <td><button onClick={()=>{
+                                                                    const handleClick = () => {
+                                                                        setModifyCmtModal(true);
+                                                                        setGrpCmtNo(cmt.grpCmtNo);
+                                                                    };
+                                                                   return handleClick();
+                                                                }}>수정</button></td>
                         <td><button onClick={()=>{cmtDelete(cmt.grpCmtNo)}}>삭제</button></td>
                     </tr>
                     <tr>
@@ -237,50 +281,35 @@ export default function GroupFeed(){
     
     return (
         <>
-        <h1>특정 그룹 피드</h1>
-        {}
+        <h1>{grpName}</h1>
         <CreateFeedModal show={createFeedModal}
                                             onHide={()=>{setCreateFeedModal(false)}} />
         <ModifyFeedModal show={modifyFeedModal}
                                             onHide={()=>{setModifyFeedModal(false)}}
                                             grpFeedNo={selectedGrpFeedId} />
-        <input readOnly style={{border:'none'}} className="my-3 py-3" type="text" size="50" onClick={()=>{setCreateFeedModal(true)}} placeholder="무슨 일이 일어나고 있나요?" />
-        {groupFeed !== null && groupFeed.length !== 0
-        ?
-        <>
-                <table text-align="center">
-                    <colgroup>
-                        <col width='70' /><col width='600' /><col width='100' /><col width='70' />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>작성자</th>
-                            <th>피드 내용</th>
-                            <th>작성일</th>
-                            <th>공개여부</th>
-                            <th>수정/삭제</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {groupFeed.map((feed, i) => (
-                            <>
-                            <FeedWithComments
-                                key={i}
-                                feed={feed}
-                            />
-                            <tr>
-                                <td colSpan={5}>──────────────────────────────────────────────────────────────────────</td>
-                            </tr>
-                            </>
-                        ))}
-                    </tbody>
-                </table>
-        </>
-        :
-        <>
-        <p>해당 그룹에 작성된 피드가 없습니다.</p>
-        </>
-        }
+        <ModifyCmtModal show={modifyCmtModal}
+                                            onHide={()=>{setModifyCmtModal(false)}}
+                                            grpCmtNo={grpCmtNo}/>
+        <CareFeedModal show={careFeedModal}
+                                            onHide={()=>{setCareFeedModal(false)}}
+                                            />
+        <ModifyCareFeedModal show={modifyCareFeedModal}
+                                            onHide={()=>{setModifyCareFeedModal(false)}}
+                                            grpFeedNo={selectedGrpFeedId}
+                                            />
+
+        {member === true && (
+        <input
+            readOnly
+            style={{border:'none'}}
+            className="my-3 py-3"
+            type="text"
+            size="50"
+            onClick={()=>{grpName === '돌봄' ? setCareFeedModal(true) : setCreateFeedModal(true)}}
+            placeholder={grpName === '돌봄' ? '돌봄이 필요하세요?' : '무슨 일이 일어나고 있나요?'}
+        />
+        )}
+        {grpName !== '돌봄' ? <NormalGroup /> : <CareGroup />}
          {userId === groupLeader
         ?
             <div>
@@ -318,4 +347,121 @@ export default function GroupFeed(){
         }
        </>
     );
+
+    function NormalGroup() {
+        return (
+            <>
+            {groupFeed !== null && groupFeed.length !== 0
+            ?
+                    <table text-align="center">
+                        <colgroup>
+                            <col width='70' /><col width='600' /><col width='100' /><col width='70' />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>작성자</th>
+                                <th>피드 내용</th>
+                                <th>작성일</th>
+                                <th>공개여부</th>
+                                <th>수정/삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {groupFeed.map((feed, i) => (
+                                <>
+                                <FeedWithComments
+                                    key={i}
+                                    feed={feed}
+                                />
+                                <tr>
+                                    <td colSpan={5}>──────────────────────────────────────────────────────────────────────</td>
+                                </tr>
+                                </>
+                            ))}
+                        </tbody>
+                    </table>
+            :
+            <>
+            <p>해당 그룹에 작성된 피드가 없습니다.</p>
+            </>
+            }
+            </>
+        )
+    }
+
+    function CareGroup(){
+
+        // 피드 삭제
+        const deleteCareFeed = async (i) => {
+            await axios.get("http://localhost:3000/group/deleteCareFeed", {params:{"careGrpFeedNo":i}})
+            .then(function(res){
+                alert(res.data);
+                window.location.reload();
+            })
+            .catch(function(err){
+                alert(err);
+            })
+        }
+
+        return (
+            <>
+             {careGroupFeed !== null && careGroupFeed.length !== 0
+            ?
+                    <table text-align="center">
+                        <colgroup>
+                            <col width='70' /><col width='200' /><col width='100' /><col width='200' /><col width='200' />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>분류</th>
+                                <th>피드 내용</th>
+                                <th>작성자</th>
+                                <th>시작일</th>
+                                <th>종료일</th>
+                                <th>시작시간</th>
+                                <th>종료시간</th>
+                                <th>체크사항</th>
+                                <th>작성일</th>
+                                <th>공개여부</th>
+                                <th>수정/삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {careGroupFeed.map(function(feed,i){
+                                return(
+                                    <>
+                                    <tr key={i}>
+                                        {feed.careGrpType === 'care' ? <td>돌봄</td> : <td>산책</td> }
+                                        <td>{ReactHtmlParser(feed.careGrpContent)}</td>
+                                        <td>{feed.careGrpFeedWriter}</td>
+                                        <td>{moment(feed.careGrpStartDt).locale("ko").format("YY년 MM월 DD일")}</td>
+                                        <td>{moment(feed.careGrpEndDt).locale("ko").format("YY년 MM월 DD일")}</td>
+                                        <td>{moment(feed.careGrpStartTime).format("HH:mm")}</td>
+                                        <td>{moment(feed.careGrpEndTime).format("HH:mm")}</td>
+                                        <td>{feed.careGrpCheck}</td>
+                                        <td>{feed.careGrpFeedWd.substring(0,10)}</td>
+                                        <td>{feed.careGrpFeedSetting}</td>
+                                        <td>
+                                            <button
+                                                onClick={()=>{
+                                                    setModifyCareFeedModal(true);
+                                                    setSelectedGrpFeedId(feed.careGrpFeedNo);
+                                                }}>수정
+                                            </button>
+                                            <button onClick={()=>{deleteCareFeed(feed.careGrpFeedNo)}}>삭제</button>
+                                        </td>
+                                    </tr>
+                                    </>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+            :
+            <>
+            <p>해당 그룹에 작성된 피드가 없습니다.</p>
+            </>
+            }
+            </>
+        )
+    }
 }

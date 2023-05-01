@@ -2,23 +2,22 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import "./App.css";
 import Nav from "./component/Nav.js";
-import "./styles/FeedPost.css";
 
-import Home from "./router/home/Home.js";
+import Home from "./router/home/Home";
 
+import Login from "./router/login/Login";
+import KakaoAuth from "./router/login/KakaoAuth";
 
-import Login from "./router/login/Login.js";
-import Regi from "./router/login/Regi.js";
-import KakaoAuth from "./router/login/KakaoAuth.js";
-import Pet_info from "./router/login/Pet_info.js";
-import Pet_info_detail from "./router/login/Pet_info_detail.js";
+import RegisterPage1 from "./router/register/RegisterPage1";
+import RegisterPage2 from "./router/register/RegisterPage2";
+import RegisterPage3 from "./router/register/RegisterPage3";
 
 import FeedPost from "./router/Feed/FeedPost";
-import Place_Detail from './router/place/Place_Detail.js';
 
 import Place from "./router/place/Place.js";
+import Place_detail from "./router/place/Place_detail.js";
 
-import Myfeed from "./router/myfeed/Myfeed";
+import Myfeed from "./router/myfeed/myfeed";
 import User_update from "./router/myfeed/User_update";
 import Pet_update from "./router/myfeed/Pet_update";
 import MarketHome from "./router/market/Market_home";
@@ -43,7 +42,11 @@ import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
 
+import Pawtens from "./router/pawtens/Pawtens";
+import Pawtens_detail from "./router/pawtens/Pawtens_detail";
 
+import Contest from "./router/contest/Contest";
+import Contest_detail from "./router/contest/Contest_detail";
 
 
 function App() {
@@ -69,39 +72,40 @@ function App() {
             <Route path="/home/home" element={<Home />} />
 
             {/* 로그인/회원가입 */}
-            <Route path="/login/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/login/findAccount" element={<FindAccount />} />
-            <Route path="/login/regi" element={<Regi />} />
+            <Route path="/register" element={<RegisterPage1 />} />
+            <Route path="/register/petHave" element={<RegisterPage2 />} />
+            <Route path="register/petInfo" element={<RegisterPage3 />} />
             <Route path="/login/kakaoAuth" element={<KakaoAuth />} />
-            <Route path="/login/pet_info" element={<Pet_info />} />
-            <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
       
 
             {/* 피드 */}
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
+            <Route path="/router/regi" element={null} />
+            <Route path="/router/regi" element={null} />
 
             {/* 콘테스트 */}
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/contest" element={<Contest />} />
+            <Route path="/contest/detail" element={<Contest_detail />} />
 
             {/* 포텐스 */}
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/pawtens" element={<Pawtens />} />
+            <Route path="/pawtens/detail" element={<Pawtens_detail />} />
 
             {/* 마켓 */}
             <Route path="/market" element={<MarketHome />} />
             <Route path="/market/write" element={<MarketWrite />} />
-            <Route path="/market/update" element={<MarketUpdate />} />
-            <Route path="/market/detail" element={<MarketDetail />} />
+            <Route path="/market/update/:posting" element={<MarketUpdate />} />
+            <Route path="/market/detail/:posting" element={<MarketDetail />} />
 
             {/* 채팅 */}
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
 
             {/* 플레이스 */}
-            <Route path="/place/place" element={<Place />} />
-            <Route path="/place/place/:search?/:category?" element={<Place />} />
-            <Route path="/place/place-detail/:search?/:category?" element={<Place_Detail />} />
+            <Route path="/place" element={<Place />} />
+            <Route path="/place/:search?/:category?" element={<Place />} />
+            <Route path="/place/detail/:search?/:category?" element={<Place_detail />} />
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
@@ -112,7 +116,7 @@ function App() {
             <Route path="/group/MyGroup" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
             <Route path="/group/GroupFeed/:grpNo" exact element={<GroupFeed />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
 
             {/* 관리자 */}
             <Route path="admin/admin" element={<Admin />} />
@@ -139,7 +143,7 @@ function App() {
         </main>
         </div>
       </BrowserRouter>
-   
+    
       {/* footer */}
       <footer>
         <div>
