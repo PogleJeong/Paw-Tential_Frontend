@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import session from "react-session-api";
 import "../styles/Nav.css";
 
 const Nav = () =>{
+    const [ loginState, setLoginState ] = useState(false);
+    useEffect(()=>{
+        session.get("user") ? setLoginState(true) : setLoginState(false);
+    })
     return (
         <div className="Nav">
         <label><div>메뉴</div></label>
         <ul>
-            <li><Link className="nav-link" to="/login/login">로그인</Link></li>
+            {loginState ? 
+            null
+            : 
+            <li><Link className="nav-link" to="/login">로그인</Link></li> 
+            }
             <br />
             <li><Link className="nav-link" to="/place">포텐플레이스</Link></li>
             <li><Link className="nav-link" to="/market">마켓</Link></li>

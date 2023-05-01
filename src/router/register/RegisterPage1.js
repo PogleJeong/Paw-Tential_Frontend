@@ -1,7 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import PetRegi from './PetRegi';
-import { Link, useNavigate } from 'react-router-dom';
 
 /** 실시간 입력값 체크 */
 const useInput = (initValue, validator, valid) => {
@@ -27,11 +26,10 @@ const checkRegExp = (value, regExp) => {
 
 const maxLen = (value, valid) => value.length <= valid;
 
-const RegisterForm = () => {
+function RegisterPage1() {
     // 입력값 검증
     const id = useInput("", maxLen, 15);
     const password = useInput("", maxLen, 20);
-    const confirm = useInput("", maxLen, 20);
     const email = useInput("",maxLen, 45);
     const nick = useInput("", maxLen, 10);
     const number = useInput("", maxLen, 11);
@@ -49,6 +47,7 @@ const RegisterForm = () => {
 
     // DB 에서 중복검증
     const [ idSuccess ,setIdSuccess ] = useState(false);
+    const [ passwordSuccess, setPasswordSuccess ] = useState(false);
     const [ nickSuccess, setNickSuccess ] = useState(false);
 
     // 메세지 출력
@@ -66,7 +65,7 @@ const RegisterForm = () => {
         console.log(value);
         const idRegExp = /^[a-z0-9_-]{6,20}$/; 
         idCheckMsgRef.current.innerText = checkRegExp(value, idRegExp) ? "사용가능한 아이디입니다." : "6~20 자리의 영문자를 포함한 아이디를 입력해주세요.";
-    }, [id])
+    }, [id.value])
 
     useEffect(()=>{
         const { value } = password;
@@ -84,11 +83,12 @@ const RegisterForm = () => {
 
     useEffect(()=>{
         const { value } = nick;
-        const nickRegExp = /^[가-힣a-zA-Z]{2,10}$/;
+        const nickRegExp = /^[가-힣a-zA-Z0-9]+$/;
         console.log(value);
         nickCheckMsgRef.current.innerText = checkRegExp(value, nickRegExp) ? null : "영문숫자조합 2~10 글자 가능합니다.";
     },[nick.value])
-    
+
+    /** 사용자 정보 입력후 다음 페이지로 이동 */
     const nextPage = async() => {
         // 입력값
         const id = idRef.current.value;
@@ -98,11 +98,11 @@ const RegisterForm = () => {
         const number = numberRef.current.value;
         const birth = birthRef.current.value;
         const gender = radioValue;
+        
         // 정규식
         const idRegExp = /^[a-z0-9_-]{6,20}$/; 
         const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
-        const nickRegExp = /^[가-힣a-zA-Z]{2,10}$/;
-
+        const nickRegExp = /^[가-힣a-zA-Z0-9]{2,10}$/;
         // 1. 정보가 모두 입력되었는가
         if (!id) {
             alert("아이디가 입력되지 않았습니다.");
@@ -133,21 +133,26 @@ const RegisterForm = () => {
             birthRef.focus();
             return;
         }
+        if( birth.length !== 8) {
+            alert("생년월일 8자를 입력해주세요");
+            return;
+        }
         if (!gender) {
             alert("성별이 입력되지 않았습니다.");
             return;
         }
 
         // 2. 정규식
-        if (!checkRegExp(idRef, idRegExp)) {
+        if (!checkRegExp(id, idRegExp)) {
+            
             alert("아이디를 다시 확인해주세요.");
             return;
         }
-        if (!checkRegExp(passwordRef, pwdRegExp)){
+        if (!checkRegExp(password, pwdRegExp)){
             alert("비밀번호를 다시 확인해주세요.");
             return;
         }
-        if (!checkRegExp(nickRef, nickRegExp)) {
+        if (!checkRegExp(nick, nickRegExp)) {
             alert("닉네임을 다시 확인해주세요.");
             return;
         }
@@ -155,6 +160,11 @@ const RegisterForm = () => {
         // 3. 중복체크
         if (!idSuccess) {
             alert("아이디 중복을 확인해주세요.");
+            return;
+        }
+
+        if(!passwordSuccess) {
+            alert("비밀번호를 확인해주세요!");
             return;
         }
 
@@ -166,21 +176,24 @@ const RegisterForm = () => {
         const userInfo = {id, password, email, nick, number, birth, gender};
         
         // useNavigator 으로 데이터보내기 => useLocation 로 데이터 받기
+        
         navigate("/register/petHave", {
             state: {
                 userInfo
             }
         });
+        return;
     }
 
     /** 중복된 아이디가 있는지 체크 */
     const checkId = async() => {
+        const id = idRef.current.value;
         const idRegExp = /^[a-z0-9_-]{6,20}$/; 
-        if (!checkRegExp(idRef, idRegExp)){
+        if (!checkRegExp(id, idRegExp)){
             alert("아이디를 다시 확인해주세요.");
             return;
         }
-        await axios.post("http://localhost:3000/idCheck", null, {params: {id: id.value}})
+        await axios.post("http://localhost:3000/idCheck", null, {params: {id}})
         .then((response) => {
             console.log("ID Check >> ", response.data);
             if (response.status === 200){
@@ -200,12 +213,13 @@ const RegisterForm = () => {
 
     /** 닉네임 체크 함수 */
     const checkNickname =  async() => {
-        const nickRegExp = /^[가-힣a-zA-Z]+$/;
-        if (!checkRegExp(nickRef, nickRegExp)){
+        const nickname = nickRef.current.value;
+        const nickRegExp = /^[가-힣a-zA-Z0-9]+$/;
+        console.log(nickname)
+        if (!checkRegExp(nickname, nickRegExp)){
             alert("닉네임을 다시 확인해주세요.");
             return;
         }
-        const nickname = nickRef.current.value;
 
         await axios.post("http://localhost:3000/nicknameCheck", null, {params: {nickname}})
         .then((response) => {
@@ -244,12 +258,12 @@ const RegisterForm = () => {
 
     return(
         <div>
-            <label>아이디<input {...id} placeholder='최대 15자 까지 가능합니다.' required/></label>
+             <label>아이디<input ref={idRef} {...id} placeholder='최대 15자 까지 가능합니다.' required/></label>
             <button onClick={checkId}>중복확인</button><br/>
             <small ref={idCheckMsgRef}></small><br/>
             <label>비밀번호<input ref={passwordRef} {...password} type="password" placeholder='특수문자를 포함하는 8~24 자리의 비밀번호' required/></label><br/>
             <small ref={pwdRegExpRef}></small><br/>
-            <label>비밀번호 확인<input ref={confirmRef} {...confirm} type="password" onChange={confirmPassword} required/></label><br/>
+            <label>비밀번호 확인<input ref={confirmRef} type="password" onChange={confirmPassword} required/></label><br/>
             <small ref={pwdCheckMsgRef}></small><br/>
             <label>이메일<input ref={emailRef} {...email} type="email" required /></label><br/>
             <small ref={emailRegExpRef}></small><br/>
@@ -275,4 +289,4 @@ const RegisterForm = () => {
     );
 };
 
-export default RegisterForm;
+export default RegisterPage1;
