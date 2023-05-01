@@ -45,8 +45,6 @@ import Pawtens_detail from "./router/pawtens/Pawtens_detail";
 import Contest from "./router/contest/Contest";
 import Contest_detail from "./router/contest/Contest_detail";
 
-import Home from './router/home/Home';
-
 
 function App() {
     return (
