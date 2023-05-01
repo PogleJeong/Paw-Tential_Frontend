@@ -1,13 +1,23 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 import { Modal, Button, Form, Container } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Session from "react-session-api"
 
 const CreateFeedModal = ({show, onHide}) => {
 
+  const [userId, setUserId] = useState('');
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');
+
+  useEffect(()=>{
+    let user = Session.get("user");
+    if(user !== undefined){ // 세션에 저장해둔 문자열이 있을 때
+        setUserId(user);
+    }
+  }, []);
 
   const customUploadAdapter = (loader) => {
     return {
@@ -63,7 +73,7 @@ const CreateFeedModal = ({show, onHide}) => {
     e.preventDefault();
 
     let formData = new FormData();
-    formData.append("id", "test2"); // 임시
+    formData.append("id", userId);
     formData.append("content",content);
     formData.append("tag", ""); // 임시
     formData.append("location", ""); // 임시
