@@ -7,11 +7,11 @@ import AdminSidebar from "../../component/AdminSidebar";
 const UserChart = () => {
     const [data, setData] = useState([]);
 
-    useEffect(() => {
-        axios.get('backend/data')
-          .then(response => setData(response.data))
-          .catch(error => console.log(error));
-      }, []);
+    // useEffect(() => {
+    //     axios.get('backend/data')
+    //       .then(response => setData(response.data))
+    //       .catch(error => console.log(error));
+    //   }, []);
     
 
 

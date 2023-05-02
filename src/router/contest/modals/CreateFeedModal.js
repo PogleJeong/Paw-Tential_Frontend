@@ -63,7 +63,7 @@ const CreateFeedModal = ({show, onHide}) => {
     e.preventDefault();
 
     let formData = new FormData();
-    formData.append("id", "test2"); // 임시
+    formData.append("id", "loserya"); // 임시
     formData.append("content",content);
     formData.append("tag", ""); // 임시
     formData.append("location", ""); // 임시

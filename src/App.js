@@ -15,9 +15,9 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_detail.js";
+import Place_detail from "./router/place/Place_Detail.js";
 
-import Myfeed from "./router/myfeed/myfeed";
+import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";
 import Pet_update from "./router/myfeed/Pet_update";
 import MarketHome from "./router/market/Market_home";
@@ -105,7 +105,7 @@ function App() {
             {/* 플레이스 */}
             <Route path="/place" element={<Place />} />
             <Route path="/place/:search?/:category?" element={<Place />} />
-            <Route path="/place/detail/:search?/:category?" element={<Place_detail />} />
+            <Route path="/place_detail/:search?/:category?" element={<Place_detail />} />
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}

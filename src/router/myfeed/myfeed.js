@@ -47,14 +47,17 @@ const MyFeed = () => {
       {userInfo && (
         <h1>{userInfo.id}님의 MYFEED</h1>
       )}
-      {feed.map((post) => (
-        <div key={post.id}>
-          <img src={post.image} alt={post.caption} />
-          <p>{post.caption}</p>
-        </div>
-      ))}
+      {feed
+        .filter(post => post.user_id === userInfo.id) // 해당 사용자의 피드만 필터링
+        .map(post => (
+          <div key={post.id}>
+            <img src={post.image} alt={post.caption} />
+            <p>{post.caption}</p>
+          </div>
+        ))}
     </div>
   );
+  
 };
 
 export default MyFeed;
