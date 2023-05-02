@@ -6,7 +6,7 @@ import FeedDropdown_writer from "./FeedDropdown_writer";
 import FeedDropdown_user from "./FeedDropdown_user";
 
 const MainFeed = (feedData) => {
-  const [id, setId] = useState('');
+  const [userId, setUserId] = useState('');
   const [isLike, setIsLike] = useState(false);
   const [isDropdown, setIsDropdown] = useState(false);
   const dropMenuRef = useRef(null);
@@ -14,7 +14,7 @@ const MainFeed = (feedData) => {
   useEffect(()=>{
     let user = Session.get("user");
     if(user !== undefined){ // 세션에 저장해둔 문자열이 있을 때
-        setId(user.id);
+        setUserId(user);
     }
   }, []);
 
@@ -27,7 +27,7 @@ const MainFeed = (feedData) => {
     try {
       const body = {
         "feed_seq" : seq,
-        "id" : id // login Id
+        "id" : userId // login Id
       }
       if(!isLike){
         const response = await axios.post(`http://localhost:3000/Favorites`,body);
@@ -42,14 +42,14 @@ const MainFeed = (feedData) => {
   };
 
   // useRef current에 담긴 엘리먼트 외부 영역 클릭 시 dropdown 메뉴 닫힘
-  useEffect(() => {
-    const handleOutsideClose = (e) => {
-      if(isDropdown && (!dropMenuRef.current.contains(e.target))) setIsDropdown(false);
-    };
-    document.addEventListener('click', handleOutsideClose);
+  // useEffect(() => {
+  //   const handleOutsideClose = (e) => {
+  //     if(isDropdown && (!dropMenuRef.current.contains(e.target))) setIsDropdown(false);
+  //   };
+  //   document.addEventListener('click', handleOutsideClose);
     
-    return () => document.removeEventListener('click', handleOutsideClose);
-  }, [isDropdown]);
+  //   return () => document.removeEventListener('click', handleOutsideClose);
+  // }, [isDropdown]);
 
   return (
     <div>
@@ -59,10 +59,10 @@ const MainFeed = (feedData) => {
           <div className="feed-icon" style={{float:"left"}}>
             <img src={"feedimages/"+ feedData.feedData.profile +".png"} alt="프로필" />
           </div>
-          {id !== '' &&
+          {userId !== '' &&
             <div className="feed-icon" style={{float:"left"}}>
               <img src="feedimages/icon.png" alt="더보기" onClick={() => setIsDropdown(!isDropdown)}/>
-              {id === feedData.feedData.id
+              {userId === feedData.feedData.id
               ? isDropdown && <FeedDropdown_writer seq={feedData.feedData.seq} />
               : isDropdown && <FeedDropdown_user seq={feedData.feedData.seq} />}
             </div>
