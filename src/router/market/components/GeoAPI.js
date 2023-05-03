@@ -37,8 +37,8 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
 
     useEffect(()=>{
         // 위치정보 먼저 불러온 후 실행
+        navigator.geolocation.getCurrentPosition(success, error);
         // 추기 : 초기위치 정보 저장 : 지도정보를 사용하지 않은경우
-        navigator.geolocation.getCurrentPosition(success, error, options);
         console.log("위도: " + initLat + " | 경도 : " + initLng);
         const mapOption = {
             center: new kakao.maps.LatLng(initLat, initLng), // 지도의 좌표
@@ -91,22 +91,16 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
                 }   
             });
         });
-
-        // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
-        kakao.maps.event.addListener(map, 'idle', function() {
-            searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-        });
-
         function searchAddrFromCoords(coords, callback) {
             // 좌표로 행정동 주소 정보를 요청합니다
             geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);         
         }
-
+    
         function searchDetailAddrFromCoords(coords, callback) {
             // 좌표로 법정동 상세 주소 정보를 요청합니다
             geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
         }
-
+    
         // 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
         function displayCenterInfo(result, status) {
             if (status === kakao.maps.services.Status.OK) {
@@ -121,8 +115,13 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
                 }
             }    
         }
+        // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
+        kakao.maps.event.addListener(map, 'idle', function() {
+            searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+        });
     });
 
+    
     // 추가 : 기능 2. 현재 마커로 설정된 위치 좌표를 가져오기
     
     return(

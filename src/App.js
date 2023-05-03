@@ -40,7 +40,6 @@ import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
 
-
 function App() {
     return (
         <div>

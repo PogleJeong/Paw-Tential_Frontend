@@ -2,12 +2,13 @@
 // CKEditor 사용
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import session from "react-session-api";
+import { useCookies } from "react-cookie";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import UploadAdapter from '../../utils/UploadAdaptor';
 import axios from 'axios';
-import KakaoMapWrite from '../../component/GeoAPI';
+import KakaoMapWrite from './components/GeoAPI';
+import useGeolocation from '../../utils/GeoPosition';
 
 const stateList = ["--분류--","나눔", "판매"];
 const categories = ["--카테고리--", "완구류", "침구류", "간식류", "주식", "음료", "기타"];
@@ -37,7 +38,8 @@ const useInput = (initialValue, validator, valid) => {
 const maxLen = (value, valid) => ( value.length <= valid );
 
 const MarketWrite = () => {
-    const [ user, setUser ] = useState(session.get("user"));
+    const geoLocation = useGeolocation();
+    const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID", "USER_NICKNAME"]);
     const title = useInput("제목", maxLen, 500);
     const [ content, setContent ] = useState("<p>Hello from CKEditor 5!</p>"); // api 에서 유효성검사진행
     const state = useInput(stateList[0], maxLen, 45);
@@ -47,21 +49,20 @@ const MarketWrite = () => {
     const productNumber = useInput("1", maxLen, 3); // 0~999개 까지
     const conditions = useInput(conditionList[0], maxLen, 45);
     const [ imgFile, setImgFile ] = useState("market_base_image"); // 대표이미지 파일
-    const [ geoLat, setGeoLat ]= useState(0);
-    const [ geoLng, setGeoLng ]= useState(0);
+    const [ geoLat, setGeoLat ]= useState(geoLocation.coordinates.lat);
+    const [ geoLng, setGeoLng ]= useState(geoLocation.coordinates.lng);
     const navigator = useNavigate();
     const imgRef = useRef();
-
     const [ triggerPrice, setTriggerPrice ] = useState(false);
 
+    console.log(geoLocation);
     useEffect(()=>{
         // 로그인한 유저인지 확인
-        const userSession = session.get("user") || false;
-        if (!userSession){
+        if (!cookies.USER_ID){
             alert("로그인을 해주세요");
             navigator("/");
+            return;
         }
-        setUser(userSession);
     },[])
 
     // 판매분류가 될 경우 가격 작성가능
@@ -107,7 +108,7 @@ const MarketWrite = () => {
 
         let marketInfo = { title: title.value,
             content,
-            id: user,
+            id: cookies.USER_ID,
             state: state.value,
             category: category.value,
             price: price.value,
@@ -122,11 +123,13 @@ const MarketWrite = () => {
         formData.append("marketInfo", new Blob([JSON.stringify(marketInfo)], {type: "application/json"}));
         await axios.post("http://localhost:3000/market/write", formData, {"Content-Type": `multipart/form-data`})
         .then((response) =>{
-            if (response.data === "MARKET_WRITE_NO") {
-                alert("게시물 등록에 실패하였습니다.");
+            if (response.status === 200) {
+                if (response.data === "MARKET_WRITE_NO") {
+                    alert("게시물 등록에 실패하였습니다.");
+                }
+                alert("게시물이 등록되었습니다.");
+                //navigator("/market");
             }
-            alert("게시물이 등록되었습니다.");
-            navigator("/market");
         })
     }
     const onLoadFile = () => {
@@ -144,7 +147,7 @@ const MarketWrite = () => {
                 제목
                 <input type="text" {...title} placeholder='제목을 작성해주세요'/>
             </label>
-            <p>작성자 {user}</p>
+            <p>작성자 {`${cookies.USER_NICKNAME}(${cookies.USER_ID})`}</p>
             <p>작성날짜 {new Date().toLocaleString('ko-KR')}</p>
             <label>거래분류
                 <select {...state}>
@@ -206,7 +209,7 @@ const MarketWrite = () => {
                     console.log( 'Focus.', editor );
                 } }
             />
-            <KakaoMapWrite setGeoLat={setGeoLat} setGeoLng={setGeoLng}/>
+            <KakaoMapWrite geoLat={geoLat} setGeoLat={setGeoLat} geoLng={geoLng} setGeoLng={setGeoLng}/>
             <button onClick={marketUpload}>작성하기</button>
         </div>
     );
