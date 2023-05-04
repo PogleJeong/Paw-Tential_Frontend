@@ -3,6 +3,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import "../../styles/pawtens.css";
 import "../../styles/page.css";
+import { FeedImage } from "../../component/FeedData";
 
 function Pawtens(){
 
@@ -27,7 +28,7 @@ function Pawtens(){
 
     const pawtensListMap = pawtensList.map((pawtens, i) => {
         return(
-            <div className="pawtensItem" key={i}>{pawtens.content}</div>
+            <div className="pawtensItem" key={i}><FeedImage content={pawtens.content} /></div>
         )
     });
 
@@ -52,7 +53,7 @@ function Pawtens(){
 
             <div className="pawtens">
                 <div className="search">
-                    <input value={search} id="keyword" onChange={(e) => setSearch(e.target.value)} placeholder="검색" autocomplete='off' />
+                    <input value={search} id="keyword" onChange={(e) => setSearch(e.target.value)} placeholder="검색" autoComplete='off' />
                     <button id="submit_search" onClick={searchBtn}>검색하기</button>
                 </div >
 

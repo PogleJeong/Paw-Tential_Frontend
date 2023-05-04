@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link , useNavigate } from "react-router-dom";
-import session from "react-session-api";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 
-import KakaoMapRead from "../../component/GeoAPI2";
-import MarketReport from "../../component/MarketReport";
+import KakaoMapRead from "./components/GeoAPI2";
+import MarketReport from "./modals/MarketReport";
 
 const MarketDetail = () => {
     const location = useLocation();
+    const [ cookies, setCookies, removeCookies ] = useCookies(["id"]);
+    
     const { title, content, wdate, id, category, state, conditions, productName, productNumber, geoLat, geoLng, posting } = location.state.marketInfo;
     const imgInfo  = location.state.imgInfo;
     const [ activeReportModal, setActiveReportModal ] = useState(false);
@@ -16,7 +18,7 @@ const MarketDetail = () => {
 
     useEffect(()=>{
         // 자신이 작성한 글일경우, 수정하기 및 삭제하기 기능 활성화
-        const loginUser = session.get("user") || false;
+        const loginUser = cookies.id || false;
 
         if (loginUser === id) {
             setUpdateActive(true);
@@ -26,7 +28,7 @@ const MarketDetail = () => {
     })
 
     const marketDelete = async() => {
-        const loginUser = session.get("user") || false;
+        const loginUser = cookies.id || false;
 
         await axios.post("http://localhost:3000/market/delete", null, {params: { id: loginUser, posting }})
         .then((response)=>{
@@ -76,7 +78,7 @@ const MarketDetail = () => {
             }
             <button onClick={clickReportBtn}>신고</button>
             {activeReportModal ?
-            <MarketReport posting={posting} setActiveReportModal={setActiveReportModal}/>
+            <MarketReport writer={id} setActiveReportModal={setActiveReportModal}/>
             :
             null
             }

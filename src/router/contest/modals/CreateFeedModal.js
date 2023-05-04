@@ -1,16 +1,19 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-import { Modal, Button, Form, Container } from 'react-bootstrap';
+import { Modal, Button, Form, Container, Tab, Tabs } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Session from "react-session-api"
+import { CreatePawtensData } from '../../../component/FeedModalTabs';
 
 const CreateFeedModal = ({show, onHide}) => {
 
   const [userId, setUserId] = useState('');
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');
+
+  const [tabKey, setTabKey] = useState('feed');
 
   useEffect(()=>{
     let user = Session.get("user");
@@ -95,41 +98,62 @@ const CreateFeedModal = ({show, onHide}) => {
     size="lg"
     aria-labelledby="contained-modal-title-vcenter"
     centered
-  >
+    >
     <Container>
-    <Modal.Header closeButton>
-      <Modal.Title id="contained-modal-title-vcenter">
-        Create Feed
-      </Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-    <Form name="frm" onSubmit={submitBtn}>
-      <Form.Group className="mb-3">
-        <CKEditor
-          config={{
-            extraPlugins: [uploadPlugin],
-          }}
-          editor={ClassicEditor}
-          onChange={ (event, editor) => {
-            const data = editor.getData();
-            setContent(data);
-          }}
-        />
-        {/* <Form.Control
-          placeholder="내용을 입력해주세요"
-          onChange={(e)=>{setContent(e.target.value)}}
-          
-          /> */}
-      </Form.Group>
-    <Button variant="primary" type="submit">
-        Submit
-    </Button>
-    </Form>
-    </Modal.Body>
-    <Modal.Footer>
-    </Modal.Footer>
-  </Container>
-  </Modal>
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={tabKey}
+        onSelect={(e) => setTabKey(e)}
+        className="mb-3"
+      >
+        <Tab eventKey="feed" title="게시글">
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Create Feed
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <Form name="frm" onSubmit={submitBtn}>
+            <Form.Group className="mb-3">
+              <CKEditor
+                config={{
+                  extraPlugins: [uploadPlugin],
+                }}
+                editor={ClassicEditor}
+                onChange={ (event, editor) => {
+                  const data = editor.getData();
+                  setContent(data);
+                }}
+              />
+              {/* <Form.Control
+                placeholder="내용을 입력해주세요"
+                onChange={(e)=>{setContent(e.target.value)}}
+                
+                /> */}
+            </Form.Group>
+          <Button variant="primary" type="submit">
+              Submit
+          </Button>
+          </Form>
+          </Modal.Body>
+          <Modal.Footer>
+          </Modal.Footer>
+        </Tab>
+        <Tab eventKey="pawtens" title="포텐스">
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Create Pawtens
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <CreatePawtensData />
+          </Modal.Body>
+          <Modal.Footer>
+          </Modal.Footer>
+        </Tab>
+      </Tabs>
+    </Container>
+    </Modal>
   )
 }
 
