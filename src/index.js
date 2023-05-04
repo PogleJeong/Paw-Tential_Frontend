@@ -1,6 +1,8 @@
 // 외부 package import
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { CookiesProvider } from 'react-cookie';
+
 
 // 내부 import
 import './index.css';
@@ -8,7 +10,9 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App />
+    <CookiesProvider>
+        <App />
+    </CookiesProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

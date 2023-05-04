@@ -2,19 +2,20 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import "./App.css";
 import Nav from "./component/Nav.js";
-import "./styles/FeedPost.css";
 
-import Login from "./router/login/Login.js";
-import Regi from "./router/login/Regi.js";
-import KakaoAuth from "./router/login/KakaoAuth.js";
-import Pet_info from "./router/login/Pet_info.js";
-import Pet_info_detail from "./router/login/Pet_info_detail.js";
+import Home from "./router/home/Home";
+
+import Login from "./router/login/Login";
+import KakaoAuth from "./router/login/KakaoAuth";
+
+import RegisterPage1 from "./router/register/RegisterPage1";
+import RegisterPage2 from "./router/register/RegisterPage2";
+import RegisterPage3 from "./router/register/RegisterPage3";
 
 import FeedPost from "./router/Feed/FeedPost";
-import Place_Detail from './router/place/Place_Detail.js';
 
 import Place from "./router/place/Place.js";
-
+import Place_detail from "./router/place/Place_detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";
@@ -30,6 +31,9 @@ import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
+import PetChart from './router/admin/PetChart';
+import UserChart from './router/admin/UserChart';
+
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -38,6 +42,12 @@ import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
 import ThemedExample from "./component/chatbot";
+
+import Pawtens from "./router/pawtens/Pawtens";
+import Pawtens_detail from "./router/pawtens/Pawtens_detail";
+
+import Contest from "./router/contest/Contest";
+import Contest_detail from "./router/contest/Contest_detail";
 
 
 function App() {
@@ -63,44 +73,45 @@ function App() {
 
           <Routes>
             {/* 메인 홈 */}
-            <Route path="/" element={<Home />} />
+            <Route path="/home/home" element={<Home />} />
 
 
 
             {/* 로그인/회원가입 */}
-            <Route path="/login/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/login/findAccount" element={<FindAccount />} />
-            <Route path="/login/regi" element={<Regi />} />
+            <Route path="/register" element={<RegisterPage1 />} />
+            <Route path="/register/petHave" element={<RegisterPage2 />} />
+            <Route path="register/petInfo" element={<RegisterPage3 />} />
             <Route path="/login/kakaoAuth" element={<KakaoAuth />} />
-            <Route path="/login/pet_info" element={<Pet_info />} />
-            <Route path="/login/pet_info_detail" element={<Pet_info_detail />} />
       
 
             {/* 피드 */}
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
+            <Route path="/router/regi" element={null} />
+            <Route path="/router/regi" element={null} />
 
             {/* 콘테스트 */}
-            <Route path="/router/regi" element={<Regi />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/contest" element={<Contest />} />
+            <Route path="/contest/detail" element={<Contest_detail />} />
 
             {/* 포텐스 */}
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/pawtens" element={<Pawtens />} />
+            <Route path="/pawtens/detail" element={<Pawtens_detail />} />
 
             {/* 마켓 */}
             <Route path="/market" element={<MarketHome />} />
             <Route path="/market/write" element={<MarketWrite />} />
-            <Route path="/market/update" element={<MarketUpdate />} />
-            <Route path="/market/detail" element={<MarketDetail />} />
+            <Route path="/market/update/:posting" element={<MarketUpdate />} />
+            <Route path="/market/detail/:posting" element={<MarketDetail />} />
 
             {/* 채팅 */}
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/router/regi" element={null} />
 
             {/* 플레이스 */}
-            <Route path="/place/place" element={<Place />} />
-            <Route path="/place/place/:search?/:category?" element={<Place />} />
-            <Route path="/place/place-detail/:search?/:category?" element={<Place_Detail />} />
+            <Route path="/place" element={<Place />} />
+            <Route path="/place/:search?/:category?" element={<Place />} />
+            <Route path="/place_detail/:search?/:category?" element={<Place_detail />} />
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
@@ -110,8 +121,8 @@ function App() {
             <Route path="/group/GroupList/:search" element={<GroupList />} />
             <Route path="/group/MyGroup" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
-            <Route path="/group/GroupFeed/:grpNo" exact element={<GroupFeed />} />
-            <Route path="/router/regi" element={<Regi />} />
+            <Route path="/group/GroupFeed/:grpNo/:grpName" exact element={<GroupFeed />} />
+            <Route path="/router/regi" element={null} />
 
             {/* 관리자 */}
             <Route path="admin/admin" element={<Admin />} />
@@ -122,6 +133,10 @@ function App() {
             <Route path="admin/reports" element={<Reports />} />
             <Route path="admin/reports/:choice/:search" element={<Reports />} />
             <Route path="admin/data" element={<Data />} />
+            <Route path="admin/petChart" element={<PetChart />} />
+            <Route path="admin/userChart" element={<UserChart />} />
+
+
 
             
 
@@ -134,7 +149,7 @@ function App() {
         </main>
         </div>
       </BrowserRouter>
-   
+
       {/* footer */}
       <footer>
         <div>

@@ -11,7 +11,7 @@ import "../../styles/Place.css";
 
 const { kakao } = window;
 
-const Place_Detail = () => {
+const Place_detail = () => {
 
     // 플레이스 정보
     const [placeTitle, setPlaceTitle] = useState('');
@@ -32,9 +32,9 @@ const Place_Detail = () => {
         const unlistenHistoryEvent = history.listen(({ action }) => {
             if (action === "POP") {
                 if(params.search !== "_" && params.search !== undefined){
-                    navigate("/place/place/" + params.search + "/_", {state:{"latlng": location.state.latlng, "bounds": location.state.bounds}});
+                    navigate("/place/" + params.search + "/_", {state:{"latlng": location.state.latlng, "bounds": location.state.bounds}});
                 } else if(params.category !== "_" && params.category !== undefined){
-                    navigate("/place/place/_/" + params.category, {state:{"latlng": location.state.latlng, "bounds": location.state.bounds}});
+                    navigate("/place/_/" + params.category, {state:{"latlng": location.state.latlng, "bounds": location.state.bounds}});
                 }
             }
         });
@@ -143,4 +143,4 @@ const Place_Detail = () => {
         </div>
     );
 };
-export default Place_Detail;
+export default Place_detail;

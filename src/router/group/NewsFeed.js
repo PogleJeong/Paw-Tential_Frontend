@@ -6,11 +6,15 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import ReactHtmlParser from "react-html-parser";
+import { useCookies } from "react-cookie";
 
 export default function NewsFeed() {
     
-    // 테스트 아이디 임시 저장
-    const userId = 'test';
+    const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
+    // cookie에 저장된 사용자 ID 및 닉네임
+    const userId = cookies.USER_ID;
+    const userNickName = cookies.USER_NICKNAME;
 
     // 가입 그룹 존재 여부
     const [groupJoined, setGroupJoined] = useState(false);
@@ -21,15 +25,14 @@ export default function NewsFeed() {
     // 마운트 될 때, setUserId의 값을 테스트 아이디로 저장
     useEffect(()=>{
         hasJoinedGroup();
-        if(groupJoined) {
-            getMemberGroupsFeeds();
-        }
-    },[])
+        getMemberGroupsFeeds();
+    },[userId])
 
-    // 가입한 그룹 존재 여부 확인 함수
+    // // 가입한 그룹 존재 여부 확인 함수
     const hasJoinedGroup = async () => {
         axios.get("http://localhost:3000/group/hasJoinedGroup", {params:{"memberId":userId}})
         .then(function(resp) {
+            console.log(resp.data);
             setGroupJoined(resp.data);
         })
         .catch(function(err) {
@@ -40,7 +43,8 @@ export default function NewsFeed() {
     const getMemberGroupsFeeds = () => {
         axios.get("http://localhost:3000/group/newsFeed", {params:{"memberId":userId}})
         .then(function(resp) {
-            setGroupFeeds(resp.data.list);
+            console.log(resp.data.newsFeed);
+            setGroupFeeds(resp.data.newsFeed);
         })
         .catch(function(err) {
             alert(err);
@@ -64,9 +68,9 @@ export default function NewsFeed() {
                     groupFeeds.map(function(feed, i){
                         return(
                             <tr key={i}>
-                                <td>{feed.grpNo}</td>
+                                <td>{feed.grpName}</td>
                                 <td>{feed.grpFeedId}</td>
-                                <td>{feed.grpFeedContent}</td>
+                                <td>{ReactHtmlParser(feed.grpFeedContent)}</td>
                                 <td>{feed.grpFeedSetting}</td>
                                 <td>{ feed.grpFeedWd.substring(0,10)}</td>
                             </tr>

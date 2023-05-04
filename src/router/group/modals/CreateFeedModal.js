@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const CreateFeedModal = ({show, onHide}) => {
+const CreateFeedModal = ({show, onHide, userId}) => {
 
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');
@@ -73,8 +73,7 @@ const CreateFeedModal = ({show, onHide}) => {
     formData.append("grpNo",params.grpNo);
     formData.append("grpFeedContent",content);
     formData.append("grpFeedSetting",setting);
-    // 임시
-    formData.append("grpFeedId", "test2");
+    formData.append("grpFeedId", userId);
 
     axios.post("http://localhost:3000/group/createFeed", formData)
     .then(function(res){

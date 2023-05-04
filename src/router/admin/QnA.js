@@ -120,7 +120,10 @@ const AdminQnAList = () => {
           {
           QnA.map(function(dto, i){
             return(
-              <TableRow QnA={dto} cnt={i+1} key={i} />
+
+
+                <TableRow QnA={dto} cnt={i+1} key={i} />
+
             )
           
 
@@ -147,126 +150,141 @@ const AdminQnAList = () => {
 };
 
 function TableRow(props) {
-    const [showModal, setShowModal] = useState(false);
-    const [answer, setAnswer] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [answer, setAnswer] = useState("");
 
+  const toggleModal = () => {
+    setAnswer(""); // 모달이 열릴 때마다 답변 내용을 초기화합니다.
+    setShowModal(true); // showModal 상태를 true로 변경하여 모달을 엽니다.
+  };
   
-    const toggleModal = () => setShowModal(!showModal);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
+    try {
+      const templateParams = {
+        to_email: props.QnA.email,
+        to_name: props.QnA.id,
+        from_name: "paw-tential",
+        message_html: answer,
+      };
 
-
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-    
-      try {
-        const templateParams = {
-          to_email: props.QnA.email,
-          to_name: props.QnA.id,
-          from_name: "paw-tential",
-          message_html: answer
-        };
-        console.log(props.QnA.email);
-        
-        const handleAnswer = async (seq) => {
-          await axios.post("http://localhost:3000/answer", null,
-          {params:{"seq":seq}})
-          .then(res=>{
+      const handleAnswer = async (seq) => {
+        await axios
+          .post("http://localhost:3000/answer", null, { params: { seq: seq } })
+          .then((res) => {
             console.log(seq);
             console.log(res.data);
-            if(res.data === "YES"){
-              alert('이메일이 전송되었습니다.');
+            if (res.data === "YES") {
+              alert("이메일이 전송되었습니다.");
+
               toggleModal();
               window.location.reload();
             }
           })
-          
-          .catch (function(error) {
+          .catch(function (error) {
             console.log(error);
-          })
+          });
+      };
 
-        };
-    
-        const response = await emailjs.send('service_xpsk69f', 'template_3u5vcm2', templateParams, '2UkkRVJwD7B4ZXZ_b');
-    
-        if (response.status === 200) {
-          await handleAnswer(props.QnA.seq);
-          console.log(props.QnA.seq);
-        } else {
-          alert('이메일 전송 중 오류가 발생했습니다.');
-        }
-      } catch (error) {
-        console.error(error);
-        alert('이메일 전송 중 오류가 발생했습니다.');
+      const response = await emailjs.send(
+        "service_xpsk69f",
+        "template_3u5vcm2",
+        templateParams,
+        "2UkkRVJwD7B4ZXZ_b"
+      );
+
+      if (response.status === 200) {
+        await handleAnswer(props.QnA.seq);
+      } else {
+        alert("이메일 전송 중 오류가 발생했습니다.");
       }
-    };
-      
-      
-  
-    return (
-      <>
-        <tr onClick={toggleModal}>
-          <td>{props.QnA.seq}</td>
-          <td>{props.QnA.content.length > 15 ? props.QnA.content.substr(0, 15) + "..." : props.QnA.content}</td>
-          <td>{props.QnA.id}</td>
-          <td>{props.QnA.email}</td>
-          <td>{props.QnA.wdate}</td>
-          <td>{props.QnA.whether === 0 ? '대기중' : '답변완료'}</td>
+    } catch (error) {
+      console.error(error);
+      alert("이메일 전송 중 오류가 발생했습니다.");
+    }
+  };
+
+
+  return (
+    <>
+      <tr onClick={toggleModal}>
+        <td>{props.QnA.seq}</td>
+        <td>
+          {props.QnA.content.length > 15
+            ? props.QnA.content.substr(0, 15) + "..."
+            : props.QnA.content}
+        </td>
+        <td>{props.QnA.id}</td>
+        <td>{props.QnA.email}</td>
+        <td>{props.QnA.wdate}</td>
+        <td>{props.QnA.whether === 0 ? "대기중" : "답변완료"}</td>
+      </tr>
+      {showModal && (
+        <tr>
+          <td colSpan="6">
+            <div className="modal">
+              <div className="modal-content">
+                <span className="close" onClick={toggleModal}>
+                  &times;
+                </span>
+                <h2>{props.QnA.id}님의 문의 내용</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>번호</th>
+                      <th>ID</th>
+                      <th>이메일</th>
+                      <th>작성일</th>
+                      <th>답변 여부</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{props.QnA.seq}</td>
+                      <td>{props.QnA.id}</td>
+                      <td>{props.QnA.email}</td>
+                      <td>{props.QnA.wdate}</td>
+                      <td>{props.QnA.whether === 0 ? "대기중" : "답변완료"}</td>
+                    </tr>
+                    <tr>
+                      <td colSpan={5} style={{textAlign: "center", fontSize: "1.2rem"}}>
+                        {props.QnA.content}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan={5}>
+                        <form onSubmit={handleSubmit}>
+                          <div className="form-group">
+                            <label htmlFor="answer">답변 내용:</label>
+                            <textarea
+                              id="answer"
+                              name="answer"
+                              rows="4"
+                              cols="50"
+                              value={answer}
+                              onChange={(e) => setAnswer(e.target.value)}
+                            />
+                          </div>
+                          <button type="submit">답변 보내기</button>
+                        </form>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </td>
         </tr>
-        {showModal && (
-  <div className="modal">
-    <div className="modal-content">
-      <span className="close" onClick={toggleModal}>&times;</span>
-      <h2>{props.QnA.id}님의 문의 내용</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>ID</th>
-            <th>이메일</th>
-            <th>작성일</th>
-            <th>답변 여부</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-          <td>{props.QnA.seq}</td>
-            <td>{props.QnA.id}</td>
-            <td>{props.QnA.email}</td>
-            <td>{props.QnA.wdate}</td>
-            <td>{props.QnA.whether === 0 ? '대기중' : '답변완료'}</td>
-          </tr>
-          <tr>
-            <td style={{textAlign: "center", fontSize: "1.2rem"}}>{props.QnA.content}</td>
-          </tr>
-          <tr>
-            <td colSpan={5}>
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="answer">답변 내용:</label>
-                  <textarea
-                    id="answer"
-                    name="answer"
-                    rows="4"
-                    cols="50"
-                    value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                  />
-                </div>
-                <button type="submit">답변 보내기</button>
-              </form>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-)}
+      )}
+    </>
+  );
+
+  
+    
 
 
 
-
-      </>
-    );
   }
 
 export default AdminQnAList;

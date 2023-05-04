@@ -1,0 +1,11 @@
+.chart-container {
+    height: 500px; /* 차트 컨테이너의 높이 지정 */
+    position: relative; /* 포지션 속성을 relative로 설정 */
+  }
+  
+  .chart {
+    position: absolute; /* 포지션 속성을 absolute로 설정 */
+    top: 0; /* 상단 여백을 0으로 설정 */
+    left: 0; /* 왼쪽 여백을 0으로 설정 */
+  }
+  
