@@ -14,7 +14,7 @@ import FeedPost from "./router/Feed/FeedPost";
 import Place_Detail from './router/place/Place_Detail.js';
 
 import Place from "./router/place/Place.js";
-import Place_Detail from "./router/place/Place_Detail.js";
+
 
 import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";

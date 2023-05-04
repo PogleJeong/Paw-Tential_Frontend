@@ -6,7 +6,7 @@ const HomeFeed = (feedData, comment, image) => {
     const [favoriteSeq, setFavoriteSeq] = useState(feedData.feedData.favoriteSeq);
     const [isBookmark, setIsBookmark] = useState(false);
 
-    // 댓글 리스트 커스텀 훅
+    // 댓글 리스트 커스텀 훅=33
     const useCommentList = (feedSeq) => {
         const [commentList, setCommentList] = useState([]);
 
