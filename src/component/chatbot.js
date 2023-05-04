@@ -45,7 +45,7 @@ const steps = [
   },
   {
     id: '반려동물 등록 번호 조회 방법',
-    message:"반려동물 등록 번호 조회 방법은 다음 사이트를 참조하시면 됩니다. https://ddnews.co.kr/pet-number/ ",
+    message:"반려동물 등록 번호 조회 방법은 다음 사이트를 참조하시면 됩니다.... https://ddnews.co.kr/pet-number/ ",
     end: true,
   },
 ];

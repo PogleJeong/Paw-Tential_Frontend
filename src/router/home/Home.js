@@ -8,7 +8,7 @@ const Home = () => {
   const [comments, setComments] = useState([]);
   const [images, setImages] = useState([]);
 
-//content
+//content;;
   const fetchFeeds = async () => {
     try {
       const response = await axios.get("http://localhost:3000/mainFeed");
