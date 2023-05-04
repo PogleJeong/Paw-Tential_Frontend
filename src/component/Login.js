@@ -54,8 +54,8 @@ export const LoginForm = () => {
                 }
                 const loginUser = response.data.USER_ID;
                 const loginUserNickname = response.data.USER_NICKNAME;
-                setCookies("id", loginUser, {path:"/", maxAge: 3600});
-                setCookies("nickname", loginUserNickname, {path:"/", maxAge: 3600});
+                setCookies("USER_ID", loginUser, {path:"/", maxAge: 3600});
+                setCookies("USER_NICKNAME", loginUserNickname, {path:"/", maxAge: 3600});
                 navigate("/");
                 return;
             }

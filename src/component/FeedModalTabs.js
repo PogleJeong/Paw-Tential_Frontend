@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from 'react-bootstrap';
-import session from "react-session-api";
+import { useCookies } from "react-cookie";
 import axios from 'axios';
 
 // 피드 작성
@@ -16,20 +16,10 @@ export const CreateFeedData = (data) => {
 // 포텐스 작성
 export const CreatePawtensData = () => {
 
-    const [ user, setUser ] = useState("");
-    const [ content, setContent ] = useState("");
+    const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
+    const [content, setContent] = useState("");
     const [file, setFile] = useState({});
     const videoRef = useRef();
-
-    useEffect(()=>{
-        // 로그인 확인
-        const userSession = session.get("user") || false;
-        if (!userSession){
-            alert("로그인을 해주세요");
-            navigator("/");
-        }
-        setUser(userSession);
-    },[])
 
     const pawtensWrite = async() => {
         if(!videoRef.current.files[0]) {
@@ -39,7 +29,7 @@ export const CreatePawtensData = () => {
         
         let formData = new FormData();
         formData.append("file", videoRef.current.files[0]);
-        formData.append("id", user);
+        formData.append("id", cookies.USER_ID);
         formData.append("content", content);
         await axios.post("http://localhost:3000/pawtens/write", formData, {"Content-Type": `multipart/form-data`})
         .then((response) =>{
