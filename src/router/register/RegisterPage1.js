@@ -34,7 +34,7 @@ function RegisterPage1() {
     const nick = useInput("", maxLen, 10);
     const number = useInput("", maxLen, 11);
     const birth = useInput("", maxLen, 8);
-    const [ radioValue, setRadioValue ] = useState("0");
+    const [ radioValue, setRadioValue ] = useState("male");
 
     // 입력값 검증
     const idRef = useRef();
@@ -48,13 +48,14 @@ function RegisterPage1() {
     // DB 에서 중복검증
     const [ idSuccess ,setIdSuccess ] = useState(false);
     const [ passwordSuccess, setPasswordSuccess ] = useState(false);
+    const [ emailSuccess, setEmailSuccess ] = useState(false);
     const [ nickSuccess, setNickSuccess ] = useState(false);
 
     // 메세지 출력
     const idCheckMsgRef = useRef();
     const pwdRegExpRef = useRef();
     const pwdCheckMsgRef = useRef();
-    const emailRegExpRef = useRef();
+    const emailCheckMsgRef = useRef();
     const nickCheckMsgRef = useRef();
 
     // 페이지이동
@@ -62,7 +63,7 @@ function RegisterPage1() {
 
     useEffect(()=>{
         const { value } = id;
-        console.log(value);
+  
         const idRegExp = /^[a-z0-9_-]{6,20}$/; 
         idCheckMsgRef.current.innerText = checkRegExp(value, idRegExp) ? "사용가능한 아이디입니다." : "6~20 자리의 영문자를 포함한 아이디를 입력해주세요.";
     }, [id.value])
@@ -70,21 +71,21 @@ function RegisterPage1() {
     useEffect(()=>{
         const { value } = password;
         const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
-        console.log(value);
+     
         pwdRegExpRef.current.innerText = checkRegExp(value, pwdRegExp) ? "사용가능한 비밀번호입니다." : "특수문자를 포함하는 8~24 자리의 비밀번호를 입력해주세요.";
     },[password.value]);
 
     useEffect(()=>{
         const { value } = email;
         const emailRegRef = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
-        console.log(value);
-        emailRegExpRef.current.innerText = checkRegExp(value, emailRegRef) ? "해당 이메일을 사용할 수 있습니다." : "이메일 형식에 맞지 않습니다.";
+    
+        emailCheckMsgRef.current.innerText = checkRegExp(value, emailRegRef) ? "해당 이메일을 사용할 수 있습니다." : "이메일 형식에 맞지 않습니다.";
     },[email.value])
 
     useEffect(()=>{
         const { value } = nick;
         const nickRegExp = /^[가-힣a-zA-Z0-9]+$/;
-        console.log(value);
+     
         nickCheckMsgRef.current.innerText = checkRegExp(value, nickRegExp) ? null : "영문숫자조합 2~10 글자 가능합니다.";
     },[nick.value])
 
@@ -102,6 +103,7 @@ function RegisterPage1() {
         // 정규식
         const idRegExp = /^[a-z0-9_-]{6,20}$/; 
         const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
+        const emailRegExp =  /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
         const nickRegExp = /^[가-힣a-zA-Z0-9]{2,10}$/;
         // 1. 정보가 모두 입력되었는가
         if (!id) {
@@ -152,6 +154,9 @@ function RegisterPage1() {
             alert("비밀번호를 다시 확인해주세요.");
             return;
         }
+        if (!checkRegExp(email, emailRegExp)) {
+            alert("이메일을 다시 확인해주세요");
+        }
         if (!checkRegExp(nick, nickRegExp)) {
             alert("닉네임을 다시 확인해주세요.");
             return;
@@ -168,12 +173,17 @@ function RegisterPage1() {
             return;
         }
 
+        if (!emailSuccess) {
+            alert("이메일을 중복을 확인해주세요!")
+            return;
+        }
+
         if (!nickSuccess) {
-            alert("닉네임 중복을 확인해주세요");
+            alert("닉네임 중복을 확인해주세요!");
             return;
         }
         // 유저정보 입력 후 다음 버튼을 통해 반려동물 정보입력가능
-        const userInfo = {id, password, email, nick, number, birth, gender};
+        const userInfo = {id, password, email, nick, number, birth, gender: gender === "female" ? 0 : 1};
         
         // useNavigator 으로 데이터보내기 => useLocation 로 데이터 받기
         
@@ -197,12 +207,12 @@ function RegisterPage1() {
         .then((response) => {
             console.log("ID Check >> ", response.data);
             if (response.status === 200){
-                if (response.data === "exist") {
+                if (response.data === "EXIST") {
                     idCheckMsgRef.current.innerText = "이미 존재하는 아이디입니다.";
                     setIdSuccess(false);
                     return;
                 };
-                if (response.data === "notExist") {
+                if (response.data === "NOT_EXIST") {
                     idCheckMsgRef.current.innerText = "사용가능한 아이디입니다.";
                     setIdSuccess(true);
                     return;
@@ -210,6 +220,31 @@ function RegisterPage1() {
             }
         });
     };
+    /** 이메일 체크 함수 */
+    const checkEmail = async() => {
+        const email = emailRef.current.value;
+        console.log(email);
+        const emailRegExp =  /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+        if (!checkRegExp(email, emailRegExp)) {
+            alert("이메일을 다시 확인해주세요");
+            return;
+        }
+        await axios.post("http://localhost:3000/emailCheck", null, {params: {email}})
+        .then((response)=> {
+            if (response.status === 200) {
+                if (response.data === "EXIST"){
+                    emailCheckMsgRef.current.innerText = "이미 존재하는 이메일입니다.";
+                    setEmailSuccess(false);
+                    return;
+                };
+                if (response.data === "NOT_EXIST"){
+                    emailCheckMsgRef.current.innerText = "사용가능한 이메일입니다..";
+                    setEmailSuccess(true);
+                    return;
+                }
+            }
+        })
+    }
 
     /** 닉네임 체크 함수 */
     const checkNickname =  async() => {
@@ -225,12 +260,12 @@ function RegisterPage1() {
         .then((response) => {
             console.log("Nick Name Check >> ", response.data);
             if (response.status === 200) {
-                if (response.data === "exist") {
+                if (response.data === "EXIST") {
                     nickCheckMsgRef.current.innerText = "이미존재하는 닉네임입니다.";
                     setNickSuccess(false);
                     return;
                 };
-                if (response.data === "notExist") {
+                if (response.data === "NOT_EXIST") {
                     nickCheckMsgRef.current.innerText = "사용가능한 닉네임입니다.";
                     setNickSuccess(true);
                     return;
@@ -265,8 +300,9 @@ function RegisterPage1() {
             <small ref={pwdRegExpRef}></small><br/>
             <label>비밀번호 확인<input ref={confirmRef} type="password" onChange={confirmPassword} required/></label><br/>
             <small ref={pwdCheckMsgRef}></small><br/>
-            <label>이메일<input ref={emailRef} {...email} type="email" required /></label><br/>
-            <small ref={emailRegExpRef}></small><br/>
+            <label>이메일<input ref={emailRef} {...email} type="email" required /></label>
+            <button onClick={checkEmail}>중복확인</button><br/>
+            <small ref={emailCheckMsgRef}></small><br/>
             <label>닉네임<input ref={nickRef} {...nick} required /></label>
             <button onClick={checkNickname}>중복확인</button><br/>
             <small ref={nickCheckMsgRef}></small><br/>
@@ -277,10 +313,11 @@ function RegisterPage1() {
             <label>
                 성별
                 <div>
-                    <input type="radio" name="gender" value="남성" onChange={()=>setRadioValue(0)} />
-                    <label>남자</label>
-                    <input type="radio" name="gender" value="여성" onChange={()=>setRadioValue(1)} />
-                    <label>여자</label>
+                    <label htmlFor='male'>남성</label>
+                    <input type="radio"  id="male" name="gender" checked={radioValue === "male"} value="male" onChange={(event)=>setRadioValue(event.target.value)} />
+                    <label htmlFor='female'>여성</label>
+                    <input type="radio" id="female" name="gender" checked={radioValue === "female"} value="female" onChange={(event)=>setRadioValue(event.target.value)} />
+    
                 </div>
             </label>
     

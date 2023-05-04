@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import UploadAdapter from '../../utils/UploadAdaptor';
 import axios from 'axios';
-import KakaoMapUpdate from '../../component/GeoAPI3';
+import KakaoMapUpdate from './components/GeoAPI3';
 
 
 const stateList = ["--분류--","나눔", "판매"];

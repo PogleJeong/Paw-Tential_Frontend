@@ -1,7 +1,10 @@
-import axios from "axios";
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import session from "react-session-api";
 
 const useInput = (initValue, validator, valid) => {
+  
     const [value, setValue ] = useState(initValue);
     
     const onChange = (event) => {
@@ -21,14 +24,21 @@ const useInput = (initValue, validator, valid) => {
 // posting 정보받기, modal 을 위한 onChange 함수 받기.
 const maxLen = (value, valid) => value.length <= valid;
 
-function MarketReport({posting, setActiveReportModal}) {
+function MarketReport({writer, setActiveReportModal}) {
     const title = useInput("", maxLen, 45);
     const category = useInput("--전체--", maxLen, 45);
     const content = useInput("", maxLen, 500);
-
+    const location = useLocation();
+    
     const sendReport = async() => {
+        const reporter = session.get("user") || null;
+        const { pathname } = location;
         if (!title.value) {
             alert("신고제목을 입력해주세요.");
+            return;
+        }
+        if (!reporter) {
+            alert("로그인 후 진행해주세요");
             return;
         }
         if (!category) {
@@ -39,12 +49,26 @@ function MarketReport({posting, setActiveReportModal}) {
             alert("신고내용을 입력해주세요.");
             return;
         }
-        await axios.post(null, null, {params: {
+        await axios.post("http://localhost:3000/market/report", null, {params: {
             title: title.value,
+            reporter,
+            reported: writer,
             category: category.value,
             content: content.value,
-            posting
+            url: pathname,
         }})
+        .then((response) => {
+            if (response.status === 200){
+                if (response.data === "REPORT_MARKET_OK"){
+                    alert("신고되었습니다.");
+                    setActiveReportModal(false);
+                    return;
+                }
+                if( response.data === "REPORT_MARKET_NO"){
+                    alert("신고실패!!");
+                }
+            }
+        })
     }
     const closeModal = () => {
         setActiveReportModal(false);
