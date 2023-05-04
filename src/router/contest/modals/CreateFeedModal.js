@@ -1,25 +1,21 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import { Modal, Button, Form, Container, Tab, Tabs } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Session from "react-session-api"
 import { CreatePawtensData } from '../../../component/FeedModalTabs';
 
 const CreateFeedModal = ({show, onHide}) => {
 
-  const [userId, setUserId] = useState('');
+  const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');
 
   const [tabKey, setTabKey] = useState('feed');
 
   useEffect(()=>{
-    let user = Session.get("user");
-    if(user !== undefined){ // 세션에 저장해둔 문자열이 있을 때
-        setUserId(user);
-    }
+
   }, []);
 
   const customUploadAdapter = (loader) => {
@@ -76,7 +72,7 @@ const CreateFeedModal = ({show, onHide}) => {
     e.preventDefault();
 
     let formData = new FormData();
-    formData.append("id", "loserya"); // 임시
+    formData.append("id", cookies.USER_ID); // 임시
     formData.append("content",content);
     formData.append("tag", ""); // 임시
     formData.append("location", ""); // 임시
