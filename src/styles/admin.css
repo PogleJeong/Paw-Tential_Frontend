@@ -1,58 +1,91 @@
-.navbar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 70px;
-  background-color: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 0 20px;
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding-top: 4rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  transition: all 0.3s;
 }
 
-.navbar-brand {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #000000;
-  text-decoration: none;
-}
-
-.navbar-nav {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-item {
-  margin: 0 10px;
+.sidebar-sticky {
+  top: 4rem;
+  z-index: 2;
+  padding: 0.5rem 1rem 1rem;
 }
 
 .nav-link {
-  font-size: 1.2rem;
-  color: #000000;
-  text-decoration: none;
-  transition: color 0.2s ease-in-out;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.3s;
 }
 
 .nav-link:hover {
-  color: #6c757d;
+  background-color: #f2f2f2;
+  color: #007bff;
 }
 
-.admin-page {
-  display: flex;
-  flex-direction: row;
+.dropdown-toggle {
+  position: relative;
 }
 
-.admin-page-sidebar {
-  width: 20%;
-  min-width: 200px;
+.dropdown-menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 0.5rem;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  z-index: 1;
 }
 
-.admin-page-main {
-  width: 80%;
-  padding-left: 20px;
+.dropdown-item {
+  padding: 0.25rem 1.5rem;
+  font-size: 0.875rem;
+  color: #333;
+  transition: all 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: #f2f2f2;
+  color: #007bff;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    z-index: 1;
+    width: 200px;
+    transition: none;
+  }
+  
+  .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 4rem;
+  }
+  
+  .nav-item:hover .dropdown-menu {
+    display: block;
+  }
+}
+
+.sub-menu {
+  display: none;
+}
+
+.show {
+  display: block;
 }
 

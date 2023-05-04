@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import "./App.css";
 import Nav from "./component/Nav.js";
-import "./styles/FeedPost.css";
 
 import Home from "./router/home/Home";
 
@@ -16,7 +15,7 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_Detail from "./router/place/Place_Detail.js";
+import Place_detail from "./router/place/Place_Detail.js";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";
@@ -32,6 +31,9 @@ import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
+import PetChart from './router/admin/PetChart';
+import UserChart from './router/admin/UserChart';
+
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -39,6 +41,13 @@ import GroupList from './router/group/GroupList';
 import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
+
+import Pawtens from "./router/pawtens/Pawtens";
+import Pawtens_detail from "./router/pawtens/Pawtens_detail";
+
+import Contest from "./router/contest/Contest";
+import Contest_detail from "./router/contest/Contest_detail";
+
 
 function App() {
     return (
@@ -60,7 +69,7 @@ function App() {
         <main>
           <Routes>
             {/* 메인 홈 */}
-            <Route path="/" element={<Home />} />
+            <Route path="/home/home" element={<Home />} />
 
             {/* 로그인/회원가입 */}
             <Route path="/login" element={<Login />} />
@@ -77,11 +86,12 @@ function App() {
             <Route path="/router/regi" element={null} />
 
             {/* 콘테스트 */}
-            <Route path="/router/regi" element={null} />
-            <Route path="/router/regi" element={null} />
+            <Route path="/contest" element={<Contest />} />
+            <Route path="/contest/detail" element={<Contest_detail />} />
 
             {/* 포텐스 */}
-            <Route path="/router/regi" element={null} />
+            <Route path="/pawtens" element={<Pawtens />} />
+            <Route path="/pawtens/detail" element={<Pawtens_detail />} />
 
             {/* 마켓 */}
             <Route path="/market" element={<MarketHome />} />
@@ -93,9 +103,9 @@ function App() {
             <Route path="/router/regi" element={null} />
 
             {/* 플레이스 */}
-            <Route path="/place/place" element={<Place />} />
-            <Route path="/place/place/:search?/:category?" element={<Place />} />
-            <Route path="/place/place-detail/:search?/:category?" element={<Place_Detail />} />
+            <Route path="/place" element={<Place />} />
+            <Route path="/place/:search?/:category?" element={<Place />} />
+            <Route path="/place_detail/:search?/:category?" element={<Place_detail />} />
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
@@ -105,7 +115,7 @@ function App() {
             <Route path="/group/GroupList/:search" element={<GroupList />} />
             <Route path="/group/MyGroup" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
-            <Route path="/group/GroupFeed/:grpNo" exact element={<GroupFeed />} />
+            <Route path="/group/GroupFeed/:grpNo/:grpName" exact element={<GroupFeed />} />
             <Route path="/router/regi" element={null} />
 
             {/* 관리자 */}
@@ -117,6 +127,12 @@ function App() {
             <Route path="admin/reports" element={<Reports />} />
             <Route path="admin/reports/:choice/:search" element={<Reports />} />
             <Route path="admin/data" element={<Data />} />
+            <Route path="admin/petChart" element={<PetChart />} />
+            <Route path="admin/userChart" element={<UserChart />} />
+
+
+
+            
 
             {/* 마이피드 */}
             <Route path="/myfeed/myfeed" element={<Myfeed />} />
@@ -127,7 +143,7 @@ function App() {
         </main>
         </div>
       </BrowserRouter>
-   
+    
       {/* footer */}
       <footer>
         <div>
