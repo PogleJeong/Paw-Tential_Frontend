@@ -15,9 +15,9 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_detail.js";
+import Place_detail from "./router/place/Place_Detail.js";
 
-import Myfeed from "./router/myfeed/myfeed";
+import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";
 import Pet_update from "./router/myfeed/Pet_update";
 import MarketHome from "./router/market/Market_home";
@@ -31,6 +31,9 @@ import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
+import PetChart from './router/admin/PetChart';
+import UserChart from './router/admin/UserChart';
+
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -66,7 +69,7 @@ function App() {
         <main>
           <Routes>
             {/* 메인 홈 */}
-            <Route path="/" element={<Home />} />
+            <Route path="/home/home" element={<Home />} />
 
             {/* 로그인/회원가입 */}
             <Route path="/login" element={<Login />} />
@@ -102,7 +105,7 @@ function App() {
             {/* 플레이스 */}
             <Route path="/place" element={<Place />} />
             <Route path="/place/:search?/:category?" element={<Place />} />
-            <Route path="/place/detail/:search?/:category?" element={<Place_detail />} />
+            <Route path="/place_detail/:search?/:category?" element={<Place_detail />} />
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
@@ -124,6 +127,12 @@ function App() {
             <Route path="admin/reports" element={<Reports />} />
             <Route path="admin/reports/:choice/:search" element={<Reports />} />
             <Route path="admin/data" element={<Data />} />
+            <Route path="admin/petChart" element={<PetChart />} />
+            <Route path="admin/userChart" element={<UserChart />} />
+
+
+
+            
 
             {/* 마이피드 */}
             <Route path="/myfeed/myfeed" element={<Myfeed />} />

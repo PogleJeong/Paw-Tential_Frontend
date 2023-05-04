@@ -23,7 +23,7 @@ const Nav = () =>{
             <li><Link className="nav-link" to="/pawtens">포텐스</Link></li>
             <li><Link className="nav-link" to="/contest">포텐콘테스트</Link></li>
             <li><Link className="nav-link" to="/group/newsfeed">그룹</Link></li>
-            <li><Link className="nav-link" to="/myfeed/myfeed">마이피드</Link></li>
+            <li><Link className="nav-link" to="/myfeed/Myfeed">프로필</Link></li>
             <br/><br/>
             <li><Link className="nav-link" to="/admin/admin" target="_blank">관리자페이지</Link></li>
         </ul>
