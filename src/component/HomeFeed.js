@@ -5,38 +5,30 @@ import axios from "axios";
 const HomeFeed = (feedData, comment, image) => {
     const [favoriteSeq, setFavoriteSeq] = useState(feedData.feedData.favoriteSeq);
     const [isBookmark, setIsBookmark] = useState(false);
-    const [commentList, setCommentList] = useState(feedData.feedData.comments || []);
-    const [newComment, setNewComment] = useState("");
+
+    // 댓글 리스트 커스텀 훅
+    const useCommentList = (feedSeq) => {
+        const [commentList, setCommentList] = useState([]);
+
+        useEffect(() => {
+            axios.get('http://localhost:3000/getComment', {params: {'feed_seq': feedSeq}})
+              .then((response) => {
+                  console.log(response.data);
+                  setCommentList(response.data.cmtList);
+              })
+              .catch((error) => {
+                  console.log(error);
+              })
+        }, [feedSeq]);
+
+        return commentList;
+    }
 
 
 
 
-    //댓글 저장
-    const saveComment = async () => {
-        try {
-            const data = {
-                feed_seq: feedData.feedData.seq,
-                id: "test", // login Id
-                content: newComment,
-            };
-            const response = await axios.post("http://localhost:3000/Comments", data);
-            setCommentList([...commentList, response.data]);
-            setNewComment("");
-        } catch (error) {
-            console.error(error);
-            alert("Failed to save comment");
-        }
-    };
 
-    const onCommentChange = (event) => {
-        setNewComment(event.target.value);
-    };
 
-    const onSubmitComment = (event) => {
-        event.preventDefault();
-        alert('#1');
-        saveComment();
-    };
 
     //좋아요
     const onClickLike = () => {
@@ -87,9 +79,136 @@ const HomeFeed = (feedData, comment, image) => {
         }
     };
 
+    // 댓글 불러오기
+    const FeedWithComments = ((props) => {
+
+        const [newComment, setNewComment] = useState("");
+        // TO-DO
+        const commentList = useCommentList(props.feed.seq);
+
+        //댓글 저장
+        const saveComment = async () => {
+            await axios.post("http://localhost:3000/Comments", null,{params: {'feed_seq': props.feed.seq, 'id': "euna_1", 'comment': newComment}})
+            .then(function(res){
+                alert(res.data);
+                window.location.reload();
+            })
+            .catch(function(error){
+                alert(error);
+            })
+        }
+            {/*
+            try {
+                const data = {
+                    feed_seq: feedData.feedData.seq,
+                    id: "euna_1", // login Id
+                    comment: newComment,
+                };
+                const response = await axios.post("http://localhost:3000/Comments", data);
+                window.location.reload();
+            } catch (error) {
+                console.error(error);
+                alert("Failed to save comment");
+            }
+            */
+        };
+
+
+        const onCommentChange = (event) => {
+            setNewComment(event.target.value);
+        };
+
+        const onSubmitComment = (event) => {
+            event.preventDefault();
+            alert('#1');
+            saveComment();
+        };
+
+
+        return (
+          <>
+              <div className="feed-post">
+
+                  <img
+                    src="feedimages/icon.png"
+                    alt="더보기"
+                    style={{ width: 30, height: 30 }}
+                  />
+
+                  <div className="post-image">
+                      <img src="feedimages/bc.jpg" alt="post" />
+                  </div>
+                  <div className="post-header">
+                      <button onClick={onClickLike}>
+                          <img
+                            src={
+                              "feedimages/" +
+                              (favoriteSeq > 0 ? "likeon.png" : "likeoff.png")
+                            }
+                            alt="좋아요"
+                          />
+                      </button>
+                      <button type="submit">
+                          <img
+                            src="feedimages/comment.png"
+                            alt="댓글"
+                            style={{ width: 50, height: 50 }}
+                          />
+
+                      </button>
+
+                      <button onClick={onClickBookmark}>
+                          <img
+                            src={
+                              "feedimages/" +
+                              (isBookmark ? "bookmarkon.png" : "bookmarkoff.png")
+                            }
+                            alt="북마크"
+                          />
+                      </button>
+                  </div>
+                  {/*post-comment*/}
+                  <div className="post-content">
+                      <h2 style={{ textAlign: "center" }}>{props.feed.content}</h2>
+                  </div>
+
+                  <div className="post-details">
+                      <div className="post-details-left">
+                          <p>좋아요 {feedData.feedData.favoriteCount}개</p>
+                      </div>
+                  </div>
+
+              {commentList.map((comment, index) => (
+                  <div key={index}>
+                      <div>{comment.id}</div>
+                      <div>{comment.comment}</div>
+                  </div>
+              ))}
+              <form onSubmit={onSubmitComment}>
+                  <input
+                    type="text"
+                    value={newComment}
+                    onChange={onCommentChange}
+                    placeholder="댓글달기..."
+                  />
+                  <button type="submit">게시</button>
+              </form>
+              </div>
+          </>
+        )
+
+
+    })
     return (
+        <>
+            <FeedWithComments feed={feedData.feedData} />
+        </>
+
+      /*
         <div>
+
             <div className="feed-post">
+
                 <img
                     src="feedimages/icon.png"
                     alt="더보기"
@@ -115,7 +234,9 @@ const HomeFeed = (feedData, comment, image) => {
                             alt="댓글"
                             style={{ width: 50, height: 50 }}
                         />
+
                     </button>
+
                     <button onClick={onClickBookmark}>
                         <img
                             src={
@@ -126,7 +247,7 @@ const HomeFeed = (feedData, comment, image) => {
                         />
                     </button>
                 </div>
-                {/*post-content*/}
+                post-comment
                 <div className="post-content">
                     <h2 style={{ textAlign: "center" }}>{feedData.feedData.content}</h2>
                 </div>
@@ -161,7 +282,12 @@ const HomeFeed = (feedData, comment, image) => {
                 </div>
             </div>
         </div>
+
+
+    */
     );
+
+
 };
 
 export default HomeFeed;
