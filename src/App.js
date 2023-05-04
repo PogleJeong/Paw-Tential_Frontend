@@ -15,7 +15,7 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_Detail";
+import Place_detail from "./router/place/Place_detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";
@@ -115,7 +115,7 @@ function App() {
             <Route path="/group/GroupList/:search" element={<GroupList />} />
             <Route path="/group/MyGroup" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
-            <Route path="/group/GroupFeed/:grpNo/:grpName" exact element={<GroupFeed />} />
+            <Route path="/group/GroupFeed/:grpNo" exact element={<GroupFeed />} />
             <Route path="/router/regi" element={null} />
 
             {/* 관리자 */}
