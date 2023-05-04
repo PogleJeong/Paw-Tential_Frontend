@@ -21,7 +21,7 @@ export default function CreateGroup() {
 
     useEffect(()=>{
         // setGrpLeader(json.id);
-        setGrpLeader('example');
+        setGrpLeader('loserya');
     },[]);
 
     // 그룹명 중복 확인

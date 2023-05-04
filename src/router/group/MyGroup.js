@@ -12,7 +12,7 @@ export default function MyGroup(){
     const [myGroup, setMyGroup] = useState([]);
     
     // 테스트용 임시 ID
-    const memberId = 'example';
+    const memberId = 'loserya';
 
     useEffect(()=>{
         getMyGroupList();
@@ -20,7 +20,7 @@ export default function MyGroup(){
 
     // 내가 가입한 그룹 불러오는 함수
     const getMyGroupList = async () => {
-        axios.get("http://localhost:3000/group/getMyGroupList", {params:{"memberId":'example'}})
+        axios.get("http://localhost:3000/group/getMyGroupList", {params:{"memberId":'loserya'}})
         .then(function(res) {
             setMyGroup(res.data.myGroupList);
         })

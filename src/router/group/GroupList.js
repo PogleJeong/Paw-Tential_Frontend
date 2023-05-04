@@ -7,7 +7,7 @@ export default function GroupList() {
     const navigate = useNavigate();
 
     // 임시 사용자 ID
-    const userId = 'test';
+    const userId = 'loserya';
 
     // 검색어 state 변수
     const [search, setSearch] = useState('');

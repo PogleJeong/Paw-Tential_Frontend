@@ -113,7 +113,7 @@ function App() {
             <Route path="/group/CreateGroup" element={<CreateGroup />} />
             <Route path="/group/GroupList" element={<GroupList />} />
             <Route path="/group/GroupList/:search" element={<GroupList />} />
-            <Route path="/group/MyGroup" element={<MyGroup />} />
+            <Route path="/group/MyGroup/" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
             <Route path="/group/GroupFeed/:grpNo/:grpName" exact element={<GroupFeed />} />
             <Route path="/router/regi" element={null} />
