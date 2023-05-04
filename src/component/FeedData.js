@@ -7,7 +7,7 @@ export const FeedImage = (data) => {
         if(str.includes('<img src="')){
             return str.split('<img src="')[1].split('">')[0];
         } else {
-            return "feedimages/nofeed.png";
+            return "../feedimages/nofeed.png";
         }
     }
     return (
