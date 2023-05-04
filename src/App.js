@@ -115,7 +115,7 @@ function App() {
             <Route path="/group/GroupList/:search" element={<GroupList />} />
             <Route path="/group/MyGroup" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
-            <Route path="/group/GroupFeed/:grpNo" exact element={<GroupFeed />} />
+            <Route path="/group/GroupFeed/:grpNo/:grpName" exact element={<GroupFeed />} />
             <Route path="/router/regi" element={null} />
 
             {/* 관리자 */}

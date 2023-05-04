@@ -11834,7 +11834,7 @@ fieldset:disabled .btn {
   padding: 0.938rem 0;
 }
 .iq-search-bar {
-  padding: 0 0.938rem;
+  padding: 0 0.938rem 0 45rem;
 }
 .iq-search-bar .searchbox {
   width: 30rem;

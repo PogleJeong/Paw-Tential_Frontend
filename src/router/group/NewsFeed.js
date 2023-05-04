@@ -7,11 +7,14 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import ReactHtmlParser from "react-html-parser";
+import { useCookies } from "react-cookie";
 
 export default function NewsFeed() {
     
-    // 테스트 아이디 임시 저장
-    const userId = 'example';
+    const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
+    // cookie에 저장된 사용자 ID 및 닉네임
+    const userId = cookies.USER_ID;
+    const userNickName = cookies.USER_NICKNAME;
 
     // 가입 그룹 존재 여부
     const [groupJoined, setGroupJoined] = useState(false);
