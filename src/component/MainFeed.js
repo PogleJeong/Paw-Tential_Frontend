@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Session from "react-session-api"
 import { FeedImage, FeedContent } from "./FeedData";
-import FeedDropdown_writer from "./FeedDropdown_writer";
-import FeedDropdown_user from "./FeedDropdown_user";
+import { FeedDropdown_user, FeedDropdown_writer } from "./FeedDropdown";
 
 const MainFeed = (feedData) => {
   const [userId, setUserId] = useState('');

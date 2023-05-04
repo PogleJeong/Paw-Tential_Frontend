@@ -10,8 +10,15 @@
     align-content: flex-start;
 }
 .pawtensItem {
-    width:250px;
-    height:150px;
     margin: 10px;
-    background-color: #cbcbcb;
+}
+
+.pawtensItem img {
+    width:250px;
+    height:180px;
+    object-fit: cover;
+}
+
+.createPawtens .filePreview {
+    margin-top: 20px;
 }
