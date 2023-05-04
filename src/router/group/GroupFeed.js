@@ -20,7 +20,7 @@ export default function GroupFeed(){
     let params = useParams();
     let grpName = params.grpName;
     
-    const userId = 'test2';
+    const userId = 'test123';
 
     const [grpCmtNo, setGrpCmtNo] = useState('');
 
