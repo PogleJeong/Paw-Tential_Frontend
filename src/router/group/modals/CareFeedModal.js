@@ -14,15 +14,16 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import { Calendar } from 'react-date-range';
+import { useCookies } from "react-cookie";
 
 
 
 export default function CareFeedModal ({show, onHide}) {
     let params = useParams();
 
-    
+    const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
     // 넘겨줘야 할 값
-    const writer = 'test2';
+    const writer = cookies.USER_ID;
     
     // category === care 일 때 사용할 state변수
     const [category, setCategory] = useState('walk');

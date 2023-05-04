@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from "axios";
-import Session from 'react-session-api';
+import { useCookies } from "react-cookie";
 import '../../styles/MyFeed.css';
 import { FeedImage } from '../../component/FeedData';
 import  MyfeedDropdown_user  from '../../component/MyfeedDropdown_user';
@@ -11,6 +11,7 @@ import  MyfeedDropdown_others from '../../component/MyfeedDropdown_others';
 
 const MyFeed = () => {
 
+  const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [feed, setFeed] = useState([]);
@@ -35,8 +36,7 @@ const MyFeed = () => {
 
   const fetchUserInfo = async () => {
     try {
-      const id = Session.get("user");
-      const res = await axios.get("http://localhost:3000/userInfo", {params: {id : id}});
+      const res = await axios.get("http://localhost:3000/userInfo", {params: {id : cookies.USER_ID}});
       setUserInfo(res.data);
       console.log(res.data);
     } catch (err) {
@@ -48,10 +48,9 @@ const MyFeed = () => {
 
   const fetchFeed = async () => {
     try {
-      const id = Session.get("user");
       const res = await axios.get("http://localhost:3000/Myfeed", { 
         params: {
-          id: id,
+          id: cookies.USER_ID,
           page: pageNumber
         }
       });
@@ -99,7 +98,7 @@ const MyFeed = () => {
             {userInfo !== '' &&
             <div className="feed-icon" style={{float:"right"}}>
               <img src="feedimages/icon.png" alt="더보기" onClick={() => setIsDropdown(!isDropdown)}/>
-              {Session.get("user") === userInfo.id
+              {cookies.USER_ID === userInfo.id
               ? isDropdown && <MyfeedDropdown_user id={userInfo.id} />
               : isDropdown && <MyfeedDropdown_others id={userInfo.id} />}
             </div>

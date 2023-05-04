@@ -13,6 +13,7 @@ import ModifyCmtModal from './modals/ModifyCmtModal';
 import CareFeedModal from './modals/CareFeedModal';
 import ModifyCareFeedModal from './modals/ModifyCareFeedModal';
 import moment from 'moment';
+import { useCookies } from "react-cookie";
 
 
 export default function GroupFeed(){
@@ -20,7 +21,10 @@ export default function GroupFeed(){
     let params = useParams();
     let grpName = params.grpName;
     
-    const userId = 'loserya';
+    const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
+    // cookie에 저장된 사용자 ID 및 닉네임
+    const userId = cookies.USER_ID;
+    const userNickName = cookies.USER_NICKNAME;
 
     const [grpCmtNo, setGrpCmtNo] = useState('');
 
@@ -358,7 +362,8 @@ export default function GroupFeed(){
     return ( // start of GroupFeed Component return
     <>
     <CreateFeedModal show={createFeedModal}
-                                            onHide={()=>{setCreateFeedModal(false)}} />
+                                            onHide={()=>{setCreateFeedModal(false)}}
+                                            userId={userId} />
         <ModifyFeedModal show={modifyFeedModal}
                                             onHide={()=>{setModifyFeedModal(false)}}
                                             grpFeedNo={selectedGrpFeedId} />
@@ -374,7 +379,7 @@ export default function GroupFeed(){
                                             />
         <div className="wrapper">
             <div className="header-for-bg">
-                <div className="background-header position-relative">
+                <div className="background-header">
                     <img src="/assets/images/page-img/profile-bg7.jpg" className="img-fluid w-100" alt="header-bg" />
                     <div className="title-on-header">
                         <div className="data-block">
