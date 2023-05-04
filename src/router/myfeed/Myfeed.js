@@ -9,7 +9,7 @@ import  MyfeedDropdown_others from '../../component/MyfeedDropdown_others';
 
 
 
-const MyFeed = () => {
+const Myfeed = () => {
 
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [userInfo, setUserInfo] = useState(null);
@@ -137,4 +137,4 @@ const MyFeed = () => {
   );
 };
 
-export default MyFeed;
+export default Myfeed;
