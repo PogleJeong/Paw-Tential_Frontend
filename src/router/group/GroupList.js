@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import "../../styles/socialv.css";
 
 export default function GroupList() {
     
@@ -65,10 +64,81 @@ export default function GroupList() {
 
     return (
         <>
+
+        {/* TO-DO 사이드바 수정 후에 다시 확인해주세요 */}
+        <div className="header-for-bg">
+            <div className="background-header position-relative">
+                <img src="../assets/images/page-img/profile-bg7.jpg" className="img-fluid w-100" alt="header-bg" />
+                <div className="title-on-header">
+                    <div className="data-block">
+                        <h2>Groups</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h1>그룹 검색</h1>
         <input type="text" value={search} name="search" placeholder="Search here..." onChange={(e)=>{setSearch(e.target.value)}}/>
         <button type="button" onClick={searchBtn}>검색</button>
-        <table>
+        <div id="content-page" className="content-page">
+            <div className="container">
+                <div className="d-grid gap-3 d-grid-template-1fr-19">
+                {
+                    groupList.map(function(group, i) {
+                        return (
+                        <div key={i}>
+                                        <div className="card mb-3">
+                                            {/* 그룹 커버 이미지 */}
+                                            <div className="top-bg-image">
+                                                <img src="/assets/images/page-img/profile-bg1.jpg" className="img-fluid w-100" alt="group-bg" />
+                                            </div>
+                                            {/* 그룹 대표 이미지 및 그룹명, 게시글 수, 멤버 수, 방문 수 */}
+                                            <div className="card-body text-center">
+                                                <div className="group-icon">
+                                                    <img src={`http://localhost:3000/${group.grpImage}`} alt="profile-img" className="rounded-circle img-fluid avatar-120" />
+                                                </div>
+                                                <div className="group-info pt-3 pb-3">
+                                                    <h4><Link to={`/group/GroupFeed/${group.grpNo}/${group.grpName}`}>{group.grpName}</Link>{group.grpIsOfficial === 1 && <span>✅</span>}</h4>
+                                                    <p>{group.grpIntro}</p>
+                                                </div>
+                                                <div className="group-details d-inline-block pb-3">
+                                                    <ul className="d-flex align-items-center justify-content-between list-inline m-0 p-0">
+                                                        <li className="pe-3 ps-3">
+                                                            <p className="mb-0">Post</p>
+                                                                <h6>{group.grpPost}</h6>
+                                                        </li>
+                                                        <li className="pe-3 ps-3">
+                                                            <p className="mb-0">Member</p>
+                                                                <h6>{group.grpMember}</h6>
+                                                        </li>
+                                                        <li className="pe-3 ps-3">
+                                                            <p className="mb-0">Visit</p>
+                                                            <h6>{group.grpVisit}</h6>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                {/* TO-DO 해당 그룹에 가입한 인원들의 프로필 사진 */}
+                                                {/* <div className="group-member mb-3">
+                                                    <div className="iq-media-group">
+                                                        <a href="#" className="iq-media">
+                                                            <img className="img-fluid avatar-40 rounded-circle" src="/assets/images/user/05.jpg" alt="" />
+                                                        </a>
+                                                    </div>
+                                                </div> */}
+                                                {group.grpStatus === 1 && <button className="btn btn-primary d-block w-100">가입된 그룹입니다.</button>} 
+                                                {group.grpStatus === 0 && <button type="button" className="btn btn-primary d-block w-100" onClick={()=>{groupJoinRequest(group.grpNo, group.grpName)}}>가입 하기</button>} 
+                                                {group.grpStatus === 2 && <button type="button" className="btn btn-primary d-block w-100" onClick={()=>{groupJoinCancel(group.grpNo)}}>가입 대기중</button>} 
+                                            </div>
+                                        </div>
+                                    </div>
+                        ) // end of map return
+            }) // end of map
+        }
+        </div>
+    </div>
+</div>
+
+        {/* <table>
             <thead>
                 <tr>
                     <th>그룹 이름</th>
@@ -97,7 +167,7 @@ export default function GroupList() {
                     }) // end of map
                 }
             </tbody>
-        </table>
+        </table> */}
         </>
     )
     
