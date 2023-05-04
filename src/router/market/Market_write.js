@@ -209,7 +209,7 @@ const MarketWrite = () => {
                     console.log( 'Focus.', editor );
                 } }
             />
-            <KakaoMapWrite geoLat={geoLat} setGeoLat={setGeoLat} geoLng={geoLng} setGeoLng={setGeoLng}/>
+            <KakaoMapWrite setGeoLat={setGeoLat} setGeoLng={setGeoLng}/>
             <button onClick={marketUpload}>작성하기</button>
         </div>
     );
