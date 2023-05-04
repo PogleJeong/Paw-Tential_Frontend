@@ -7,7 +7,7 @@ const MyfeedDropdown_user = ({ id }) => {
   return (
     <>
       <ul style={{ position: "absolute", backgroundColor: "white" }}>
-      <Link to="/myfeed/User_update" className="nav-link">
+      <Link to={{ pathname: "/myfeed/User_update", state: { userId: id } }} className="nav-link">
         정보 수정
         </Link> 
            <li>문의</li>
