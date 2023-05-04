@@ -46,3 +46,18 @@ K
 src/router/myfeed/Myfeed.js,b\9\b9c144eac37f583ba6ded5ebf2b8e33bd310f263
 O
 src/router/myfeed/Pet_update.js,1\7\173e8b7bd8edffe9480c6e738498c79320eac033
+P
+ src/router/myfeed/User_update.js,b\8\b8b5f1f3fa24d87a1a34adc77fed63fb579000ca
+A
+package-lock.json,f\a\fa288d1472d29beccb489a676f68739ad365fc47
+H
+src/component/chatbot.js,4\c\4c452749e1b4323e44146b9089d85eb2801d8b30
+I
+src/component/Register.js,9\0\90d382e0624231cc50566c77a0b2dc51e23d9a81
+P
+ src/router/place/Place_Detail.js,9\f\9f0c6a20a09e143fe84899a6b04f6e4d342ba13a
+I
+src/router/place/Place.js,b\f\bf8753cb67febe8a21002b1479aa8b62a5191192
+:
+
+src/App.js,1\e\1e43fa63aecd2127be034b3fb9d4caa172275714
