@@ -91,8 +91,7 @@ const PetInfo = ({userId}) => {
 
         await axios.post("http://localhost:3000/petRegister", formData, {"Content-Type": `multipart/form-data`})
         .then((response)=> {
-            response = response.data;
-            if (response === "YES") {
+            if (response.data === "YES") {
                 alert("회원가입이 완료되었습니다!.");
                 navigator("/login/login");
                 return;
@@ -140,11 +139,17 @@ const PetRegi = ({userInfo}) => {
         setSelected(userHavePet);
         userInfo.petHave = userHavePet; // useState 는 재랜더링 이후에 업데이트 됨.
         
-        await axios.post("http://localhost:3000/register", null, {params: userInfo});
-        
-        if (userHavePet === "0"){
-            navigator("/");
-        }
+        await axios.post("http://localhost:3000/register", null, {params: userInfo})
+        .then(response => {
+            if (response.data === "REGISTER_NO") {
+                alert("회원가입에 실패하였습니다.");
+                return;
+            }
+            if (userHavePet === "0"){
+                alert("회원가입에 성공하였습니다.")
+                navigator("/");
+            }
+        });
     }
     return(
         <div>
