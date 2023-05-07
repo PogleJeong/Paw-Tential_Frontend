@@ -34,7 +34,6 @@ import Data from './router/admin/Data';
 import PetChart from './router/admin/PetChart';
 import UserChart from './router/admin/UserChart';
 
-
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
 import GroupList from './router/group/GroupList';
@@ -47,6 +46,8 @@ import Pawtens_detail from "./router/pawtens/Pawtens_detail";
 
 import Contest from "./router/contest/Contest";
 import Contest_detail from "./router/contest/Contest_detail";
+
+import Search from "./router/search/Search";
 
 
 function App() {
@@ -79,7 +80,6 @@ function App() {
             <Route path="register/petInfo" element={<RegisterPage3 />} />
             <Route path="/login/kakaoAuth" element={<KakaoAuth />} />
       
-
             {/* 피드 */}
             <Route path="/router/regi" element={null} />
             <Route path="/router/regi" element={null} />
@@ -88,6 +88,9 @@ function App() {
             {/* 콘테스트 */}
             <Route path="/contest" element={<Contest />} />
             <Route path="/contest/detail" element={<Contest_detail />} />
+
+            {/* 검색 */}
+            <Route path="/search" element={<Search />} />
 
             {/* 포텐스 */}
             <Route path="/pawtens" element={<Pawtens />} />
@@ -105,7 +108,7 @@ function App() {
             {/* 플레이스 */}
             <Route path="/place" element={<Place />} />
             <Route path="/place/:search?/:category?" element={<Place />} />
-            <Route path="/place_detail/:search?/:category?" element={<Place_detail />} />
+            <Route path="/place/detail/:search?/:category?" element={<Place_detail />} />
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
