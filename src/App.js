@@ -15,7 +15,7 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_detail";
+import Place_detail from "./router/place/Place_Detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";
@@ -40,6 +40,7 @@ import GroupList from './router/group/GroupList';
 import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
 import GroupFeed from './router/group/GroupFeed';
+import ThemedExample from "./component/chatbot";
 
 import Pawtens from "./router/pawtens/Pawtens";
 import Pawtens_detail from "./router/pawtens/Pawtens_detail";
@@ -68,9 +69,14 @@ function App() {
           </div>
         </nav>
         <main>
+          {/*쳇봇*/}
+          <ThemedExample/>
+
           <Routes>
             {/* 메인 홈 */}
             <Route path="/home/home" element={<Home />} />
+
+
 
             {/* 로그인/회원가입 */}
             <Route path="/login" element={<Login />} />
@@ -146,7 +152,7 @@ function App() {
         </main>
         </div>
       </BrowserRouter>
-    
+
       {/* footer */}
       <footer>
         <div>
