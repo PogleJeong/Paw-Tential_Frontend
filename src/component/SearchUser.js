@@ -7,7 +7,7 @@ const { Meta } = Card;
 
 const SearchUser = () => {
   const [searchText, setSearchText] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
@@ -15,34 +15,36 @@ const SearchUser = () => {
   };
 
   const handleUserClick = (userId) => {
-    navigate(`/myfeed/${userId}`); // 검색된 유저의 MyFeed 페이지로 이동
+    navigate(`/myfeed/myfeed2/${userId}`); // 검색된 유저의 MyFeed 페이지로 이동
   };
 
   useEffect(() => {
-    let timer;
-    if (searchText !== '') {
-      // 입력이 멈춘 후 500ms 이후에 검색 수행
-      timer = setTimeout(() => {
-        const userId = searchText.trim();
-        searchUser(userId);
-      }, 500);
+    if (searchText === '') {
+      setUsers([]); // 검색어가 비어있으면 검색 결과 초기화
+      return;
     }
 
-    return () => {
-      clearTimeout(timer); // 컴포넌트가 unmount 되면 타이머 클리어
-    };
+    // 검색어가 변경될 때마다 검색을 수행
+    const userId = searchText.trim();
+    fetchUsers(userId);
   }, [searchText]);
 
-  const searchUser = (userId) => {
-    axios
-      .get('http://localhost:3000/reportList', { params: { 'choice': 'id', 'search': userId } })
-      .then((response) => {
-        setSearchResults(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const fetchUsers = async (userId) => {
+      
+    await axios.get('http://localhost:3000/userList', { params:{ "search": userId } })
+    .then(function(res){
+    console.log(res.data.list);
+    const filteredUsers = res.data.list.filter((user) =>
+    user.id.includes(userId)
+  );
+
+  setUsers(filteredUsers);
+
+    })
+  .catch (function(error) {
+    console.log(error);
+  })
+}
 
   return (
     <div>
@@ -52,9 +54,9 @@ const SearchUser = () => {
         onChange={handleSearch}
       />
 
-      {searchResults.length > 0 && (
+      {users.length > 0 && (
         <div style={{ marginTop: '20px' }}>
-          {searchResults.map((user) => (
+          {users.map((user) => (
             <Card
               key={user.id}
               style={{ width: 200, display: 'inline-block', margin: '10px' }}
@@ -63,9 +65,10 @@ const SearchUser = () => {
             >
               <Meta
                 avatar={<Avatar src={user.profile} />}
-                title={user.nickname}
+                title={user.id}
                 description={user.intro}
               />
+
             </Card>
           ))}
         </div>

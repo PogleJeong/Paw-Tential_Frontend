@@ -8,7 +8,7 @@ import { FeedImage } from '../../component/FeedData';
 
 import ProfileCard from '../../component/ProfileCard';
 
-const MyFeed = () => {
+const MyFeed2 = () => {
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -34,7 +34,7 @@ const MyFeed = () => {
 
   const fetchUserInfo = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/userInfo", {params: {id : cookies.USER_ID}});
+      const res = await axios.get("http://localhost:3000/userInfo", {params: {id : userId}});
       setUserInfo(res.data);
       console.log(res.data);
     } catch (err) {
@@ -48,7 +48,7 @@ const MyFeed = () => {
     try {
       const res = await axios.get("http://localhost:3000/Myfeed", { 
         params: {
-          id: cookies.USER_ID,
+          id: userId,
           page: pageNumber
         }
       });
@@ -115,5 +115,5 @@ const MyFeed = () => {
     );
   };
   
-  export default MyFeed;
+  export default MyFeed2;
   
