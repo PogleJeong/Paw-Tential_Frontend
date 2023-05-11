@@ -17,7 +17,7 @@ import FeedPost from "./router/Feed/FeedPost";
 import Place from "./router/place/Place.js";
 import Place_detail from "./router/place/Place_Detail";
 
-import Myfeed from "./router/myfeed/Myfeed";
+import Myfeed from "./router/myfeed/myfeed";
 import User_update from "./router/myfeed/User_update";
 import Pet_update from "./router/myfeed/Pet_update";
 import MarketHome from "./router/market/Market_home";
@@ -47,6 +47,7 @@ import Pawtens_detail from "./router/pawtens/Pawtens_detail";
 
 import Contest from "./router/contest/Contest";
 import Contest_detail from "./router/contest/Contest_detail";
+import NewGroupFeed from "./router/group/NewGroupFeed";
 
 import Search from "./router/search/Search";
 
@@ -124,7 +125,7 @@ function App() {
             <Route path="/group/GroupList/:search" element={<GroupList />} />
             <Route path="/group/MyGroup" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
-            <Route path="/group/GroupFeed/:grpNo/:grpName" exact element={<GroupFeed />} />
+            <Route path="/group/GroupFeed/:grpNo/:grpName" exact element={<NewGroupFeed />} />
             <Route path="/router/regi" element={null} />
 
             {/* 관리자 */}

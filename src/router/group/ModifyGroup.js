@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -7,13 +7,30 @@ export default function ModifyGroup() {
 
     let history = useNavigate();
    
-    // http://localhost:9001/group/MyGroup?groupId=1
     let params = useParams();
 
     const grpNo = params.grpNo;
     const [grpName, setGrpName] = useState('');
     const [grpIntro, setGrpIntro] = useState('');
-    
+    const [grpImage, setGrpImage] = useState('');
+
+    const [displayOriginImg, setDisplayOriginImg] = useState("block");
+    const [displayChanged, setDisplayChanged] = useState("none");
+
+
+    // 이미지 미리보기 관련 state 변수 및 함수
+    const ref = useRef();
+
+    const imgLoad = () => {
+        const file = ref.current.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setDisplayOriginImg("none");
+            setDisplayChanged("block");
+            setGrpImage(reader.result);
+        }
+    }
 
     useEffect(()=>{
         getGroupInfo();
@@ -25,6 +42,7 @@ export default function ModifyGroup() {
         .then(function(res){
             setGrpName(res.data.grpName);
             setGrpIntro(res.data.grpIntro);
+            setGrpImage(res.data.grpImage);
         })
         .catch(function(err){
             alert(err);
@@ -72,6 +90,85 @@ export default function ModifyGroup() {
 
     return (
         <>
+            <div className="wrapper">
+                <div id="content-page" className="content-page">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div className="card position-relative inner-page-bg bg-primary" style={{height: "150px"}}>
+                                    <div className="inner-page-title">
+                                        <h3 className="text-white">Modify Group</h3>
+                                            <p className="text-white">그룹 수정</p>
+                                    </div>
+                                </div>
+                            </div> {/*end of col-sm-12*/}
+                            <div className="col-sm-12 col-lg-12">
+                                <div className="card">
+                                    <div className="card-header d-flex justify-content-between">
+                                        <div className="header-title">
+                                            <h4 className="card-title">Type Here...</h4>
+                                        </div>
+                                    </div> {/*end of card-header*/}
+                                    <div className="card-body">
+                                        <form name="frm" onSubmit={modifyGroup} encType="multipart/form-data">
+                                            <div className="form-group">
+                                                <label className="form-label">그룹명</label>
+                                                <input type="text"
+                                                            className="form-control"
+                                                            name="grpName"
+                                                            disabled
+                                                            readOnly
+                                                            value={grpName}
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label custom-file-input">그룹 대표 이미지</label>
+                                                {grpImage &&
+                                                <div className="my-3">
+                                                    {/*원본 대표 이미지 */}
+                                                    <img src={`http://localhost:3000/uploads/${grpImage}`}
+                                                            alt=""
+                                                            className="img-fluid rounded w-30"
+                                                            style={{display : displayOriginImg}}
+                                                            />
+                                                    {/*바뀐 대표 이미지 */}
+                                                    <img src={grpImage}
+                                                            alt=""
+                                                            className="img-fluid rounded w-30"
+                                                            style={{display : displayChanged}}
+                                                    />
+                                                </div>
+                                                }
+                                                <input type="file"
+                                                            className="form-control" 
+                                                            name="uploadFile"
+                                                            accept='*' 
+                                                            ref={ref}
+                                                            onChange={imgLoad}
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label className="form-label">그룹 소개</label>
+                                                <textarea className="form-control"
+                                                                rows="5"
+                                                                name="grpIntro"
+                                                                value={grpIntro}
+                                                                onChange={(e)=>setGrpIntro(e.target.value)}
+                                                ></textarea>
+                                            </div>
+                                            <div style={{align:"center"}}>
+                                                <button type="submit" className="btn btn-primary">Modify</button>
+                                                <button type="button" className="btn bg-danger mx-1" onClick={deleteGroupBtn}>Delete</button>
+                                            </div>
+                                        </form>
+                                    </div> {/*end of card-body*/}
+                                </div> {/*end of card*/}
+                            </div>
+                        </div> {/*end of row*/}
+                    </div> {/*end of container*/}
+                </div> {/*end of content-page*/}
+            </div> {/*end of wrapper*/}
+        {/*
         <h1>그룹 수정하기</h1>
         <form name="frm" onSubmit={modifyGroup} encType="multipart/form-data">
             <div id="grpName">
@@ -95,6 +192,8 @@ export default function ModifyGroup() {
             <button type="button" onClick={deleteGroupBtn}>그룹 삭제</button>
         </form>
         <br />
+        */}
+
         </>
     )
 
