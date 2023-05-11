@@ -1,0 +1,42 @@
+.pawtens {
+    width: 1200px;
+    float: left;
+}
+
+.pawtens .pawtensItem {
+    width: 1200px;
+    height: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.pawtens .pawtensItem video {
+    width: 1000px;
+    max-height: 700px;
+}
+
+.pawtens .pawtensItem .profile {
+    width: 80px;
+    object-fit: cover;
+}
+
+.pawtens .slick-slide .pawtens-like img {
+    display: inherit !important;
+}
+
+/* slick carousel css  */
+.pawtens .slick-prev:before, .slick-next:before {
+    font-size: 37px !important;
+    color: gray !important;
+}
+
+.pawtens .slick-prev {
+    left: -42px !important;
+}
+
+/* 포텐스 작성 */
+.createPawtens .filePreview {
+    margin-top: 20px;
+}
