@@ -31,6 +31,7 @@ const maxLen = (value, valid) => value.length <= valid;
 
 const EditProfileForm = () => {
   // 입력값 검증
+  const profilePicture = useInput("", null, null);
   const id = useInput("", maxLen, 15);
   // const password = useInput("", maxLen, 20);
   const confirm = useInput("", maxLen, 20);
@@ -54,7 +55,6 @@ const EditProfileForm = () => {
   const birthRef = useRef();
 
   // DB 에서 중복검증
-  const [idSuccess, setIdSuccess] = useState(false);
   const [nickSuccess, setNickSuccess] = useState(false);
 
   // 메세지 출력
@@ -76,6 +76,7 @@ useEffect(() => {
         setUsernick(res.data.nickname);
         if (res.data.profile) {
 
+        //  프로필 사진 미리보기
           const profilePicturePath = `http://localhost:3000/${res.data.profile}`;
           setProfilePictureFile(profilePicturePath); // 프로필 사진을 설정합니다.
           setPreviewUrl(profilePicturePath); // 미리보기 URL을 설정합니다.
@@ -98,7 +99,7 @@ useEffect(() => {
       nick.onChange({ target: { value: userNick } }); // nick 값을 설정합니다
       number.onChange({ target: { value: userNumber } }); // number 값을 설정합니다.
       intro.onChange({ target: { value: userIntro } }); // intro 값을 설정합니다.
-      setProfilePictureFile({ target: { value: userProfilePicture } }); // profile 값을 설정합니다.
+      profilePicture.onChange({ target: { value: userProfilePicture } }); // profile 값을 설정합니다.
     }
   }, [userInfo]);
 
@@ -112,7 +113,7 @@ useEffect(() => {
   const editMember = async (userInfo) => {
     try {
       const formData = new FormData();
-     formData.append('upload', profilePictureFile); // 파일을 FormData에 추가합니다.
+      formData.append('upload', profilePictureFile); // 파일을 FormData에 추가합니다.
       Object.entries(userInfo).forEach(([key, value]) => {
         formData.append(key, value);
       });
@@ -192,7 +193,7 @@ useEffect(() => {
       nickname: nick,
       phone: number,
       intro: intro.value,
-      profile: profilePictureFile.value,
+      profile: profilePicture.value,
     };
 
 
@@ -239,6 +240,7 @@ useEffect(() => {
 // 프로필 사진 변경 시 미리보기 업데이트
 const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
+    profilePicture.onChange(event);
     if (file) {
       setProfilePictureFile(file); // 선택한 파일을 상태로 설정합니다.
       const reader = new FileReader();
