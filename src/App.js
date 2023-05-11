@@ -149,7 +149,6 @@ function App() {
             {/* 채팅 */}
             <Route path="/chat/home" element={<ChatroomHome />} />
             <Route path="/chat/:id" element={<Chatroom />} />            {/* 검색 */}
-            <Route path="/searchUser" element={<SearchUser />} />
 
 
             {/* 마이피드 */}
@@ -157,6 +156,7 @@ function App() {
             <Route path="/myfeed/Myfeed2/:userId" element={<Myfeed2 />} />
             <Route path="/myfeed/user_update" element={<User_update />} />
             <Route path="/myfeed/pet_update" element={<Pet_update />} />
+            <Route path="/searchUser" element={<SearchUser />} />
           </Routes>
         </main>
         </div>
