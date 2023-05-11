@@ -14,15 +14,16 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import { Calendar } from 'react-date-range';
-
+import {useCookies} from 'react-cookie';
 
 
 export default function CareFeedModal ({show, onHide}) {
     let params = useParams();
 
-    
-    // 넘겨줘야 할 값
-    const writer = 'test2';
+    const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
+    // cookie에 저장된 사용자 ID 및 닉네임
+    const userId = cookies.USER_ID;
+    const userNickName = cookies.USER_NICKNAME;
     
     // category === care 일 때 사용할 state변수
     const [category, setCategory] = useState('walk');
@@ -90,7 +91,7 @@ export default function CareFeedModal ({show, onHide}) {
       formData.append("careGrpCheck", check);
       formData.append("careGrpContent", content);
       formData.append("careGrpFeedSetting", setting);
-      formData.append("careGrpFeedWriter", writer);
+      formData.append("careGrpFeedWriter", userId);
 
       axios.post("http://localhost:3000/group/createCareFeed", formData)
       .then(function(res) {

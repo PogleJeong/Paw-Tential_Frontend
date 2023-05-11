@@ -1,23 +1,25 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-import { Modal, Button, Form, Container } from 'react-bootstrap';
+import { Modal, Button, Form, Container, ButtonGroup } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Session from "react-session-api"
 
 const CreateFeedModal = ({show, onHide}) => {
 
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState('test33');
+  const [showLocationInput, setShowLocationInput] = useState(false);
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');
+  const [location, setLocation] = useState('');
 
-  useEffect(()=>{
-    let user = Session.get("user");
-    if(user !== undefined){ // 세션에 저장해둔 문자열이 있을 때
-        setUserId(user);
-    }
-  }, []);
+  // useEffect(()=>{
+  //   let user = Session.get("user");
+  //   if(user !== undefined){ // 세션에 저장해둔 문자열이 있을 때
+  //       setUserId(user);
+  //   }
+  // }, []);
 
   const customUploadAdapter = (loader) => {
     return {
@@ -75,10 +77,9 @@ const CreateFeedModal = ({show, onHide}) => {
     let formData = new FormData();
     formData.append("id", userId);
     formData.append("content",content);
-    formData.append("tag", ""); // 임시
-    formData.append("location", ""); // 임시
+    formData.append("location", location); // 임시
 
-    axios.post("http://localhost:3000/feedWrite", formData)
+    axios.post("http://localhost:3000/home/feedWrite", formData)
     .then(function(res){
       alert(res.data);
       window.location.reload();
@@ -121,9 +122,33 @@ const CreateFeedModal = ({show, onHide}) => {
           
           /> */}
       </Form.Group>
-    <Button variant="primary" type="submit">
-        Submit
-    </Button>
+      <ButtonGroup className="mb-3">
+        <Button variant="secondary" onClick={() => setShowLocationInput(true)}>장소 추가</Button>
+      </ButtonGroup>
+      {showLocationInput && (
+        <Form.Group className="comment-text d-flex align-items-center mb-3">
+          <Form.Control type="text" placeholder="장소를 입력해보세요." value={location} onChange={(e) => setLocation(e.target.value)} />
+          <div className="comment-attagement d-flex">
+                  <a href="javascript:void(0);">
+                    <i className="ri-eraser-line mx-4"
+                        onClick={()=>{
+                          if(location !== "") {
+                            if(window.confirm("입력된 장소를 지우시겠습니까?")) {
+                              setShowLocationInput(false);
+                              setLocation("");
+                            }
+                          } else {
+                            setShowLocationInput(false);
+                            setLocation("");  
+                          }
+                        }}>
+                    </i>
+                  </a>
+          </div>
+        </Form.Group>
+      )}
+      <br />
+      <Button variant="primary" type="submit">작성</Button>
     </Form>
     </Modal.Body>
     <Modal.Footer>
