@@ -14,7 +14,7 @@ export default function MyGroup(){
     
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
     // cookie에 저장된 사용자 ID 및 닉네임
-    const userId = cookies.USER_ID;
+    const userId = 'test2';
     const userNickName = cookies.USER_NICKNAME;
 
     useEffect(()=>{
