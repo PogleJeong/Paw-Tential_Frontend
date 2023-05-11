@@ -10,10 +10,11 @@ const Logout = () => {
         if (cookies.USER_ID) {
             removeCookies("USER_ID");
             removeCookies("USER_NICKNAME");
+            window.location.href = "/login";
         }
     }
     return(
-        <li onClick={logout}><Link to="/login">로그아웃</Link></li>
+        <li onClick={logout}>로그아웃</li>
     );
 }
 
