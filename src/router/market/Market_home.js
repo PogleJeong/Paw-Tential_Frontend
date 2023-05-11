@@ -1,112 +1,125 @@
 import { useEffect, useState } from "react";
-import { useLocation ,useNavigate, useSearchParams, Link } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-
-//import session from "react-session-api";
+import axios from "axios";
+import { styled, keyframes } from "styled-components";
 
 import MarketList from "./components/Market";
-import DetailSearch from "./components/DetailSearch";
+
+import { maxLen, useInput, useSaleStateTabs, useSelect, throttle, wrapperTo2Arrays } from "../../utils/UseHook";
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    min-height: 800px;
+    padding: 50px;
+    animation: ${fadeIn} 2s;
+`;
+
+const Wrapper = styled.div`
+    width: 100%;
+    min-height: inherit;
+    margin: 0px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 2px 3px 5px 0px;
+`;
+
+const Title = styled.h1`
+    font-size: 30px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+`;
+
+const SearchWrapper = styled.div`
+    display: flex;
+    justify-content: right;
+    align-items: center;
+
+    padding-right: 20px;
+    width: 100%;
+    height: 60px;
+    background-color: tomato;
+    border-radius: 15px;
+`;
+
+const SelectBox = styled.select`
+    border: none;
+    border-radius: 10px;
+    margin-right: 5px;
+    padding-left: 5px;
+    width: 80px;
+    height: 30px;
+`
+const SearchBox = styled.input`
+    width: 200px;
+    height: 30px;
+    padding-left: 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 10px;
+    border-bottom: 2px soild black;
+`
+const SearchBtn = styled.button`
+    width: 50px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    background-color: #66FFCC;
+
+    &:hover {
+        transform: scale(0.95) 1s;
+    }
+`
+
+const MarketWriteBtn = styled.button`
+    width: 100px;
+    height: 40px;
+    border: none;
+    margin: 20px;
+    background-color: #FF9933;
+`;
 
 const saleStateContent = ["전체","나눔","판매"];
 const selectOptionList = ["전체","제목","내용","카테고리","제품상태"];
 
-// 이중 리스트 생성
-const wrapperTo2Arrays = (array1, array2) =>{
-    let crossArray = []
-    for (let i=0; i<array1.length; i++) {
-        crossArray.push([array1[i], array2[i]])
-    }
-    console.log("함수결과 >> ",crossArray);
-    return crossArray;
-}
-
-const maxLen = (value, max) => value.length <= max;
-
-const useSaleStateTabs = (initialState, content) => {
-    const [ activedTabIndex, setActivedTabIndex ] = useState(initialState);
-    
-    return { activedTab : content[activedTabIndex],
-            changeTab: setActivedTabIndex};
-}
-
-const useSelect = (initialOption) => {
-    const [ selectedOption, setSeletedOption ] = useState(initialOption);
-    const onChange = (event) => {
-        setSeletedOption(event.currentTarget.value);
-    }
-    return { value: selectedOption, onChange }
-}
-
-const useInput = (initialValue, validation, valid) => {
-    const [ value, setValue ] = useState(initialValue); 
-  
-    const onChange = (event) => {
-        const value = event.currentTarget.value;
-        let willUpdate = true;
-        if (typeof validation === "function"){
-            willUpdate = validation(value, valid);
-            if (willUpdate) {
-                setValue(value);
-            }
-        }
-    }
-    return { value, onChange };
-}
-
-// 스크롤 이벤트 성능저하 방지를 위한 쓰로틀
-const throttle =(callback) => {
-    let throttle;
-    return()=>{
-        if (throttle) return;
-        throttle = setTimeout(()=> {
-            throttle = null;
-            callback();
-        },2000);
-    };
-};
-
-// 무한루프 -> onclick 에 함수를 애로우함수로 작성
-// 소셜로그인시 useLocation 으로 값 가져오기
 const MarketHome = () => {
-    const { search }  = useLocation();
-    const [ searchParams, setSearchParams ] = useSearchParams(); 
     const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID","USER_NICKNAME"]);
     const [ marketInfoList, setMarketInfoList ] = useState([]);
-    const { activedTab, changeTab } = useSaleStateTabs(0, saleStateContent);
+    // const { activedTab, changeTab } = useSaleStateTabs(0, saleStateContent);
     const selectedOption = useSelect("전체");
-    const searchWord = useInput("", maxLen, 10);
-    const navigate = useNavigate();
+    const searchWord = useInput("", maxLen, 30);
     const [ pages, setPages ] = useState(0);
-    
     const [ filterMarketInfoList, setFilterMarketInfoList ] = useState([]);
     const [ filterOn, setFliterOn ] = useState(false);
-
+    
+    const navigate = useNavigate();
     useEffect(()=> {
-        console.log(search);
-        // 만약 소셜로그인을 통했을 시, url 에 search 가 존재
-        const USER_ID = searchParams.get("USER_ID");
-        const USER_NICKNAME = searchParams.get("USER_NICKNAME");
-
-        if (search) {
-            setCookies("USER_ID", USER_ID, {path:"/", maxAge: 3600});
-            setCookies("USER_NICKNAME", USER_NICKNAME, {path:"/", maxAge: 3600});
+        console.log(cookies);
+        if (!cookies.USER_ID) {
+            alert("로그인 후 이용해주세요.");
+            navigate("/");
+            return;
         }
-        // js 는 비동기로 작동하므로 setCookie 가 완료되기 전에 cookies 를 봄. (처리해야함..)
-        setTimeout(function(){
-            console.log(cookies)
-            if (!cookies.USER_ID) {
-                alert("로그인 후 이용해주세요.");
-                navigate("/");
-            }
-        },1000);
         callMarketInfo("search");
 
         window.addEventListener("scroll",throttle(scrollFunction));
         return ()=>{
             window.removeEventListener("scroll",throttle(scrollFunction))
         }
-    },[])
+    })
 
     useEffect(()=>{
         callMarketInfo("scroll");
@@ -166,34 +179,36 @@ const MarketHome = () => {
             }
         })    
     }
-    console.log("필터배열", filterMarketInfoList);
-    console.log("카테고리", selectedOption.value);
+
     return(
-        <div>
-            <div>
-                <h3>검색필터</h3>
-                <ul style={{display: "flex"}}>
-                {saleStateContent.map((state, index)=>    
-                (<li key={index} onClick={()=>filterByState(marketInfoList,state)} style={{border: "2px solid gray", padding: "10px", width: "30px", aspectRatio: "4/1"}} >{state}</li>))}
-                </ul>
+        <Container>
+            <Wrapper>
+                <Title>Welcome to Paw-tential market!</Title>
+                   {/*  <ul style={{display: "flex"}}>
+                    {saleStateContent.map((state, index)=>    
+                    (<li key={index} onClick={()=>filterByState(marketInfoList,state)} style={{border: "2px solid gray", padding: "10px", width: "30px", aspectRatio: "4/1"}} >{state}</li>))}
+                    </ul>
+                    
+                    <Link to="/market/write"><MarketWriteBtn>마켓 등록하기</MarketWriteBtn></Link> */}
+                    
+                    
+                <SearchWrapper>
+                    <SelectBox {...selectedOption}>
+                        {selectOptionList.map((option, index) => (
+                            <option key={index} value={option}>{option}</option>))}
+                    </SelectBox>
+                    <SearchBox {...searchWord} />
+                    <SearchBtn onClick={()=>callMarketInfo("search")}>찾기</SearchBtn>
+                    <Link to="/market/write"><MarketWriteBtn>마켓 등록하기</MarketWriteBtn></Link> 
+                </SearchWrapper>
                 
-            </div>
-            <select {...selectedOption}>
-                {selectOptionList.map((option, index) => (
-                    <option key={index} value={option}>{option}</option>))}
-            </select>
-            <input type="text" {...searchWord} />
-            <button onClick={()=>callMarketInfo("search")}>찾기</button>
-            
-            <div>
-                <Link to="/market/write">글쓰기</Link>
-            </div>
-            {filterOn ?
-            <MarketList marketInfoList={filterMarketInfoList} />
-            :
-            <MarketList marketInfoList={marketInfoList} />
-            }
-        </div>
+                {filterOn ?
+                <MarketList marketInfoList={filterMarketInfoList} />
+                :
+                <MarketList marketInfoList={marketInfoList} />
+                }
+            </Wrapper>
+        </Container>
     );
 }
 
