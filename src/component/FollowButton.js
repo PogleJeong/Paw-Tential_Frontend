@@ -1,30 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button } from 'antd';
 import { useCookies } from "react-cookie";
-
 
 const FollowButton = ({ userId, isFollowing }) => {
   const [following, setFollowing] = useState(isFollowing);
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
 
+  useEffect(() => {
+    const checkIsFollowing = async () => {
+      try {
+        const response = await axios.post('http://localhost:3000/isFollowing', null, {
+          params: {
+            follower_id: cookies.USER_ID,
+            following_id: userId
+          }
+        });
+        const result = response.data;
+
+        setFollowing(result === 'YES');
+      } catch (error) {
+        console.error('팔로잉 체크 에러:', error);
+      }
+    };
+
+    checkIsFollowing();
+  }, [cookies.USER_ID, userId]);
 
   const followUser = async (userId) => {
     try {
       const response = await axios.post('http://localhost:3000/follow', null, {
         params: {
           'follower_id': cookies.USER_ID,
-          'following_id': userId // 팔로우할 사용자의 ID를 설정
+          'following_id': userId
         }
       });
-      const result = response.data; // 팔로우 결과를 받아옴
+      const result = response.data;
   
       if (result === "YES") {
         console.log("팔로우 성공");
-        // 팔로우 성공한 경우 추가 작업 수행
+        setFollowing(true); // Set following to true after successfully following
+        // Additional actions on successful follow
       } else {
         console.log("팔로우 실패");
-        // 팔로우 실패한 경우 추가 작업 수행
+        // Additional actions on failed follow
       }
     } catch (error) {
       console.error("팔로우 에러:", error);
@@ -35,6 +54,7 @@ const FollowButton = ({ userId, isFollowing }) => {
     try {
       const response = await axios.post('/api/unfollow', { userId });
       console.log('언팔로우 성공:', response.data);
+      setFollowing(false); // Set following to false after successfully unfollowing
     } catch (error) {
       console.error('언팔로우 에러:', error);
     }
@@ -43,10 +63,8 @@ const FollowButton = ({ userId, isFollowing }) => {
   const handleFollow = () => {
     if (!following) {
       followUser(userId);
-      setFollowing(true);
     } else {
       unfollowUser(userId);
-      setFollowing(false);
     }
   };
 

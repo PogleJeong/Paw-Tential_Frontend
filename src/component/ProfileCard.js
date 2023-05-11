@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FollowCount from './FollowCount';
 import FollowButton from './FollowButton';
-import IsFollowing from './IsFollowing';
 import { useCookies } from "react-cookie";
 import MyfeedDropdown_user from './MyfeedDropdown_user';
 import MyfeedDropdown_others from './MyfeedDropdown_others';
@@ -23,7 +22,6 @@ const ProfileCard = ({ userInfo }) => {
         <h1>{id}</h1>
         <p className="bio">{intro}</p>
         {<FollowCount userId={id} />}
-        {!isCurrentUser && <IsFollowing followerId={cookies.USER_ID} followingId={id} />}
         {!isCurrentUser && <FollowButton userId={id} />}
         {userInfo !== '' && (
             <div className="feed-icon" style={{ float: "right" }}>
