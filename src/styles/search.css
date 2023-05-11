@@ -1,24 +1,20 @@
-.pawtens {
+.search {
     width: 1200px;
     float: left;
 }
-.pawtensList {
+.search .searchList {
     margin-top: 30px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: flex-start;
 }
-.pawtensItem {
+.search .searchItem {
     margin: 10px;
 }
 
-.pawtensItem img {
+.search .searchItem img {
     width:250px;
     height:180px;
     object-fit: cover;
-}
-
-.createPawtens .filePreview {
-    margin-top: 20px;
 }
