@@ -4,11 +4,103 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useCookies } from "react-cookie";
 import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from 'react-router-dom';
-import UploadAdapter from '../../utils/UploadAdaptor';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import KakaoMapWrite from './components/GeoAPI';
+
+import UploadAdapter from '../../utils/UploadAdaptor';
 import useGeolocation from '../../utils/GeoPosition';
+import { useInput, maxLen } from '../../utils/UseHook';
+import { styled, keyframes } from 'styled-components';
+
+import baseImg from '../../image/market_base_image.jpg';
+
+const fadeIn = keyframes`
+    0% {
+    opacity: 0;
+    }
+    100% {
+    opacity: 1;
+    }
+`;
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0px;
+    padding: 100px;
+    width: 80%;
+    height: 1200px;
+
+    animation: ${fadeIn} 2s;
+`;
+
+const Wrappers = styled.div`
+    width: 1000px;
+    height: 1000px;
+
+    padding: 50px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 3px 5px 0px;
+`;
+const HeaderWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ImageBox= styled.div`
+    width:450px;
+    height: 450px;
+`;
+
+const Title = styled.h1`
+    font-size: 30px;
+    text-align: center;
+    padding: 30px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    background-color: #99FFCC;
+`;
+
+const Label = styled.label`
+    display: inline-block;
+    width: 60px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+`;
+
+const Thumbnail = styled.img`
+    width: 400px;
+    height: 400px;
+    border: 5px solid black;
+    border-radius: 40px;
+`
+const FileBtn = styled.input.attrs({type: "file"})`
+    border: none;
+    border: radius: 15px;
+    background-color: #66FFCC;
+`;
+
+const InfoBox = styled.div`
+    width: 400px;
+    height: 400px;
+    margin: 30px;
+    padding: 30px; 
+`
+
+
+
+
+
+
+
 
 const stateList = ["--분류--","나눔", "판매"];
 const categories = ["--카테고리--", "완구류", "침구류", "간식류", "주식", "음료", "기타"];
@@ -19,23 +111,6 @@ function MyCustomUploadAdapterPlugin(editor) {
         return new UploadAdapter(loader)
     }
 }
-
-const useInput = (initialValue, validator, valid) => {
-    const [ value, setValue ] = useState(initialValue);
-    const onChange = (event) => {
-        const value = event.currentTarget.value;
-        let willUpdate = true;
-        if (typeof validator === "function") {
-            willUpdate = validator(value, valid);
-            if( willUpdate) {
-                setValue(value);
-            }
-        }
-    }
-    return { value, onChange };
-}
-
-const maxLen = (value, valid) => ( value.length <= valid );
 
 const MarketWrite = () => {
     const geoLocation = useGeolocation();
@@ -48,14 +123,13 @@ const MarketWrite = () => {
     const productName = useInput("", maxLen, 45);
     const productNumber = useInput("1", maxLen, 3); // 0~999개 까지
     const conditions = useInput(conditionList[0], maxLen, 45);
-    const [ imgFile, setImgFile ] = useState("market_base_image"); // 대표이미지 파일
+    const [ imgFile, setImgFile ] = useState(baseImg); // 대표이미지 파일
     const [ geoLat, setGeoLat ]= useState(geoLocation.coordinates.lat);
     const [ geoLng, setGeoLng ]= useState(geoLocation.coordinates.lng);
     const navigator = useNavigate();
     const imgRef = useRef();
     const [ triggerPrice, setTriggerPrice ] = useState(false);
 
-    console.log(geoLocation);
     useEffect(()=>{
         // 로그인한 유저인지 확인
         if (!cookies.USER_ID){
@@ -141,10 +215,23 @@ const MarketWrite = () => {
         }
     }
     return(
-        <div>
-            <h2>Market 작성하기</h2>
+        <Container>
+            <Wrappers>
+                <Title>Market 작성하기</Title>
+                <HeaderWrapper>
+                    <ImageBox>
+                        <Thumbnail src={imgFile} alt="" /><br/>
+                        <FileBtn ref={imgRef} onChange={onLoadFile} />
+                    </ImageBox>
+                    <InfoBox>
+                        <Label>제목 </Label>
+                           
+                       
+
+                    </InfoBox>
+                </HeaderWrapper>
             <label>
-                제목
+                
                 <input type="text" {...title} placeholder='제목을 작성해주세요'/>
             </label>
             <p>작성자 {`${cookies.USER_NICKNAME}(${cookies.USER_ID})`}</p>
@@ -184,10 +271,7 @@ const MarketWrite = () => {
                     (<option key={index}>{condition}</option>))}
                 </select>
             </label><br/>
-            <label>대표이미지
-                <img src={imgFile} style={{width: "200px", aspectRatio: "16/9"}} alt="" /><br/>
-                <input ref={imgRef} type="file" onChange={onLoadFile} />
-            </label>
+            
 
 
             <CKEditor
@@ -211,7 +295,8 @@ const MarketWrite = () => {
             />
             <KakaoMapWrite setGeoLat={setGeoLat} setGeoLng={setGeoLng}/>
             <button onClick={marketUpload}>작성하기</button>
-        </div>
+            </Wrappers>
+        </Container>
     );
 }
 
