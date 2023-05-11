@@ -40,6 +40,10 @@
     "react-session-api": "^1.1.0",
     "sockjs-client": "^1.6.1",
     "styled-components": "^6.0.0-rc.1",
+    "react-simple-chatbot": "^0.6.1",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^5.3.10",
     "web-vitals": "^2.1.4",
     "webstomp-client": "^1.2.6"
   },
