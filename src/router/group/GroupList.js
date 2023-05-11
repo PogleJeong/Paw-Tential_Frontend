@@ -83,7 +83,7 @@ export default function GroupList() {
     <>
         {/* TO-DO 사이드바 수정 후에 다시 확인해주세요 */}
         <div className="header-for-bg">
-            <div className="background-header position-relative">
+            <div className="background-header">
                 <img src="../assets/images/page-img/profile-bg7.jpg" className="img-fluid w-100" alt="header-bg" />
                 <div className="title-on-header">
                     <div className="data-block">

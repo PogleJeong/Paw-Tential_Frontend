@@ -128,7 +128,7 @@ const MarketWrite = () => {
                     alert("게시물 등록에 실패하였습니다.");
                 }
                 alert("게시물이 등록되었습니다.");
-                //navigator("/market");
+                navigator("/market");
             }
         })
     }

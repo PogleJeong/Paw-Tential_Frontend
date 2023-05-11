@@ -114,9 +114,9 @@ const PetInfo = ({userId}) => {
                 <button onClick={activeModalBtn}>카테고리 선택</button><br/>
                 <img src={imgFile} style={{width: "200px", aspectRatio: "16/9"}} alt="" /><br/>
                 <input type="file" ref={imgRef} onChange={imgLoad} /><br/>
-                <input value={petName} onChange={setPetName} type="text" placeholder="이름을 입력하세요" /><br/>
-                <input value={petBirth} onChange={setPetBirth} type="text" placeholder="생년월일 8자리를 입력해주세요" /><br/>
-                <textarea value={petIntro} onChange={setPetIntro} rows="10" maxLength="300" placeholder="300자 이내로 소개해주세요" ></textarea>
+                <input value={petName} onChange={(e)=>setPetName(e.target.value)} type="text" placeholder="이름을 입력하세요" /><br/>
+                <input value={petBirth} onChange={(e)=>setPetBirth(e.target.value)} type="text" placeholder="생년월일 8자리를 입력해주세요" /><br/>
+                <textarea value={petIntro} onChange={(e)=>setPetIntro(e.target.value)} rows="10" maxLength="300" placeholder="300자 이내로 소개해주세요" ></textarea>
                 <div>
                     <label><input type="radio" onChange={()=>setPetGender(0)} name="petGender" />남아</label><br/>
                     <label><input type="radio" onChange={()=>setPetGender(1)} name="petGender" />여아</label><br/>
