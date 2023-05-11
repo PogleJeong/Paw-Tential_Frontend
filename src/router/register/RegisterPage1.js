@@ -1,30 +1,108 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { keyframes, styled } from 'styled-components';
 import axios from 'axios';
 
-/** 실시간 입력값 체크 */
-const useInput = (initValue, validator, valid) => {
-    const [value, setValue] = useState(initValue);  
-    const onChange = (event) => {
-        const {target: { value }} = event;
-        let willUpdate = true;
-        if (typeof validator === "function") {
-            willUpdate = validator(value, valid);
-            if (willUpdate) {
-                setValue(value);
-            }
-        }
-        console.log(value);
+import { useInput, checkRegExp, maxLen } from "../../utils/UseHook";
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1000px;
+    
+    animation: ${fadeIn} 2s;
+`;
+
+const RegisterBox = styled.div`
+    width: 800px;
+    padding: 40px;
+    border-radius: 10px;
+    background-color: white;
+    text-align: center;
+
+    box-shadow: 2px 3px 5px 0px;
+`; 
+
+const Title = styled.h1`
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+    display: inline-block;
+    width: 60px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+`;
+
+const InputBox = styled.input.attrs({required: true})`
+    width: 200px;
+    padding: 10px;
+    padding-bottom: 5px;
+    margin: 5px;
+    border: none;
+    border-bottom: 2px solid black;
+    font-size: 15px;
+
+    &:focus {
+        background-color: rgba(255, 207, 159, 0.4);
     }
-    return { value, onChange };
-}
+`
+const MsgBox = styled.small`
+  font-size: 12px;
+  color: black;
+  opacity: 0.5;
+`;
 
-/** 정규식 체크 함수*/
-const checkRegExp = (value, regExp) => {
-    return regExp.test(value);
-}
+const CheckBtn = styled.button.attrs({placeholder: "중복확인"})`
+  font-size: 10px;
+  width: 60px;
+  aspect-ratio: 16/9;
+  background-color: rgba(195, 54, 197, 0.2);
+  border: none;
+  border-radius: 10px;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+`
 
-const maxLen = (value, valid) => value.length <= valid;
+const ListWrapper = styled.ul`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  li {
+    width: 80px;
+    margin-right: 20px;
+    text-align: center;
+  }
+`;
+
+const RegisterBtn = styled.button`
+  width: 200px;
+  height: 40px;
+  margin: 30px;
+  border: none;
+  background-color: rgba(215, 155, 0, 0.2);
+  transition: background-color 1s;
+  &:hover {
+    background-color: rgba(62, 185, 125, 0.4);
+  }
+`
 
 function RegisterPage1() {
     // 입력값 검증
@@ -53,7 +131,7 @@ function RegisterPage1() {
 
     // 메세지 출력
     const idCheckMsgRef = useRef();
-    const pwdRegExpRef = useRef();
+    const pwdExpCheckMsgRef = useRef();
     const pwdCheckMsgRef = useRef();
     const emailCheckMsgRef = useRef();
     const nickCheckMsgRef = useRef();
@@ -63,23 +141,22 @@ function RegisterPage1() {
 
     useEffect(()=>{
         const { value } = id;
-  
         const idRegExp = /^[a-z0-9_-]{6,20}$/; 
-        idCheckMsgRef.current.innerText = checkRegExp(value, idRegExp) ? "사용가능한 아이디입니다." : "6~20 자리의 영문자를 포함한 아이디를 입력해주세요.";
+        idCheckMsgRef.current.innerText = checkRegExp(value, idRegExp) ? null : "6~20 자리의 영문자를 포함한 아이디를 입력해주세요.";
     }, [id.value])
 
     useEffect(()=>{
         const { value } = password;
         const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
      
-        pwdRegExpRef.current.innerText = checkRegExp(value, pwdRegExp) ? "사용가능한 비밀번호입니다." : "특수문자를 포함하는 8~24 자리의 비밀번호를 입력해주세요.";
+        pwdExpCheckMsgRef.current.innerText = checkRegExp(value, pwdRegExp) ? null : "특수문자를 포함하는 8~24 자리의 비밀번호를 입력해주세요.";
     },[password.value]);
 
     useEffect(()=>{
         const { value } = email;
         const emailRegRef = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
     
-        emailCheckMsgRef.current.innerText = checkRegExp(value, emailRegRef) ? "해당 이메일을 사용할 수 있습니다." : "이메일 형식에 맞지 않습니다.";
+        emailCheckMsgRef.current.innerText = checkRegExp(value, emailRegRef) ? null : "이메일 형식에 맞지 않습니다.";
     },[email.value])
 
     useEffect(()=>{
@@ -157,6 +234,7 @@ function RegisterPage1() {
         if (!checkRegExp(email, emailRegExp)) {
             alert("이메일을 다시 확인해주세요");
         }
+        
         if (!checkRegExp(nick, nickRegExp)) {
             alert("닉네임을 다시 확인해주세요.");
             return;
@@ -238,7 +316,7 @@ function RegisterPage1() {
                     return;
                 };
                 if (response.data === "NOT_EXIST"){
-                    emailCheckMsgRef.current.innerText = "사용가능한 이메일입니다..";
+                    emailCheckMsgRef.current.innerText = "사용가능한 이메일입니다.";
                     setEmailSuccess(true);
                     return;
                 }
@@ -292,37 +370,51 @@ function RegisterPage1() {
     }
 
     return(
-        <div>
-             <label>아이디<input ref={idRef} {...id} placeholder='최대 15자 까지 가능합니다.' required/></label>
-            <button onClick={checkId}>중복확인</button><br/>
-            <small ref={idCheckMsgRef}></small><br/>
-            <label>비밀번호<input ref={passwordRef} {...password} type="password" placeholder='특수문자를 포함하는 8~24 자리의 비밀번호' required/></label><br/>
-            <small ref={pwdRegExpRef}></small><br/>
-            <label>비밀번호 확인<input ref={confirmRef} type="password" onChange={confirmPassword} required/></label><br/>
-            <small ref={pwdCheckMsgRef}></small><br/>
-            <label>이메일<input ref={emailRef} {...email} type="email" required /></label>
-            <button onClick={checkEmail}>중복확인</button><br/>
-            <small ref={emailCheckMsgRef}></small><br/>
-            <label>닉네임<input ref={nickRef} {...nick} required /></label>
-            <button onClick={checkNickname}>중복확인</button><br/>
-            <small ref={nickCheckMsgRef}></small><br/>
-            <div>
-                <label>전화번호<input ref={numberRef} {...number} required /></label><br/>
-                <label>생년월일<input ref={birthRef} {...birth} required /></label><br/>
-            </div>
-            <label>
-                성별
-                <div>
-                    <label htmlFor='male'>남성</label>
-                    <input type="radio"  id="male" name="gender" checked={radioValue === "male"} value="male" onChange={(event)=>setRadioValue(event.target.value)} />
-                    <label htmlFor='female'>여성</label>
-                    <input type="radio" id="female" name="gender" checked={radioValue === "female"} value="female" onChange={(event)=>setRadioValue(event.target.value)} />
-    
-                </div>
-            </label>
-    
-            <button onClick={nextPage}>회원등록</button>
-        </div>
+        <Container>
+            <RegisterBox>
+                <Title>Paw-tential 회원가입</Title>
+                
+                <Label>아이디</Label>
+                <InputBox ref={idRef} {...id} />
+                <CheckBtn onClick={checkId}>중복확인</CheckBtn><br/>
+                <MsgBox ref={idCheckMsgRef}></MsgBox><br/>
+                
+                <Label>비밀번호</Label>
+                <InputBox ref={passwordRef} {...password} type="password"  /><br/>
+                <MsgBox ref={pwdExpCheckMsgRef}></MsgBox><br/>
+                <Label>비밀번호 확인</Label>
+                <InputBox ref={confirmRef} type="password" onChange={confirmPassword} /><br/>
+                <MsgBox ref={pwdCheckMsgRef}></MsgBox><br/>
+                
+                <Label>이메일</Label><InputBox ref={emailRef} {...email} type="email"  />
+                <CheckBtn onClick={checkEmail}>중복확인</CheckBtn><br/>
+                <MsgBox ref={emailCheckMsgRef}></MsgBox><br/>
+                <Label>닉네임</Label><InputBox ref={nickRef} {...nick}  />
+                <CheckBtn onClick={checkNickname}>중복확인</CheckBtn><br/>
+                <MsgBox ref={nickCheckMsgRef}></MsgBox><br/>
+                
+                <Label>전화번호</Label>
+                <InputBox ref={numberRef} {...number} placeholder='ex) 01012345678'/><br/>
+                <Label>생년월일</Label>
+                <InputBox ref={birthRef} {...birth} placeholder='ex) 19900101' /><br/>
+
+                <ListWrapper>
+                    <li>
+                        <Label>성별</Label>
+                    </li>
+                    <li>
+                        <Label htmlFor='male'>남성</Label>
+                        <input type="radio" id="male" name="gender" checked={radioValue === "male"} value="male" onChange={(event)=>setRadioValue(event.target.value)} />
+                    </li>
+                    <li>
+                        <Label htmlFor='female'>여성</Label>
+                        <input type="radio" id="female" name="gender" checked={radioValue === "female"} value="female" onChange={(event)=>setRadioValue(event.target.value)} />
+                    </li>
+                </ListWrapper>
+                     
+                <RegisterBtn onClick={nextPage}>회원등록</RegisterBtn>
+            </RegisterBox>
+        </Container>
     );
 };
 

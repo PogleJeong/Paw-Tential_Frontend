@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 import Nav from "./component/Nav.js";
 
 import Home from "./router/home/Home";
 
-import Login from "./router/login/Login";
+import Login from "./router/login/LoginHome";
 import KakaoAuth from "./router/login/KakaoAuth";
 
 import RegisterPage1 from "./router/register/RegisterPage1";
@@ -24,7 +24,7 @@ import MarketHome from "./router/market/Market_home";
 import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
-import FindAccount from './router/login/findAccount';
+import FindAccount from './router/login/FindAccount';
 
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';
@@ -47,6 +47,8 @@ import Pawtens_detail from "./router/pawtens/Pawtens_detail";
 
 import Contest from "./router/contest/Contest";
 import Contest_detail from "./router/contest/Contest_detail";
+import ChatroomHome from "./router/chat/ChatroomHome";
+import Chatroom from "./router/chat/Chatroom";
 
 
 function App() {
@@ -99,8 +101,6 @@ function App() {
             <Route path="/market/update/:posting" element={<MarketUpdate />} />
             <Route path="/market/detail/:posting" element={<MarketDetail />} />
 
-            {/* 채팅 */}
-            <Route path="/router/regi" element={null} />
 
             {/* 플레이스 */}
             <Route path="/place" element={<Place />} />
@@ -130,16 +130,15 @@ function App() {
             <Route path="admin/petChart" element={<PetChart />} />
             <Route path="admin/userChart" element={<UserChart />} />
 
-
-
-            
+            {/* 채팅 */}
+            <Route path="/chat/home" element={<ChatroomHome />} />
+            <Route path="/chat/:id" element={<Chatroom />} />
 
             {/* 마이피드 */}
             <Route path="/myfeed/myfeed" element={<Myfeed />} />
             <Route path="/myfeed/user_update" element={<User_update />} />
             <Route path="/myfeed/pet_update" element={<Pet_update />} />
           </Routes>
-
         </main>
         </div>
       </BrowserRouter>
