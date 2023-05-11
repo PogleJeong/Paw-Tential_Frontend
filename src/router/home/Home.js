@@ -32,17 +32,8 @@ const Home = () => {
     }
   }
 
-
-//content
-  const fetchFeeds = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/mainFeed");
-      setFeeds(response.data);
-    } catch (error) {
-      console.error(error);
-      alert("Failed to fetch feeds");
-    }
-  };
+  // 사용자 임시 ID
+  const userId = 'test';
 
   // 메인 - 모든 피드 불러오기
   const getAllFeed = async () => {
@@ -58,7 +49,7 @@ const Home = () => {
 
   useEffect(() => {
     saveCookie();
-    fetchFeeds();
+    getAllFeed();
   }, []);
 
   return (
