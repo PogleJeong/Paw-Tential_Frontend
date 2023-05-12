@@ -56,7 +56,7 @@ function Pawtens(){
                         <div class="w-100"><div class="d-flex justify-content-between">
                             <div class="">
                                 <h5 class="mb-0 d-inline-block"><a href="#" class="">{pawtens.nickname}</a></h5>
-                                <p class="mb-0"><i class="ri-global-line pe-1"></i>{pawtens.date_created.substring(0, 10)}</p>
+                                <p class="mb-0"><i class="ri-global-line pe-1"></i>{pawtens.date_created !== null && pawtens.date_created.substring(0, 10)}</p>
                                 
                             </div>
                             <div onClick={()=>{likeHandler(pawtens.seq)}} class="like-block d-flex align-items-center pawtens-like">
