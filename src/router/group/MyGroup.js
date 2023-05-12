@@ -24,7 +24,7 @@ export default function MyGroup(){
 
     // 내가 가입한 그룹 불러오는 함수
     const getMyGroupList = async () => {
-        axios.get("http://localhost:3000/group/getMyGroupList", {params:{"memberId":userId}})
+        axios.get("http://localhost:3000/group/getMyGroupList", {params:{"memberId":'loserya'}})
         .then(function(res) {
             setMyGroup(res.data.myGroupList);
         })
