@@ -20,11 +20,14 @@ function Pawtens(){
         vertical: false, // 세로 캐러셀
         centerPadding: '0px' // 중앙 컨텐츠 padding 값
     };
+    // 데이터를 모두 읽을 때까지 rendering 조절하는 변수
+    const [loading, setLoading] = useState(false);
 
     function getPawtenslist() {
         axios.get("http://localhost:3000/pawtens")
         .then(function(resp){
             setPawtensList(resp.data.list);
+            setLoading(true);   // 데이터를 다 읽어들임 -> rendering true
         })
         .catch(function(err){
             alert(err);
@@ -77,11 +80,15 @@ function Pawtens(){
         getPawtenslist();
     }, []);
 
+    if(!loading){
+        return <div>Loading...</div>
+    }
+
     return (
         <div>
             <h1>포텐스</h1>
             <div className="pawtens">
-                { pawtensList !== ""
+                { pawtensList.length !== 0
                     ?
                     <Slider {...settings}>
                         {pawtensListMap}
