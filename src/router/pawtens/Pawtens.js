@@ -20,11 +20,14 @@ function Pawtens(){
         vertical: false, // 세로 캐러셀
         centerPadding: '0px' // 중앙 컨텐츠 padding 값
     };
+    // 데이터를 모두 읽을 때까지 rendering 조절하는 변수
+    const [loading, setLoading] = useState(false);
 
     function getPawtenslist() {
         axios.get("http://localhost:3000/pawtens")
         .then(function(resp){
             setPawtensList(resp.data.list);
+            setLoading(true);   // 데이터를 다 읽어들임 -> rendering true
         })
         .catch(function(err){
             alert(err);
@@ -56,7 +59,7 @@ function Pawtens(){
                         <div class="w-100"><div class="d-flex justify-content-between">
                             <div class="">
                                 <h5 class="mb-0 d-inline-block"><a href="#" class="">{pawtens.nickname}</a></h5>
-                                <p class="mb-0"><i class="ri-global-line pe-1"></i>{pawtens.date_created.substring(0, 10)}</p>
+                                <p class="mb-0"><i class="ri-global-line pe-1"></i>{pawtens.date_created !== null && pawtens.date_created.substring(0, 10)}</p>
                                 
                             </div>
                             <div onClick={()=>{likeHandler(pawtens.seq)}} class="like-block d-flex align-items-center pawtens-like">
@@ -77,11 +80,15 @@ function Pawtens(){
         getPawtenslist();
     }, []);
 
+    if(!loading){
+        return <div>Loading...</div>
+    }
+
     return (
         <div>
             <h1>포텐스</h1>
             <div className="pawtens">
-                { pawtensList !== ""
+                { pawtensList.length !== 0
                     ?
                     <Slider {...settings}>
                         {pawtensListMap}

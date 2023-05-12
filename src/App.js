@@ -17,7 +17,7 @@ import FeedPost from "./router/Feed/FeedPost";
 import Place from "./router/place/Place.js";
 import Place_detail from "./router/place/Place_detail";
 
-import Myfeed from "./router/myfeed/myfeed";
+import Myfeed from "./router/myfeed/Myfeed";
 import User_update from "./router/myfeed/User_update";
 import Pet_update from "./router/myfeed/Pet_update";
 import MarketHome from "./router/market/Market_home";
@@ -71,7 +71,7 @@ function App() {
         </nav>
         <main>
           {/*쳇봇*/}
-          <ThemedExample/>
+          {/* <ThemedExample/> */}
 
           <Routes>
             {/* 메인 홈 */}
