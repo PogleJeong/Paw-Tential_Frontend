@@ -75,7 +75,7 @@ export default function NewGroupFeed() {
             setMemberProfile(res.data.profileList);
             console.log(res.data.profileList);
         })
-        .alert(function(err){
+        .catch(function(err){
             alert(err);
         })
     }
@@ -112,7 +112,6 @@ export default function NewGroupFeed() {
             <CareFeedModal show={careFeedModal} onHide={()=>{setCareFeedModal(false)}} />
             {/* <ModifyCareFeedModal show={modifyCareFeedModal} onHide={()=>{setModifyCareFeedModal(false)}} grpFeedNo={selectedGrpFeedId} /> */}
 
-            <div className="wrapper">
                 <div className="header-for-bg">
                     <div className="background-header position-relative">
                         {/* TO-DO 그룹 커버 이미지 넣어주세요 */}
@@ -231,7 +230,6 @@ export default function NewGroupFeed() {
                         </div>
                     </div>
                 </div>
-            </div> {/* end of wrapper */}
         </>
     )
 }

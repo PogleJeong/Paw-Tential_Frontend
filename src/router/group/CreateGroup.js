@@ -79,7 +79,6 @@ export default function CreateGroup() {
 
     return (
         <>
-            <div className="wrapper">
                 <div id="content-page" className="content-page">
                     <div className="container">
                         <div className="row">
@@ -145,7 +144,6 @@ export default function CreateGroup() {
                         </div> {/*end of row*/}
                     </div> {/*end of container*/}
                 </div> {/*end of content-page*/}
-            </div> {/*end of wrapper*/}
         </>
     )
 }
