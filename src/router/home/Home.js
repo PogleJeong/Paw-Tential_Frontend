@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "../../styles/FeedPost.css";
 import MainFeed from "../../component/MainFeed";
@@ -10,6 +12,25 @@ const Home = () => {
 
   const [createFeedModal, setCreateFeedModal] = useState(false);
   const [feeds, setFeeds] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [images, setImages] = useState([]);
+  
+  // SNS-login - 정은성
+  const [ searchParams, setSearchParams ] = useSearchParams(); 
+  const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID","USER_NICKNAME"]);
+  
+  /** 소셜로그인시 유저정보를 쿠키에 저장 */
+  const saveCookie = async() => {
+
+    // 만약 소셜로그인을 통했을 시, url 에 search 가 존재
+    const USER_ID = searchParams.get("USER_ID");
+    const USER_NICKNAME = searchParams.get("USER_NICKNAME");
+    console.log(USER_ID, USER_NICKNAME);
+    if (USER_ID) {
+      setCookies("USER_ID", USER_ID, {path:"/", maxAge: 3600});
+      setCookies("USER_NICKNAME", USER_NICKNAME, {path:"/", maxAge: 3600});
+    }
+  }
 
   // 사용자 임시 ID
   const userId = 'test';
@@ -27,6 +48,7 @@ const Home = () => {
   }
 
   useEffect(() => {
+    saveCookie();
     getAllFeed();
   }, []);
 

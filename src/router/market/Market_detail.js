@@ -18,17 +18,17 @@ const MarketDetail = () => {
 
     useEffect(()=>{
         // 자신이 작성한 글일경우, 수정하기 및 삭제하기 기능 활성화
-        const loginUser = cookies.id || false;
+        const loginUser = cookies.USER_ID || false;
 
         if (loginUser === id) {
             setUpdateActive(true);
         }
         // 게시물 조회수 : 이미 본 유저와 아닌 유저를 검사하여 추가
-        axios.post("http://localhost:3000/market/view/add", null, {params: {id: loginUser, posting}});
+        (async()=> await axios.post("http://localhost:3000/market/view/add", null, {params: {id: loginUser, posting}}))();
     })
 
     const marketDelete = async() => {
-        const loginUser = cookies.id || false;
+        const loginUser = cookies.USER_ID || false;
 
         await axios.post("http://localhost:3000/market/delete", null, {params: { id: loginUser, posting }})
         .then((response)=>{
@@ -52,6 +52,14 @@ const MarketDetail = () => {
     const clickReportBtn = () => {
         setActiveReportModal(true);
     }
+
+    const enterChat = async() => {
+        // 서버에서 처리.
+        await axios.post("http://localhost:3000/createChat",null, {params: {
+            sender: cookies.USER_ID,
+            recipient: id,
+        }})
+    }
     return(
         <div>  
             <div>
@@ -66,6 +74,7 @@ const MarketDetail = () => {
             <img src={`data:image/jpeg;base64,${imgInfo}`} alt="대표이미지" />
             <div dangerouslySetInnerHTML={{__html: `${content}`}}></div>
             <KakaoMapRead geoLat={geoLat} geoLng={geoLng}/>
+            <button onClick={enterChat}>채팅하기</button>
             {updateActive ?
             (<Link to={`/market/update/${posting}`} state={location.state} >수정하기</Link>)
             :

@@ -110,11 +110,11 @@ const MarketInfo = ({marketInfo, imgInfo}) => {
 
 // 특정 스크롤 위치에 따라 market list 가 추가됨. 
 const MarketList = ({marketInfoList}) => {
-   
+    console.log("컴포넌트내", marketInfoList);
     return(
         <div style={{display: "flex", width: "1800px", flexWrap: "wrap"}}>
             
-            {marketInfoList.length? 
+            {marketInfoList?.length ? 
             (marketInfoList.map((marketInfo, index)=>(
                <MarketInfo key={index} marketInfo={marketInfo[0]} imgInfo={marketInfo[1]} /> 
             )))

@@ -232,10 +232,8 @@ const RegisterForm = () => {
         if (confirm) {
             if(password === confirm) {
                 pwdCheckMsgRef.current.innerText = "비밀번호가 일치합니다.";
-                setPasswordSuccess(true);
             } else{
                 pwdCheckMsgRef.current.innerText = "비밀번호가 일치하지 않습니다.";
-                setPasswordSuccess(false);
             }
         } else {
             pwdCheckMsgRef.current.innerText = "";
