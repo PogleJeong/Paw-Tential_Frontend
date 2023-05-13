@@ -2,25 +2,28 @@ import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
+import { Modal, Input, Button } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+
+
 
 /** 실시간 입력값 체크 */
 const useInput = (initValue, validator, valid) => {
-    const [value, setValue] = useState(initValue);
-    const onChange = (event) => {
-      const { target } = event;
-      const inputValue = target.type === 'file' ? target.files[0] : target.value;
+  const [value, setValue] = useState(initValue);  
+  const onChange = (event) => {
+      const {target: { value }} = event;
       let willUpdate = true;
-      if (typeof validator === 'function') {
-        willUpdate = validator(inputValue, valid);
-        if (willUpdate) {
-          setValue(inputValue);
-        }
+      if (typeof validator === "function") {
+          willUpdate = validator(value, valid);
+          if (willUpdate) {
+              setValue(value);
+          }
       }
-      console.log(inputValue);
-    };
-    return { value, onChange };
-  };
-  
+      console.log(value);
+  }
+  return { value, onChange };
+}
+
 
 /** 정규식 체크 함수*/
 const checkRegExp = (value, regExp) => {
@@ -33,7 +36,7 @@ const EditProfileForm = () => {
   // 입력값 검증
   const profilePicture = useInput("", null, null);
   const id = useInput("", maxLen, 15);
-  // const password = useInput("", maxLen, 20);
+  const password = useInput("", maxLen, 20);
   const confirm = useInput("", maxLen, 20);
   const email = useInput("", maxLen, 45);
   const nick = useInput("", maxLen, 10);
@@ -41,13 +44,16 @@ const EditProfileForm = () => {
   const intro = useInput("", maxLen, 500);
   const [userInfo, setUserInfo] = useState(null);
   const [cookies, setCookies] = useCookies(["USER_ID", "USER_NICKNAME"]);
-  const [profilePictureFile, setProfilePictureFile] = useState(null);
+  const [profilePicturePath, setProfilePicturePath] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [userNick, setUsernick] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [previewIconClicked, setPreviewIconClicked] = useState(false);
+
 
   // 입력값 검증
   const idRef = useRef();
-  // const passwordRef = useRef();
+  const passwordRef = useRef();
   const confirmRef = useRef();
   const emailRef = useRef();
   const nickRef = useRef();
@@ -59,7 +65,7 @@ const EditProfileForm = () => {
 
   // 메세지 출력
   const idCheckMsgRef = useRef();
-  // const pwdRegExpRef = useRef();
+  const pwdRegExpRef = useRef();
   const pwdCheckMsgRef = useRef();
   const emailRegExpRef = useRef();
   const nickCheckMsgRef = useRef();
@@ -69,25 +75,27 @@ const EditProfileForm = () => {
 
 // DB에서 사용자 정보 가져오기
 useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const res = await axios.get("http://localhost:3000/userInfo", { params: { id: cookies.USER_ID } });
-        setUserInfo(res.data);
-        setUsernick(res.data.nickname);
-        if (res.data.profile) {
+  const fetchUserInfo = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/userInfo", { params: { id: cookies.USER_ID } });
+      setUserInfo(res.data);
+      setUsernick(res.data.nickname);
 
-        //  프로필 사진 미리보기
-          const profilePicturePath = `http://localhost:3000/${res.data.profile}`;
-          setProfilePictureFile(profilePicturePath); // 프로필 사진을 설정합니다.
-          setPreviewUrl(profilePicturePath); // 미리보기 URL을 설정합니다.
-        }
-      } catch (err) {
-        console.log(err);
+      if (res.data.profile) {
+        // 프로필 사진 미리보기
+        const profilePictureFilename = res.data.profile;
+        const profilePicturePath = `http://localhost:3000/uploads/${profilePictureFilename}`;
+        setPreviewUrl(profilePicturePath); // 미리보기 URL을 설정합니다.
       }
-    };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  fetchUserInfo();
+}, []);
+
   
-    fetchUserInfo();
-  }, []);
 
   // 입력 필드에 기본값 설정
   useEffect(() => {
@@ -113,7 +121,7 @@ useEffect(() => {
   const editMember = async (userInfo) => {
     try {
       const formData = new FormData();
-      formData.append('upload', profilePictureFile); // 파일을 FormData에 추가합니다.
+      formData.append('upload', profilePicturePath); // 파일을 FormData에 추가합니다.
       Object.entries(userInfo).forEach(([key, value]) => {
         formData.append(key, value);
       });
@@ -133,22 +141,22 @@ useEffect(() => {
 
   const nextPage = async () => {
     // 입력값
-    // const password = passwordRef.current.value;
+    const password = passwordRef.current.value;
     const email = emailRef.current.value;
     const nick = nickRef.current.value;
     const number = numberRef.current.value;
 
     // 정규식
-    // const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
+    const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
     const nickRegExp = /^[가-힣a-zA-Z0-9]+$/;
 
     // 1. 정보가 모두 입력되었는가
 
-    // if (!password) {
-    //   alert("비밀번호가 입력되지 않았습니다.");
-    //   passwordRef.focus();
-    //   return;
-    // }
+    if (!password) {
+      alert("비밀번호가 입력되지 않았습니다.");
+      passwordRef.focus();
+      return;
+    }
     if (!email) {
       alert("이메일이 입력되지 않았습니다.");
       emailRef.focus();
@@ -167,10 +175,10 @@ useEffect(() => {
 
     // 2. 정규식
 
-    // if (!checkRegExp(password, pwdRegExp)) {
-    //   alert("비밀번호를 다시 확인해주세요.");
-    //   return;
-    // }
+    if (!checkRegExp(password, pwdRegExp)) {
+      alert("비밀번호를 다시 확인해주세요.");
+      return;
+    }
     if (!checkRegExp(nick, nickRegExp)) {
       alert("닉네임을 다시 확인해주세요.");
       console.log(nick, nickRegExp);
@@ -180,8 +188,15 @@ useEffect(() => {
     // 3. 중복체크
 
     if (nick !== userNick) {
-      alert("닉네임 중복을 확인해주세요");
-      return;
+      console.log('nick : '+nick);
+      console.log(userNick);
+      if(nickSuccess){
+        setNickSuccess(true);
+      }else{
+        alert("닉네임 중복을 확인해주세요");
+        return;
+
+      }
     } else {
         setNickSuccess(true);
     }
@@ -189,21 +204,25 @@ useEffect(() => {
     // 유저 정보 업데이트
     const userInfo = {
       id: id.value,
+      pwd : password,
       email: email,
       nickname: nick,
       phone: number,
       intro: intro.value,
-      profile: profilePicture.value,
+      profile: profilePicture,
     };
+
+
+  
 
 
     editMember(userInfo);
     // useNavigator 으로 데이터보내기 => useLocation 로 데이터 받기
-    // navigate("/myfeed/myfeed", {
-    //   state: {
-    //     userInfo
-    //   }
-    // });
+    navigate("/myfeed/myfeed", {
+      state: {
+        userInfo
+      }
+    });
   };
 
   /** 닉네임 체크 함수 */
@@ -239,37 +258,113 @@ useEffect(() => {
 
 // 프로필 사진 변경 시 미리보기 업데이트
 const handleProfilePictureChange = (event) => {
-    const file = event.target.files[0];
-    profilePicture.onChange(event);
-    if (file) {
-      setProfilePictureFile(file); // 선택한 파일을 상태로 설정합니다.
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewUrl(reader.result); // 미리보기 URL을 설정합니다.
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const file = event.target.files[0];
+  profilePicture.onChange(event);
+  if (file) {
+    setProfilePicturePath(file);
+    openModal();
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPreviewUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+    const openModal = () => {
+      setShowModal(true);
+    };
+  
+
+    const closeModal = () => {
+      setShowModal(false);
+      setPreviewIconClicked(false); // 모달이 닫힐 때 아이콘 클릭 여부 초기화
+    };
+
+    const handlePreviewIconClick = () => {
+      setPreviewIconClicked(true);
+      openModal();
+    };
+
+    
+    /** 첫번쨰로 작성한 비밀번호와 두번째 재확인용 비밀번호와 일치하는지 체크 */
+    const confirmPassword = () => {
+      const password = passwordRef.current.value;
+      const confirm = confirmRef.current.value;
+      if (confirm) {
+          if(password === confirm) {
+              pwdCheckMsgRef.current.innerText = "비밀번호가 일치합니다.";
+          } else{
+              pwdCheckMsgRef.current.innerText = "비밀번호가 일치하지 않습니다.";
+          }
+      } else {
+          pwdCheckMsgRef.current.innerText = "";
+      }
+  }
 
 
 
   return (
     <div>
-          <label>프로필 사진</label>
-      <br />
-      <input type="file" accept="image/*" onChange={handleProfilePictureChange} />
-      <br />
-      {previewUrl && ( // 미리보기 URL이 있는 경우에만 이미지를 표시합니다.
-        <img src={previewUrl} alt="프로필 사진 미리보기" style={{ width: '200px', height: '200px' }} />
-      )}
+    <label>프로필 사진</label>
+    <br />
+    <br />
+
+    {previewUrl && (
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        <img
+          src={previewUrl}
+          alt="프로필 사진 미리보기"
+          style={{
+            width: '200px',
+            height: '200px',
+            borderRadius: '50%',
+            objectFit: 'cover',
+          }}
+        />
+        {!previewIconClicked && (
+          <Button
+            type="text"
+            icon={<EyeOutlined />}
+            onClick={handlePreviewIconClick}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              background: 'rgba(0, 0, 0, 0.5)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '50%',
+            }}
+          />
+        )}
+      </div>
+    )}
+    <br />
+
+    <Modal
+      title="프로필 사진 변경"
+      visible={showModal}
+      onCancel={closeModal}
+      onOk={closeModal}
+      okText="확인"
+      cancelText="취소"
+    >
+
+      <Input type="file" accept="image/*" onChange={handleProfilePictureChange} />
+    </Modal>
       <br />
       <label>
         아이디<p>{id.value}</p>
       </label>
       <small ref={idCheckMsgRef}></small>
       <br />
-      {/* <label>비밀번호<input ref={passwordRef} {...password} type="password" placeholder='특수문자를 포함하는 8~24 자리의 비밀번호' required/></label><br/>
-            <small ref={pwdRegExpRef}></small><br/> */}
+      <label>비밀번호<input ref={passwordRef} {...password} type="password" placeholder='특수문자를 포함하는 8~24 자리의 비밀번호' required/></label><br/>
+      <small ref={pwdRegExpRef}></small><br/>
+       <label>비밀번호 확인<input ref={confirmRef} type="password" onChange={confirmPassword} required/></label><br/>
+       <small ref={pwdCheckMsgRef}></small><br/>
+
       <label>
         이메일<input ref={emailRef} {...email} type="email" required />
       </label>

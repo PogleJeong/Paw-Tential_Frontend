@@ -34,8 +34,7 @@ import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
-import PetChart from './router/admin/PetChart';
-import UserChart from './router/admin/UserChart';
+
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -143,8 +142,6 @@ function App() {
             <Route path="/admin/reports" element={<Reports />} />
             <Route path="/admin/reports/:choice/:search" element={<Reports />} />
             <Route path="/admin/data" element={<Data />} />
-            <Route path="/admin/petChart" element={<PetChart />} />
-            <Route path="/admin/userChart" element={<UserChart />} />
 
             {/* 채팅 */}
             <Route path="/chat/home" element={<ChatroomHome />} />
@@ -153,7 +150,7 @@ function App() {
 
             {/* 마이피드 */}
             <Route path="/myfeed/myfeed" element={<Myfeed />} />
-            <Route path="/myfeed/Myfeed2/:userId" element={<Myfeed2 />} />
+            <Route path="/myfeed/myfeed2/:userId" element={<Myfeed2 />} />
             <Route path="/myfeed/user_update" element={<User_update />} />
             <Route path="/myfeed/pet_update" element={<Pet_update />} />
             <Route path="/searchUser" element={<SearchUser />} />
@@ -163,13 +160,13 @@ function App() {
       </BrowserRouter>
 
       {/* footer */}
-      <footer>
-        <div>
-          <p>
-            <small>Copyright &copy;Paw-Tential</small>
-          </p>
-        </div>
-      </footer>
+      <footer style={{ position: 'fixed', left: 0, bottom: 0, width: '100%', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
+      <div>
+        <p>
+          <small>&copy; Paw-Tential</small>
+        </p>
+      </div>
+    </footer>
     </div>
   );
 }

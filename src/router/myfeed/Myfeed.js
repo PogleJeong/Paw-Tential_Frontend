@@ -2,10 +2,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { AiFillHome} from "react-icons/ai"; 
+import { BiBookmark } from "react-icons/bi";
+import { FiMinus } from 'react-icons/fi';
 import '../../styles/MyFeed.css';
 import { FeedImage } from '../../component/FeedData';
-import  MyfeedDropdown_user  from '../../component/MyfeedDropdown_user';
-import  MyfeedDropdown_others from '../../component/MyfeedDropdown_others';
+
+import ProfileCard from '../../component/ProfileCard';
 
 
 
@@ -13,12 +16,13 @@ const Myfeed = () => {
 
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [userInfo, setUserInfo] = useState(null);
+  const [bookmarkFeeds, setBookmarkFeeds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [feed, setFeed] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadedFeed, setLoadedFeed] = useState([]);
-  const [isDropdown, setIsDropdown] = useState(false);
+
 
 
 
@@ -46,6 +50,7 @@ const Myfeed = () => {
     }
   };
 
+
   const fetchFeed = async () => {
     try {
       const res = await axios.get("http://localhost:3000/Myfeed", { 
@@ -63,11 +68,25 @@ const Myfeed = () => {
     }
   };
 
+  const fetchBookmarkFeeds = async () => {
+    try {
+      const response = await axios.get("/api/getBookmark", {
+        params: {
+          id: cookies.USER_ID,
+        },
+      });
+      setBookmarkFeeds(response.data);
+    } catch (error) {
+      console.error("Error fetching bookmark feeds:", error);
+    }
+  };
+
   
 
   useEffect(() => {
     fetchUserInfo();
     fetchFeed();
+    fetchBookmarkFeeds(); 
   }, []);
 
   useEffect(() => {
@@ -85,37 +104,34 @@ const Myfeed = () => {
   return (
     <div className="my-feed-container">
       {userInfo && (
-        <div className="profile-card">
-          <img
-            className="profile-image"
-            src={userInfo.profile}
-            alt={userInfo.id}
-          />
-          <div className="profile-info">
-            <h1>{userInfo.id}</h1>
-            <p className="bio">{userInfo.intro}</p>
-            </div>
-            {userInfo !== '' &&
-            <div className="feed-icon" style={{float:"right"}}>
-              <img src="feedimages/icon.png" alt="더보기" onClick={() => setIsDropdown(!isDropdown)}/>
-              {cookies.USER_ID === userInfo.id
-              ? isDropdown && <MyfeedDropdown_user id={userInfo.id} />
-              : isDropdown && <MyfeedDropdown_others id={userInfo.id} />}
-            </div>
-          }
-          </div>
-
+        <>
+          <ProfileCard userInfo={userInfo} isCurrentUser={true} />
+        </>
       )}
-
+  
       <div className="feed-container">
+      <div className="feed-categories">
+  <div className="feed-category">
+    {/* 마이피드 */}
+    <div className="category-icon" onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>
+      <AiFillHome size={40} />
+    </div>
+  </div>
+  <div className="feed-category-divider">
+    <div className="divider-line"></div>
+  </div>
+
+  <div className="feed-category">
+    <div className="category-icon" onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>
+      <BiBookmark size={40} />
+    </div>
+  </div>
+</div>
+  
         {loadedFeed.map((feedData, index) => {
           if (loadedFeed.length === index + 1) {
             return (
-              <div
-                className="myfeedimg img"
-                ref={lastFeedElementRef}
-                key={index}
-              >
+              <div className="myfeedimg img" ref={lastFeedElementRef} key={index}>
                 <FeedImage content={feedData.content} />
               </div>
             );
@@ -127,6 +143,7 @@ const Myfeed = () => {
             );
           }
         })}
+  
         {loading && (
           <div className="loading-container">
             <div className="loader"></div>
@@ -135,6 +152,7 @@ const Myfeed = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Myfeed;
