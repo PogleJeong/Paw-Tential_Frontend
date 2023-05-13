@@ -49,7 +49,7 @@ const RegiChart = () => {
             max: 'auto',
             stacked: false,
             reverse: false,
-            tickValues: 5, 
+            tickValues: 'every 1 day',
           }}
           axisTop={null}
           axisRight={null}
@@ -77,6 +77,7 @@ const RegiChart = () => {
           pointLabel="y"
           pointLabelYOffset={-12}
           useMesh={true}
+          yFormat={value => Math.round(value)} // 정수로 표시하기 위해 추가
         />
       </div>
     </div>
