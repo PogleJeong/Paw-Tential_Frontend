@@ -48,4 +48,27 @@
     object-fit: cover;
   }
   
+  .feed-categories {
+    display: flex;
+    align-items: center;
+  }
+  
+  .feed-category {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .category-icon {
+    margin-right: 5px;
+  }
+  
+  .category-divider {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #ccc;
+  }
+  
+  
+  
   

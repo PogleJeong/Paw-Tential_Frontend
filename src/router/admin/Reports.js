@@ -65,6 +65,7 @@ const AdminReportList = () => {
       fetchReports(choice, search, page-1);
     }
     
+
     
     return (
       <div>
@@ -144,19 +145,12 @@ const AdminReportList = () => {
 };
 
 function TableRow(props){
-      
-//   const handleGoReport = async (seq) => {
-//     await axios.get("http://localhost:3000/goReport",
-//     {params:{"seq":seq}})
-//     .then(res=>{
-//       console.log(res.data);
+  const navigate = useNavigate();
 
-//     })
-    
-//     .catch (function(error) {
-//       console.log(error);
-//     })
-//   };
+  const handleGoMyFeed = (userId) => {
+    navigate(`/myfeed/myfeed2/${userId}`);
+  };
+
 
   return (
 
@@ -168,8 +162,9 @@ function TableRow(props){
           <td>{props.report.rtype}</td>
           <td>{props.report.content}</td>
           <td>{props.report.rdate}</td>
-          {/* <td><button onClick={() => handleGoReport(props.report.seq)}>신고 관리</button></td> */}
-
+          <td>
+        <button onClick={() => handleGoMyFeed(props.report.reported)}>피드로 이동</button>
+      </td>
       </tr>
   );
 }

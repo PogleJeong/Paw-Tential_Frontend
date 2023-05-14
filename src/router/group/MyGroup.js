@@ -24,7 +24,7 @@ export default function MyGroup(){
 
     // 내가 가입한 그룹 불러오는 함수
     const getMyGroupList = async () => {
-        axios.get("http://localhost:3000/group/getMyGroupList", {params:{"memberId":userId}})
+        axios.get("http://localhost:3000/group/getMyGroupList", {params:{"memberId":'loserya'}})
         .then(function(res) {
             setMyGroup(res.data.myGroupList);
         })
@@ -49,7 +49,6 @@ export default function MyGroup(){
 
     return (
         <>
-            <div className="wrapper">
                 <div id="content-page" className="content-page">
                     <div className="container">
                         <div className="row">
@@ -107,7 +106,6 @@ export default function MyGroup(){
                         </div>
                     </div>
                 </div>
-            </div>
         {/* <h1>내가 가입한 그룹</h1>
         {myGroup !== null && myGroup.length !== 0
         ?

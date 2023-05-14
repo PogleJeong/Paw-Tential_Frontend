@@ -198,7 +198,7 @@ export default function GroupFeedItems(props){
             .then(function(res) {
                 setCommentList(res.data.cmtList);
             })
-            .alert(function(err){
+            .catch(function(err){
                 alert(err);
             })
         }

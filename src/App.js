@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 
 import "./App.css";
 import Nav from "./component/Nav.js";
+import AdminSidebar from "./component/AdminSidebar";
 
 import Home from "./router/home/Home";
 
@@ -15,24 +17,24 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_Detail";
+import Place_detail from "./router/place/Place_detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
+import Myfeed2 from "./router/myfeed/Myfeed2";
 import User_update from "./router/myfeed/User_update";
 import Pet_update from "./router/myfeed/Pet_update";
 import MarketHome from "./router/market/Market_home";
 import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
-import FindAccount from './router/login/FindAccount';
+import FindAccount from './router/login/findAccount';
 
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
-import PetChart from './router/admin/PetChart';
-import UserChart from './router/admin/UserChart';
+
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -47,33 +49,27 @@ import Pawtens_detail from "./router/pawtens/Pawtens_detail";
 
 import Contest from "./router/contest/Contest";
 import Contest_detail from "./router/contest/Contest_detail";
+
+import SearchUser from "./component/SearchUser";
 import ChatroomHome from "./router/chat/ChatroomHome";
 import Chatroom from "./router/chat/Chatroom";
 
 import NewGroupFeed from "./router/group/NewGroupFeed";
 import Search from "./router/search/Search";
+import Navbar from "./component/NavBar";
 
 
 function App() {
     return (
         <div>
       {/* 헤더 */}
-      <header>
-        <div>
-          <h1>PAW-TENTIAL</h1>
-        </div>
-      </header>
       <BrowserRouter>
-      <div>
-        <nav>
+      <div className="wrapper">
           {/* 사이드메뉴 */}
-          <div> 
-            <Nav />
-          </div>
-        </nav>
-        <main>
-          {/*쳇봇 <ThemedExample/> */ }
-          
+
+          { window.location.pathname === "/admin/admin" ? <AdminSidebar /> :  <Navbar />}
+          {/*쳇봇*/}
+          {/* <ThemedExample/> */}
 
           <Routes>
             {/* 메인 홈 */}
@@ -123,44 +119,44 @@ function App() {
             <Route path="/group/CreateGroup" element={<CreateGroup />} />
             <Route path="/group/GroupList" element={<GroupList />} />
             <Route path="/group/GroupList/:search" element={<GroupList />} />
-            <Route path="/group/MyGroup" element={<MyGroup />} />
+            <Route path="/group/MyGroup/" element={<MyGroup />} />
             <Route path="/group/ModifyGroup/:grpNo" exact element={<ModifyGroup />} />
             <Route path="/group/GroupFeed/:grpNo/:grpName" exact element={<NewGroupFeed />} />
             <Route path="/router/regi" element={null} />
 
             {/* 관리자 */}
-            <Route path="admin/admin" element={<Admin />} />
-            <Route path="admin/users" element={<Users />} />
-            <Route path="admin/users/:choice/:search" element={<Users />} />
-            <Route path="admin/QnA" element={<QnA />} />
-            <Route path="admin/QnA/:choice/:search" element={<QnA />} />
-            <Route path="admin/reports" element={<Reports />} />
-            <Route path="admin/reports/:choice/:search" element={<Reports />} />
-            <Route path="admin/data" element={<Data />} />
-            <Route path="admin/petChart" element={<PetChart />} />
-            <Route path="admin/userChart" element={<UserChart />} />
+            <Route path="/admin/admin" element={<Admin />} />
+            <Route path="/admin/users" element={<Users />} />
+            <Route path="/admin/users/:choice/:search" element={<Users />} />
+            <Route path="/admin/QnA" element={<QnA />} />
+            <Route path="/admin/QnA/:choice/:search" element={<QnA />} />
+            <Route path="/admin/reports" element={<Reports />} />
+            <Route path="/admin/reports/:choice/:search" element={<Reports />} />
+            <Route path="/admin/data" element={<Data />} />
 
             {/* 채팅 */}
             <Route path="/chat/home" element={<ChatroomHome />} />
-            <Route path="/chat/:id" element={<Chatroom />} />
+            <Route path="/chat/:id" element={<Chatroom />} />            {/* 검색 */}
+
 
             {/* 마이피드 */}
             <Route path="/myfeed/myfeed" element={<Myfeed />} />
+            <Route path="/myfeed/myfeed2/:userId" element={<Myfeed2 />} />
             <Route path="/myfeed/user_update" element={<User_update />} />
             <Route path="/myfeed/pet_update" element={<Pet_update />} />
+            <Route path="/searchUser" element={<SearchUser />} />
           </Routes>
-        </main>
         </div>
       </BrowserRouter>
 
       {/* footer */}
-      <footer>
-        <div>
-          <p>
-            <small>Copyright &copy;Paw-Tential</small>
-          </p>
-        </div>
-      </footer>
+      <footer style={{ position: 'fixed', left: 0, bottom: 0, width: '100%', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
+      <div>
+        <p>
+          <small>&copy; Paw-Tential</small>
+        </p>
+      </div>
+    </footer>
     </div>
   );
 }

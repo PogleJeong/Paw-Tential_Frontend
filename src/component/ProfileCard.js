@@ -1,85 +1,65 @@
-import React, { useState } from "react";
-import Modal from "react-modal";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import FollowCount from './FollowCount';
+import FollowButton from './FollowButton';
+import { useCookies } from 'react-cookie';
+import MyfeedDropdown_user from './MyfeedDropdown_user';
+import MyfeedDropdown_others from './MyfeedDropdown_others';
 
+const ProfileCard = ({ userInfo }) => {
+  const [cookies, setCookies] = useCookies(['USER_ID', 'USER_NICKNAME']);
+  const { id,  intro } = userInfo;
+  const [isDropdown, setIsDropdown] = useState(false);
 
-import "../styles/Profile.css";
+  const isCurrentUser = cookies.USER_ID === id;
 
-Modal.setAppElement("#root");
+  const [profilePictureFile, setProfilePictureFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
-const ProfileCard = ({ userInfo, setUserInfo, feed }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/userInfo', { params: { id: userInfo.id } });
+        if (res.data.profile) {
+          const profilePicturePath = `http://localhost:3000/${res.data.profile}`;
+          setProfilePictureFile(profilePicturePath);
+          setPreviewUrl(profilePicturePath);
+        } else {
+          // Set a default profile picture URL for users without a profile picture
+          setProfilePictureFile('default-profile-picture.png');
+          setPreviewUrl('default-profile-picture.png');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  const handleModalOpen = () => {
-    setModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
-
-  const handleModalImageUpload = async () => {
-    if (!imageFile) return;
-    const formData = new FormData();
-    formData.append("image", imageFile);
-    try {
-      const res = await axios.post("http://localhost:3000/images", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      const imageUrl = res.data.url;
-      const userData = { ...userInfo, profile: imageUrl };
-      await axios.put(`http://localhost:3000/users/${userInfo.id}`, userData);
-  
-      setUserInfo(userData);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      handleModalClose();
-    }
-  };
-
-  const handleModalImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setPreviewImage(URL.createObjectURL(file));
-    }
-  };
+    fetchUserInfo();
+  }, [userInfo.id]);
 
   return (
-    <div className="my-feed-container">
-      {userInfo && (
-        <div className="profile-card">
-          <img
-            className="profile-image"
-            src={previewImage || userInfo.profile}
-            alt={userInfo.id}
-          />
-          <div className="profile-info">
-            <h1>{userInfo.id}</h1>
-            <p className="bio">{userInfo.intro}</p>
+    <div className="profile-card">
+      <img className="profile-image" src={previewUrl} alt={id} />
+      <div className="profile-info">
+        <h1>{id}</h1>
+        <p className="bio">{intro}</p>
+        <FollowCount userId={id} />
+        {!isCurrentUser && <FollowButton userId={id} />}
+        {userInfo !== '' && (
+          <div className="feed-icon" style={{ float: 'right' }}>
+            <img
+              src="feedimages/icon.png"
+              alt="더보기"
+              onClick={() => setIsDropdown(!isDropdown)}
+            />
+            {cookies.USER_ID === userInfo.id ? (
+              isDropdown && <MyfeedDropdown_user id={userInfo.id} email={userInfo.email} />
+            ) : (
+              isDropdown && <MyfeedDropdown_others id={userInfo.id} />
+            )}
           </div>
-        </div>
-      )}
-      <div className="feed-container">
-        {feed.map((item) => (
-          <div key={item.id} className="feed">
-            <img src={item.image} alt={item.description} />
-            <p>{item.description}</p>
-          </div>
-        ))}
+        )}
       </div>
-      <Modal
-        isOpen={modalOpen}
-        onRequestClose={handleModalClose}
-        contentLabel="Profile Image Modal"
-      >
-        <h2>Change Profile Image</h2>
-        <input type="file" accept="image/*" onChange={handleModalImageChange} />
-        <button onClick={handleModalImageUpload}>Upload</button>
-      </Modal>
     </div>
   );
 };
