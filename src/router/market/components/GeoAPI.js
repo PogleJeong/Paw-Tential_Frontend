@@ -1,11 +1,17 @@
 // 게시물 작성시 사용되는 Geo API
 
 import React, { useEffect, useRef } from "react";
+import { styled } from "styled-components";
 
 import Geolocation from '@react-native-community/geolocation';
 
-const { kakao } = window;
+const MapContainer = styled.div`
+    width: 500px;
+    height: 250px;
+    box-shadow: 2px 3px 5px 0px;
+`
 
+const { kakao } = window;
 const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
 
     const mapContentRef = useRef();
@@ -118,7 +124,7 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
     return(
         <div>
             <span ref={addressRef}></span>
-            <div ref={mapContentRef} style={{width: "500px", height: "500px"}}></div>
+            <MapContainer ref={mapContentRef} ></MapContainer>
             <div>
                 <span ref={infoRef}></span>
             </div>

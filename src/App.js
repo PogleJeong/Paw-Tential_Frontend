@@ -66,6 +66,7 @@ function App() {
       <BrowserRouter>
       <div className="wrapper">
           {/* 사이드메뉴 */}
+
           { window.location.pathname === "/admin/admin" ? <AdminSidebar /> :  <Navbar />}
           {/*쳇봇*/}
           {/* <ThemedExample/> */}

@@ -22,7 +22,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     width: 80%;
-    min-height: 800px;
+    min-height: 1600px;
     padding: 50px;
     animation: ${fadeIn} 2s;
 `;
@@ -83,7 +83,6 @@ const SearchBtn = styled.button`
         transform: scale(0.95) 1s;
     }
 `
-
 const MarketWriteBtn = styled.button`
     width: 100px;
     height: 40px;
@@ -107,7 +106,6 @@ const MarketHome = () => {
     
     const navigate = useNavigate();
     useEffect(()=> {
-        console.log(cookies);
         if (!cookies.USER_ID) {
             alert("로그인 후 이용해주세요.");
             navigate("/");
@@ -119,11 +117,12 @@ const MarketHome = () => {
         return ()=>{
             window.removeEventListener("scroll",throttle(scrollFunction))
         }
-    })
+    },[])
 
     useEffect(()=>{
         callMarketInfo("scroll");
     },[pages])
+
 
     // 스크롤 이벤트 추가
     const scrollFunction = () => {
@@ -190,8 +189,6 @@ const MarketHome = () => {
                     </ul>
                     
                     <Link to="/market/write"><MarketWriteBtn>마켓 등록하기</MarketWriteBtn></Link> */}
-                    
-                    
                 <SearchWrapper>
                     <SelectBox {...selectedOption}>
                         {selectOptionList.map((option, index) => (
