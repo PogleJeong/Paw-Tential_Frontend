@@ -35,7 +35,7 @@ const Nav = () =>{
             <li><Link className="nav-link" to="/login">로그인</Link></li> 
             }
             <br />
-            <li><Link className="nav-link" to="/searchUser">검색</Link></li>
+            <li><Link className="nav-link" to="/search">검색</Link></li>
             <li><Link className="nav-link" to="/place">포텐플레이스</Link></li>
             <li><Link className="nav-link" to="/market">마켓</Link></li>
             <li><Link className="nav-link" to="/pawtens">포텐스</Link></li>

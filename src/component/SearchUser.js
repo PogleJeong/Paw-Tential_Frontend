@@ -1,59 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input, Card, Avatar } from 'antd';
+import { Card, Avatar } from 'antd';
 import axios from 'axios';
 
 const { Meta } = Card;
 
-const SearchUser = () => {
-  const [searchText, setSearchText] = useState('');
+const SearchUser = (prop) => {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
-
-  const handleSearch = (e) => {
-    setSearchText(e.target.value);
-  };
 
   const handleUserClick = (userId) => {
     navigate(`/myfeed/myfeed2/${userId}`); // 검색된 유저의 MyFeed 페이지로 이동
   };
 
   useEffect(() => {
-    if (searchText === '') {
+    if (prop.keyword === '') {
       setUsers([]); // 검색어가 비어있으면 검색 결과 초기화
       return;
     }
 
     // 검색어가 변경될 때마다 검색을 수행
-    const userId = searchText.trim();
+    const userId = prop.keyword.trim();
     fetchUsers(userId);
-  }, [searchText]);
+  }, [prop.keyword]);
 
   const fetchUsers = async (userId) => {
-      
     await axios.get('http://localhost:3000/userList', { params:{ "search": userId } })
     .then(function(res){
-    console.log(res.data.list);
-    const filteredUsers = res.data.list.filter((user) =>
-    user.id.includes(userId)
-  );
-
-  setUsers(filteredUsers);
-
+      console.log(res.data.list);
+      const filteredUsers = res.data.list.filter((user) =>
+        user.id.includes(userId)
+      );
+      setUsers(filteredUsers);
     })
-  .catch (function(error) {
-    console.log(error);
-  })
-}
+    .catch (function(error) {
+      console.log(error);
+    })
+  }
 
   return (
     <div>
-      <Input.Search
-        placeholder="아이디 검색"
-        value={searchText}
-        onChange={handleSearch}
-      />
-
       {users.length > 0 && (
         <div style={{ marginTop: '20px' }}>
           {users.map((user) => (
