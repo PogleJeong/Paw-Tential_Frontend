@@ -15,7 +15,7 @@ export default function NewsFeed() {
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
 
     // cookie에 저장된 사용자 ID
-    const userId = 'test2';
+    const userId = cookies.USER_ID;
     
     // 가입 그룹 존재 여부
     const [groupJoined, setGroupJoined] = useState(false);
@@ -257,7 +257,6 @@ export default function NewsFeed() {
                                             onHide={()=>{setModifyCmtModal(false)}}
                                             grpCmtNo={grpCmtNo}/>
           {groupJoined === true ? (
-              <div className="wrapper">
                 <div id="content-page" className="content-page">
                   <div className="container">
                     <h1 className="my-3">NewsFeed</h1>
@@ -276,7 +275,6 @@ export default function NewsFeed() {
                     </div>
                   </div>
                 </div>
-              </div>
           ) : (
             <p>가입한 그룹이 없습니다.</p>
           )}

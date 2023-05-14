@@ -10,10 +10,11 @@ const SearchUser = (prop) => {
   const navigate = useNavigate();
 
   const handleUserClick = (userId) => {
-    navigate(`/myfeed/myfeed2/${userId}`); // 검색된 유저의 MyFeed 페이지로 이동
+    navigate(`/myfeed/myfeed2/${userId}`); // Navigate to the user's MyFeed page
   };
 
   useEffect(() => {
+
     if (prop.keyword === '') {
       setUsers([]); // 검색어가 비어있으면 검색 결과 초기화
       return;
@@ -21,10 +22,12 @@ const SearchUser = (prop) => {
 
     // 검색어가 변경될 때마다 검색을 수행
     const userId = prop.keyword.trim();
+
     fetchUsers(userId);
   }, [prop.keyword]);
 
   const fetchUsers = async (userId) => {
+    
     await axios.get('http://localhost:3000/userList', { params:{ "search": userId } })
     .then(function(res){
       console.log(res.data.list);
@@ -44,18 +47,18 @@ const SearchUser = (prop) => {
         <div style={{ marginTop: '20px' }}>
           {users.map((user) => (
             <Card
-              key={user.id}
-              style={{ width: 200, display: 'inline-block', margin: '10px' }}
-              cover={<img alt="프로필 이미지" src={user.profile} />}
-              onClick={() => handleUserClick(user.id)}
-            >
-              <Meta
-                avatar={<Avatar src={user.profile} />}
-                title={user.id}
-                description={user.intro}
-              />
+  key={user.id}
+  style={{ width: 200, display: 'inline-block', margin: '10px', cursor: 'pointer' }}
+  cover={<img alt="Profile" src={user.profile} />}
+  onClick={() => handleUserClick(user.id)}
+>
+  <Meta
+    avatar={<Avatar src={user.profile} />}
+    title={user.id}
+    description={user.intro}
+  />
+</Card>
 
-            </Card>
           ))}
         </div>
       )}

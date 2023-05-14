@@ -34,8 +34,7 @@ import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
-import PetChart from './router/admin/PetChart';
-import UserChart from './router/admin/UserChart';
+
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -57,27 +56,17 @@ import Chatroom from "./router/chat/Chatroom";
 
 import NewGroupFeed from "./router/group/NewGroupFeed";
 import Search from "./router/search/Search";
+import Navbar from "./component/NavBar";
 
 
 function App() {
     return (
         <div>
       {/* 헤더 */}
-      <header>
-        <div>
-          <h1>PAW-TENTIAL</h1>
-        </div>
-      </header>
       <BrowserRouter>
-      <div>
-        <nav>
+      <div className="wrapper">
           {/* 사이드메뉴 */}
-          <div>
-          { window.location.pathname === "/admin/admin" ? <AdminSidebar /> :  <Nav />}
-
-          </div>
-        </nav>
-        <main>
+          { window.location.pathname === "/admin/admin" ? <AdminSidebar /> :  <Navbar />}
           {/*쳇봇*/}
           {/* <ThemedExample/> */}
 
@@ -143,8 +132,6 @@ function App() {
             <Route path="/admin/reports" element={<Reports />} />
             <Route path="/admin/reports/:choice/:search" element={<Reports />} />
             <Route path="/admin/data" element={<Data />} />
-            <Route path="/admin/petChart" element={<PetChart />} />
-            <Route path="/admin/userChart" element={<UserChart />} />
 
             {/* 채팅 */}
             <Route path="/chat/home" element={<ChatroomHome />} />
@@ -153,23 +140,22 @@ function App() {
 
             {/* 마이피드 */}
             <Route path="/myfeed/myfeed" element={<Myfeed />} />
-            <Route path="/myfeed/Myfeed2/:userId" element={<Myfeed2 />} />
+            <Route path="/myfeed/myfeed2/:userId" element={<Myfeed2 />} />
             <Route path="/myfeed/user_update" element={<User_update />} />
             <Route path="/myfeed/pet_update" element={<Pet_update />} />
             <Route path="/searchUser" element={<SearchUser />} />
           </Routes>
-        </main>
         </div>
       </BrowserRouter>
 
       {/* footer */}
-      <footer>
-        <div>
-          <p>
-            <small>Copyright &copy;Paw-Tential</small>
-          </p>
-        </div>
-      </footer>
+      <footer style={{ position: 'fixed', left: 0, bottom: 0, width: '100%', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
+      <div>
+        <p>
+          <small>&copy; Paw-Tential</small>
+        </p>
+      </div>
+    </footer>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal, List, Input } from 'antd';
 import { useCookies } from "react-cookie";
-
+import FollowButton from './FollowButton';
 
 const FollowingListModal = ({ userId, closeModal }) => {
   const [followingList, setFollowingList] = useState([]);
@@ -32,6 +32,22 @@ const FollowingListModal = ({ userId, closeModal }) => {
     setSearchText(e.target.value);
   };
 
+  const checkIsFollowing = async (followingId) => {
+    try {
+      const response = await axios.post('http://localhost:3000/isFollowing', null, {
+        params: {
+          follower_id: cookies.USER_ID,
+          following_id: followingId
+        }
+      });
+      const result = response.data;
+      return result === 'YES';
+    } catch (error) {
+      console.error('팔로잉 체크 에러:', error);
+      return false;
+    }
+  };
+
   return (
     <Modal
       title="팔로잉 리스트"
@@ -46,6 +62,7 @@ const FollowingListModal = ({ userId, closeModal }) => {
         renderItem={(item) => (
           <List.Item>
             <span>{item}</span>
+            <FollowButton userId={item} isFollowing={checkIsFollowing(item)} />
           </List.Item>
         )}
       />

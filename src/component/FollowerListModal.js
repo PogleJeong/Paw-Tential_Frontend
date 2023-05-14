@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal, List, Input } from 'antd';
+import FollowButton from './FollowButton';
+import { useCookies } from "react-cookie";
 
 const FollowerListModal = ({ userId, closeModal }) => {
   const [followerList, setFollowerList] = useState([]);
   const [filteredFollowerList, setFilteredFollowerList] = useState([]);
   const [searchText, setSearchText] = useState('');
-
-  console.log(userId);
+  const [cookies] = useCookies(["USER_ID"]);
 
   useEffect(() => {
     const fetchFollowerList = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/followerList?id=${userId}`, { params: { 'following_id': userId } });
         setFollowerList(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('팔로워 리스트 조회 에러:', error);
       }
@@ -32,6 +32,22 @@ const FollowerListModal = ({ userId, closeModal }) => {
     setSearchText(e.target.value);
   };
 
+  const checkIsFollowing = async (followerId) => {
+    try {
+      const response = await axios.post('http://localhost:3000/isFollowing', null, {
+        params: {
+          follower_id: followerId,
+          following_id: cookies.USER_ID
+        }
+      });
+      const result = response.data;
+      return result === 'YES';
+    } catch (error) {
+      console.error('팔로잉 체크 에러:', error);
+      return false;
+    }
+  };
+
   return (
     <Modal
       title="팔로워 리스트"
@@ -46,6 +62,9 @@ const FollowerListModal = ({ userId, closeModal }) => {
         renderItem={(item) => (
           <List.Item>
             <span>{item}</span>
+            {cookies.USER_ID !== item && (
+              <FollowButton userId={item} isFollowing={checkIsFollowing(item)} />
+            )}
           </List.Item>
         )}
       />
