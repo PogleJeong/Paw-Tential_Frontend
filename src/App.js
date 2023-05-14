@@ -72,8 +72,8 @@ function App() {
           </div>
         </nav>
         <main>
-          {/*쳇봇*/}
-          <ThemedExample/>
+          {/*쳇봇 <ThemedExample/> */ }
+          
 
           <Routes>
             {/* 메인 홈 */}
