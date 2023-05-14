@@ -27,7 +27,7 @@ import MarketHome from "./router/market/Market_home";
 import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
-import FindAccount from './router/login/FindAccount';
+import FindAccount from './router/login/findAccount';
 
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';
@@ -56,27 +56,17 @@ import Chatroom from "./router/chat/Chatroom";
 
 import NewGroupFeed from "./router/group/NewGroupFeed";
 import Search from "./router/search/Search";
+import Navbar from "./component/NavBar";
 
 
 function App() {
     return (
         <div>
       {/* 헤더 */}
-      <header>
-        <div>
-          <h1>PAW-TENTIAL</h1>
-        </div>
-      </header>
       <BrowserRouter>
-      <div>
-        <nav>
+      <div className="wrapper">
           {/* 사이드메뉴 */}
-          <div>
-          { window.location.pathname === "/admin/admin" ? <AdminSidebar /> :  <Nav />}
-
-          </div>
-        </nav>
-        <main>
+          { window.location.pathname === "/admin/admin" ? <AdminSidebar /> :  <Navbar />}
           {/*쳇봇*/}
           {/* <ThemedExample/> */}
 
@@ -155,7 +145,6 @@ function App() {
             <Route path="/myfeed/pet_update" element={<Pet_update />} />
             <Route path="/searchUser" element={<SearchUser />} />
           </Routes>
-        </main>
         </div>
       </BrowserRouter>
 
