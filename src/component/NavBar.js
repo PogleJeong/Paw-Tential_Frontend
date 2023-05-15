@@ -72,6 +72,7 @@ export default function Navbar() {
                             <ul id="iq-sidebar-toggle" className="iq-menu">
                                 <li>
                                     <Link to="/search">
+
                                         <i className="las la-search"></i><span>검색</span>
                                     </Link>
                                 </li>
