@@ -8,6 +8,8 @@ import Pagination from 'react-js-pagination';
 import "../../styles/page.css";
 import "../../styles/admin.css";
 
+
+
 const AdminUserList = () => {
   const [users, setUsers] = useState([]);
 
@@ -64,6 +66,8 @@ const AdminUserList = () => {
       setPage(page);
       fetchUsers(choice, search, page-1);
     }
+
+  
     
     
     return (
@@ -144,38 +148,39 @@ const AdminUserList = () => {
   );
 };
 
-function TableRow(props){
-      
+function TableRow(props) {
   const handleDeleteUser = async (id) => {
-    await axios.get("http://localhost:3000/userDel",
-    {params:{"id":id}})
-    .then(res=>{
-      console.log(res.data);
-      if(res.data === "YES"){
-        alert({id} + "회원을 삭제했습니다");
-        window.location.reload(); // 새로고침
-        
-      }
-    })
-    
-    .catch (function(error) {
-      console.log(error);
-    })
+    const confirmDelete = window.confirm(`'${id}' 회원을 삭제하시겠습니까?`);
+    if (confirmDelete) {
+      await axios
+        .get("http://localhost:3000/userDel", { params: { id: id } })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data === "YES") {
+            alert(id + "회원을 삭제했습니다");
+            window.location.reload(); // 새로고침
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   };
 
   return (
+    <tr>
+      <td>{props.cnt}</td>
+      <td>{props.user.id}</td>
+      <td>{props.user.nickname}</td>
+      <td>{props.user.email}</td>
+      <td>{props.user.regiDate}</td>
+      <td>{props.user.phone}</td>
+      <td>{props.user.auth === 0 ? "일반회원" : "관리자"}</td>
+      <td>
+        <button onClick={() => handleDeleteUser(props.user.id)}>삭제</button>
+      </td>
+    </tr>
 
-      <tr>
-          <td>{props.cnt}</td>
-          <td>{props.user.id}</td>
-          <td>{props.user.nickname}</td>
-          <td>{props.user.email}</td>
-          <td>{props.user.regiDate}</td>
-          <td>{props.user.phone}</td>
-          <td>{props.user.auth === 0 ? '일반회원' : '관리자'}</td>
-          <td><button onClick={() => handleDeleteUser(props.user.id)}>삭제</button></td>
-
-      </tr>
   );
 }
 
