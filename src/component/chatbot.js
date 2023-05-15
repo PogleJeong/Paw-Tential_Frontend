@@ -53,8 +53,8 @@ const steps = [
 const ThemedExample = () => (
   <div style={{
     position: "fixed",
-    top: "30%",
-    left: "60%",
+    top: "100%",
+    left: "100%",
   }}>
   <ThemeProvider theme={theme}>
     <ChatBot speechSynthesis={{ enable: true, lang: 'ko' } } steps={steps}

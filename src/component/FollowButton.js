@@ -35,6 +35,8 @@ const FollowButton = ({ userId, isFollowing }) => {
           'following_id': userId
         }
       });
+
+
       const result = response.data;
   
       if (result === "YES") {
@@ -52,7 +54,13 @@ const FollowButton = ({ userId, isFollowing }) => {
 
   const unfollowUser = async (userId) => {
     try {
-      const response = await axios.post('/api/unfollow', { userId });
+      const response = await axios.post('http://localhost:3000/unfollow', null,
+      { 
+        params: {
+          'follower_id': cookies.USER_ID,
+          'following_id': userId
+        }
+      });
       console.log('언팔로우 성공:', response.data);
       setFollowing(false); // Set following to false after successfully unfollowing
     } catch (error) {

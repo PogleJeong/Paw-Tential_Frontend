@@ -1,7 +1,15 @@
 // 게시물 수정시 사용되는 Geo API
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef} from "react";
+import { styled } from 'styled-components';
 const { kakao } = window;
+
+const MapContainer = styled.div`
+    width: 500px;
+    height: 250px;
+    margin: 25px;
+    box-shadow: 2px 3px 5px 0px;
+`
 
 // React.memo 를 통해 rerendering 방지
 
@@ -103,7 +111,8 @@ const KakaoMapUpdate = ({ setUpdateGeoLat, setUpdateGeoLng, prevLat, prevLng }) 
     
     return(
         <div>
-            <div ref={mapContentRef} style={{width: "500px", height: "500px"}}></div>
+            <MapContainer ref={mapContentRef}>
+            </MapContainer>
             <div>
                 <span id="centerAddr"></span>
             </div>

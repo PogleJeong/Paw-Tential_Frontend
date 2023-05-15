@@ -14,7 +14,6 @@ export default function CreateGroup() {
 
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
     // cookie에 저장된 사용자 ID 및 닉네임
-    const userId = 'test2';
     const userNickName = cookies.USER_NICKNAME;
 
     // 그룹 생성 시, 입력할 사항
@@ -36,7 +35,7 @@ export default function CreateGroup() {
 
 
     useEffect(()=>{
-        setGrpLeader(userId);
+        setGrpLeader(cookies.USER_ID);
     },[]);
 
     // 그룹명 중복 확인

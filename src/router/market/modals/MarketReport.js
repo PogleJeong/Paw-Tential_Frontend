@@ -1,37 +1,127 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import axios from "axios";
-import session from "react-session-api";
+import { styled, keyframes } from 'styled-components';
 
-const useInput = (initValue, validator, valid) => {
-  
-    const [value, setValue ] = useState(initValue);
-    
-    const onChange = (event) => {
-        const value = event.target.value;
+import { useInput, maxLen } from "../../../utils/UseHook";
 
-        let willUpdate = true;
-        if (typeof validator === "function") {
-            willUpdate = validator(value, valid)
-            if (willUpdate) {
-                setValue(value);
-            }
-        }
+const fadeIn = keyframes`
+    0% {
+    opacity: 0;
     }
-    return { value, onChange };
-}
+    100% {
+    opacity: 1;
+    }
+`;
 
-// posting 정보받기, modal 을 위한 onChange 함수 받기.
-const maxLen = (value, valid) => value.length <= valid;
+const Container = styled.div`
+    position: fixed;
+    top: 100px;
+    left: 40%;
+    width: 600px;
+    aspect-ratio: 4/3;
+    padding: 20px;
+    box-shadow: 2px 3px 5px 0px;
+    background-color: white;
+    animation: ${fadeIn} 2s;
+`;
+
+const Title = styled.h2`
+    text-align: center;
+    height: 50px;
+`
+
+const HeaderWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+    padding: 10px;
+`
+
+const BodyWrapper = styled.div`
+
+`
+
+const InputBox = styled.input`
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-bottom: 3px solid black;
+    padding-left: 5px;
+    font-size: 15px;
+
+    &:focus {
+        background-color: rgba(255, 207, 159, 0.4);
+    }
+`
+
+const SelectBox = styled.select`
+    width: 100px;
+    height: 30px;
+    text-align: center;
+    &:focus {
+        background-color: rgba(255, 207, 159, 0.4);
+    }
+`
+
+const Label = styled.span`
+    display: inline-block;
+    height: 30px;
+    font-weight: bold;
+    margin: 10px;
+`
+const TextBox = styled.textarea`
+    width: 570px;
+    height: 200px;
+    padding: 10px;
+    font-size: 15px;
+`
+
+const SubmitBtn = styled.button`
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    margin: 0px 50px;
+    color: white;
+    background-color: rgba(244,183,229,0.8);
+`
+
+const CloseBtn = styled.button`
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    margin: 0px 100px;
+    color: white;
+    background-color: rgba(90,183,229,0.8);
+`
+
+const FooterWrapper = styled.div`
+    display: flex;
+`
+
+const LeftAlignBox = styled.div`
+    display: flex;
+    justify-content: left;
+`
+
+const RightAlignBox = styled.div`
+    display: flex;
+    justify-content: right;
+`
 
 function MarketReport({writer, setActiveReportModal}) {
     const title = useInput("", maxLen, 45);
     const category = useInput("--전체--", maxLen, 45);
     const content = useInput("", maxLen, 500);
+    const [ cookies ] = useCookies(["USER_ID","USER_NICKNAME"]);
     const location = useLocation();
     
     const sendReport = async() => {
-        const reporter = session.get("user") || null;
+        const reporter = cookies.USER_ID;
         const { pathname } = location;
         if (!title.value) {
             alert("신고제목을 입력해주세요.");
@@ -75,23 +165,32 @@ function MarketReport({writer, setActiveReportModal}) {
     }
 
     return(
-        <div style={{position: "fixed", top: "100px", left: "40%", width: "500px", aspectRatio: "4/3", backgroundColor: "gray", padding: "50px"}}>
-            <span>제목: </span>
-            <input {...title} placeholder="신고제목(45글자)"/><br/>
-            
-            <span>신고분류</span>
-            <select {...category}>
-                <option>--전체--</option>
-                <option>부적절한 게시물</option>
-                <option>광고 및 스팸</option>
-                <option>욕설 및 비방</option>
-            </select><br/>
-
-            <span>신고내용: </span>
-            <textarea {...content} placeholder="500자 이내로 작성해주세요"></textarea><br/>
-            <button onClick={sendReport}>제출</button>
-            <button onClick={closeModal}>닫기</button>
-        </div>
+        <Container >
+            <Title>해당 게시물 신고</Title>
+            <HeaderWrapper>
+                <Label>신고제목</Label>
+                <InputBox {...title} placeholder="신고제목(45글자)"/><br/>
+                <Label>신고분류</Label>
+                <SelectBox {...category}>
+                    <option>-전체-</option>
+                    <option>부적절한 게시물</option>
+                    <option>광고 및 스팸</option>
+                    <option>욕설 및 비방</option>
+                </SelectBox>
+            </HeaderWrapper>
+            <BodyWrapper>
+                <Label>신고내용 </Label>
+                <TextBox {...content} placeholder="500자 이내로 작성해주세요"></TextBox><br/>
+            </BodyWrapper>
+            <FooterWrapper>
+                <LeftAlignBox>
+                    <SubmitBtn onClick={sendReport}>제출</SubmitBtn>
+                </LeftAlignBox>
+                <RightAlignBox>
+                    <CloseBtn onClick={closeModal}>닫기</CloseBtn>
+                </RightAlignBox>
+            </FooterWrapper>
+        </Container>
     );
 }
 

@@ -1,4 +1,13 @@
 import React, { useRef, useEffect } from "react";
+import { styled } from "styled-components";
+
+
+const MapContainer = styled.div`
+    width: 500px;
+    height: 250px;
+    margin: 50px;
+    box-shadow: 2px 3px 5px 0px;
+`
 
 const { kakao } = window;
 
@@ -23,9 +32,9 @@ const KakaoMapRead = ({geoLat, geoLng}) => {
         });
     });  
     return(
-        <div ref={mapContentRef} style={{width: "300px", height: "300px"}}>
+        <MapContainer ref={mapContentRef}>
 
-        </div>
+        </MapContainer>
     );
 }
 

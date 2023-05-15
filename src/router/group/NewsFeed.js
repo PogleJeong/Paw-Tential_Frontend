@@ -15,7 +15,7 @@ export default function NewsFeed() {
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
 
     // cookie에 저장된 사용자 ID
-    const userId = 'test2';
+    const userId = cookies.USER_ID;
     
     // 가입 그룹 존재 여부
     const [groupJoined, setGroupJoined] = useState(false);

@@ -1,15 +1,179 @@
 // 게시물작성
 // CKEditor 사용
-import { useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import session from "react-session-api";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
-import UploadAdapter from '../../utils/UploadAdaptor';
 import axios from 'axios';
-import KakaoMapUpdate from './components/GeoAPI3';
+import { styled, keyframes } from "styled-components";
 
+import UploadAdapter from '../../utils/UploadAdaptor';
+import KakaoMapUpdate from './components/GeoAPI3';
+import './style/style.css';
+
+const fadeIn = keyframes`
+    0% {
+    opacity: 0;
+    }
+    100% {
+    opacity: 1;
+    }
+`;
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0px;
+    padding: 100px;
+    width: 80%;
+    height: 1600px;
+
+    animation: ${fadeIn} 2s;
+`;
+
+const Wrappers = styled.div`
+    width: 1000px;
+    height: 1500px;
+    padding: 50px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 3px 5px 0px;
+`;
+const HeaderWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ImageBox= styled.div`
+    width: 450px;
+    height: 450px;
+    text-align: center;
+`;
+
+const Title = styled.h1`
+    font-size: 30px;
+    text-align: center;
+    padding: 30px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    background-color: #99FFCC;
+`;
+
+const Label = styled.label`
+    display: inline-block;
+    width: 60px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+`;
+
+const Thumbnail = styled.img`
+    width: 400px;
+    height: 400px;
+    border: 5px solid black;
+    border-radius: 40px;
+`
+
+const FileName = styled.span`
+    display: inline-block;
+    height: 40px;
+    margin-top: 5px;
+    padding: 10px 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    width: 280px;
+    color: #999999;
+`
+
+const FileBtn = styled.input.attrs({type: "file"})`
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+`;
+
+const FileLabel = styled.label`
+    display: inline-block;
+    margin-top: 5px;
+    padding: 10px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #999999;
+    cursor: pointer;
+    height: 40px;
+    margin-left: 5px;
+`
+
+const InfoBox = styled.div`
+    width: 450px;
+    height: 450px;
+    padding-left: 30px;
+    padding-right: 30px;
+`
+
+const InputBox = styled.input.attrs({required: true})`
+    width: 300px;
+    height: 40px;
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    border-bottom: 2px solid black;
+    font-size: 15px;
+
+    &:focus {
+        background-color: rgba(255, 207, 159, 0.4);
+    }
+`
+
+const MsgBox = styled.span`
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
+`
+
+const SelectBox = styled.select`
+    width: 100px;
+    height: 40px;
+    margin: 5px;
+    border: none;
+    border-bottom: 2px solid black;
+    text-align: center;
+
+    &:focus {
+        background-color: rgba(255, 207, 159, 0.4);
+    }
+`
+
+const BodyWrapper = styled.div`
+    margin-top: 30px;
+    width: 100%;
+    height: 450px;
+`;
+
+const FooterWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+`
+
+const WriteBtn = styled.button`
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background-color: blue;
+`;
 
 const stateList = ["--분류--","나눔", "판매"];
 const categories = ["--카테고리--", "완구류", "침구류", "간식류", "주식", "음료", "기타"];
@@ -43,7 +207,6 @@ const MarketUpdate = () => {
     const location = useLocation();
     const { title, content, id, category, state, price, conditions, productName, productNumber, geoLat, geoLng, posting } = location.state.marketInfo;
     const imgInfo = location.state.imgInfo;
-    
 
     const [ user, setUser ] = useState(id);
     const updateTitle = useInput(title, maxLen, 500);
@@ -58,17 +221,21 @@ const MarketUpdate = () => {
     const [ updateGeoLng, setUpdateGeoLng ]= useState(geoLng);
     const imgRef = useRef();
     const [ imgFile, setImgFile ] = useState(`data:image/jpeg;base64,${imgInfo}`);
-    const navigator = useNavigate();
+    const filenameRef = useRef();
+    const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID","USER_NICKNAME"]);
+    const navigate = useNavigate();
 
     const [ triggerPrice, setTriggerPrice ] = useState(false);
     useEffect(()=>{
-        // 로그인한 유저인지 확인
-        const userSession = session.get("user") || false;
-        if (!userSession){
-            alert("로그인을 해주세요");
-            navigator("/");
+        if (!cookies.USER_ID) {
+            alert("로그인 후 이용해주세요.");
+            navigate("/");
+            return;
         }
-        setUser(userSession);
+        if (cookies.USER_ID !== user) {
+            alert("해당 게시물을 수정할 권한이 없습니다.");
+            return;
+        }
     },[])
 
     useEffect(()=>{
@@ -132,7 +299,7 @@ const MarketUpdate = () => {
                 alert("게시물 수정에 실패하였습니다.");
             }
             alert("게시물이 수정되었습니다.");
-            navigator("/market");
+            navigate("/market");
         })
     };
 
@@ -146,74 +313,82 @@ const MarketUpdate = () => {
     }
 
     return(
-        <div>
-            <h2>Market 작성하기</h2>
-            <label>
-                제목
-                <input type="text" {...updateTitle} placeholder='제목을 작성해주세요'/>
-            </label>
-            <p>작성자 {user}</p>
-            <p>작성날짜 {new Date().toLocaleString('ko-KR')}</p>
-            <label>거래분류
-                <select {...updateState}>
-                    {stateList.map((updateState, index) =>
-                    (<option key={index} >{updateState}</option>))}
-                </select>
-            </label><br/>
-            {triggerPrice ? (
-            <label>
-                가격
-                <input type="number" {...title} placeholder='가격' />
-            </label>
-            ) : (
-                null
-            )}
-            <label>제품분류
-                <select {...updateCategory}>
-                    {categories.map((category, index) =>
-                    (<option key={index} >{category}</option>))}
-                </select>
-            </label><br/>
-            <label>제품명
-                <input type="text" {...updateProductName} placeholder='제품명' />
-            </label><br/>
-            <label>개수
-                <input type="number" {...updateProductNumber} placeholder='개수'/>
-            </label><br/>
-            <label>제품상태
-                <select {...updateConditions}>
-                    {conditionList.map((condition, index)=>
-                    (<option key={index}>{condition}</option>))}
-                </select>
-            </label><br/>
-            <label>대표이미지
-                <img src={imgFile} style={{width: "200px", aspectRatio: "16/9"}} alt="" /><br/>
-                <input ref={imgRef} type="file" onChange={onLoadFile} />
-            </label>
+        <Container>
+            <Wrappers>
+                <Title>Market 수정하기</Title>
+                <HeaderWrapper>
+                <ImageBox>
+                        <Thumbnail src={imgFile} alt="" /><br/>
+                        <FileName ref={filenameRef}>첨부파일</FileName>
+                        <FileLabel>파일찾기
+                            <FileBtn ref={imgRef} onChange={onLoadFile} />
+                        </FileLabel>
+                    </ImageBox>
+                    <InfoBox>
+                        <MsgBox>작성자  | &#9;{`${cookies.USER_NICKNAME}(${cookies.USER_ID})`}</MsgBox>
+                        <MsgBox>작성날짜  | &#9; {new Date().toLocaleString('ko-KR')}</MsgBox>
 
-            <CKEditor
-                editor={ ClassicEditor }
-                data={`${content}`} // 이전 글
-                config={{extraPlugins: [MyCustomUploadAdapterPlugin]}}
-                onReady={ editor => {
-                    // You can store the "editor" and use when it is needed.
-                    console.log( 'Editor is ready to use!', editor );
-                } }
-                onChange={ ( event, editor ) => {
-                    const data = editor.getData();
-                    setUpdateContent(data);
-                } }
-                onBlur={ ( event, editor ) => {
-                    console.log( 'Blur.', editor );
-                } }
-                onFocus={ ( event, editor ) => {
-                    console.log( 'Focus.', editor );
-                } }
-            />
-            <KakaoMapUpdate setUpdateGeoLat={setUpdateGeoLat} setUpdateGeoLng={setUpdateGeoLng} prevLat={geoLat} prevLng={geoLng}/>
-            <button onClick={marketUpdate}>수정하기</button>
-        </div>
-        );
+                        <Label>제목</Label>
+                        <InputBox {...title} placeholder='제목을 작성해주세요'/><br/>
+
+                        <Label>거래분류</Label>
+                        <SelectBox {...updateState}>
+                            {stateList.map((state, index) => (<option key={index} >{state}</option>))}
+                        </SelectBox><br/>
+
+                        {triggerPrice ? (
+                        <>
+                            <Label>가격</Label>;    
+                            <InputBox type="number" {...updatePrice} placeholder='가격을 입력해주세요' /><br/>;
+                        </>
+                        ) : null}
+
+                        <Label>제품분류</Label>
+                        <SelectBox {...updateCategory}>
+                            {categories.map((category, index) => (<option key={index} >{category}</option>))}
+                        </SelectBox><br/>
+
+                        <Label>제품명</Label>
+                        <InputBox type="text" {...updateProductName} placeholder='제품명을 입력해주세요' /><br/>
+                        
+                        <Label>제품개수</Label>
+                        <InputBox type="number" {...updateProductNumber} placeholder='개수를 입력해주세요'/><br/>
+                        
+                        <Label>제품상태</Label>
+                        <SelectBox {...updateConditions}>
+                            {conditionList.map((condition, index) => (<option key={index}>{condition}</option>))}
+                        </SelectBox><br/>
+
+                    </InfoBox>
+                </HeaderWrapper>
+                <BodyWrapper>
+                    <CKEditor
+                        editor={ ClassicEditor }
+                        data={`${content}`} // 이전 글
+                        config={{extraPlugins: [MyCustomUploadAdapterPlugin]}}
+                        onReady={ editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log( 'Editor is ready to use!', editor );
+                        } }
+                        onChange={ ( event, editor ) => {
+                            const data = editor.getData();
+                            setUpdateContent(data);
+                        } }
+                        onBlur={ ( event, editor ) => {
+                            console.log( 'Blur.', editor );
+                        } }
+                        onFocus={ ( event, editor ) => {
+                            console.log( 'Focus.', editor );
+                        } }
+                    />
+                </BodyWrapper>
+                <FooterWrapper>
+                    <KakaoMapUpdate setUpdateGeoLat={setUpdateGeoLat} setUpdateGeoLng={setUpdateGeoLng} prevLat={geoLat} prevLng={geoLng}/>
+                    <WriteBtn onClick={marketUpdate}>수정하기</WriteBtn>
+                </FooterWrapper>
+            </Wrappers>
+        </Container>
+    );
 };
 
 export default MarketUpdate;

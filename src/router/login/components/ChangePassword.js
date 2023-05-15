@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { styled } from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { useInput, checkRegExp, maxLen } from "../../../utils/UseHook"; 
 
 
 const Wrapper = styled.div`
-    width: 800px;
+    min-width: 800px;
     padding: 40px;
     border-radius: 10px;
     background-color: white;
@@ -82,26 +83,26 @@ const ChangePassword = () => {
     const auth = useInput("", maxLen, 8);
     const authRef = useRef();
     const [ authCorrect, setAuthCorrect ]= useState(false);
-    
+    const navigate = useNavigate();
 
-    // 초기값설정 : 인증번호 disabled
+    /* // 초기값설정 : 인증번호 disabled
     useEffect(()=> {
         authRef.current.disabled = true;
-    })
+    },[]) */
 
     const sendAuthorization = async() => {
         if (!email.value) {
             alert("이메일을 입력해주세요.");
             return;
         }
-        alert(email.value, "로 인증번호를 전송하였습니다.");
-        authRef.current.disabled = false;
+        alert(`${email.value} 로 인증번호를 전송하였습니다.`);
+        /* authRef.current.disabled = false; */
 
         await axios.post("http://localhost:3000/findAccount/auth", null, {params: {
             id: id.value,
             email: email.value
         }}).then(response=>{
-            if (response.status === "200") {
+            if (response.status === 200) {
                 if (response.data === "notExist") {
                     alert("아이디와 이메일이 일치하는 계정이 없습니다.");
                     return;
@@ -146,20 +147,19 @@ const ChangePassword = () => {
             alert("비밀번호가 일치하지 않습니다.")
             return;
         }
-        await axios.post(("http://localhost:3000/findAccount/reset-password", null, {params: {
+        await axios.post("http://localhost:3000/findAccount/reset-password", null, {params: {
             id: id.value,
             email: email.value,
-            newPassword: newPassword.value}}))
-            .then(response=> {
+            newPassword: newPassword.value}})
+            .then((response)=> {
+                console.log(response);
                 if (response.data === "PASSWORD_RESET_NO") {
                     alert("비밀번호 재설정에 실패하였습니다.");
                     return;
                 }
-                alert("비밀번호 재설정에 성공하였습니다.\n다시 로그인해주세요");
-                window.location.href="http://localhost:9001/login/login";
+                alert("비밀번호 재설정에 성공하였습니다.");
+                window.location.href = "http://localhost:9001/login";
             });
-
-
     }
 
     return(
@@ -182,9 +182,9 @@ const ChangePassword = () => {
                 <div>
                     <InputBox type="password" {...newPassword} placeholder="비밀번호를 입력해주세요" /><br/>
                     { checkRegExp(newPassword.value, /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/) ? null : <MsgBox>특수문자를 포함하는 8~24 자리의 비밀번호를 입력해주세요.</MsgBox>}
-                    <InputBox type="password" {...confirmPassword} placeholder="비밀번호를 다시 입력해주세요" /><br/>
+                    <br/><InputBox type="password" {...confirmPassword} placeholder="비밀번호를 다시 입력해주세요" /><br/>
                     { confirmPassword.value && (newPassword.value === confirmPassword.value) ? <MsgBox>비밀번호가 일치합니다.</MsgBox> : <MsgBox>비밀번호가 일치하지 않습니다.</MsgBox>}
-                    <CheckBtn onClick={resetPassword}>재설정</CheckBtn>
+                    <br/><CheckBtn onClick={resetPassword}>재설정</CheckBtn>
                 </div> 
             }
         </Wrapper>
