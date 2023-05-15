@@ -1,12 +1,11 @@
-import { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import { useState, useRef } from "react";
 import { styled } from "styled-components";
-import { useInput, checkRegExp, maxLen } from "../../utils/UseHook"; 
 import FindID from "./components/FindID";
 import ChangePassword from "./components/ChangePassword";
 
 const Container = styled.div`
     display: flex;
+    max-width: 800px;
     flex-flow : row wrap;
 `;
 

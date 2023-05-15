@@ -1,42 +1,116 @@
-import axios from "axios";
 import { useState, useRef, useEffect} from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 import webstomp from "webstomp-client";
 import SockJS from "sockjs-client";
+import { styled, keyframes } from 'styled-components';
 
-const MyChat = ({chat}) => {
-    return(
-        <div style={{backgroundColor: "skyblue"}}>
-            <h4>나</h4>
-            <p>{chat.message}</p>
-            <small>{chat.sendDate}</small>
-        </div>
-    );
-}
+import { MyChat, OtherChat } from './components/ChatBox'
 
-const OtherChat = ({chat, otherNick}) => {
-    return(
-        <div style={{backgroundColor: "azure"}}>
-            <h4>{otherNick}</h4>
-            <p>{chat.message}</p>
-            <small>{chat.sendDate}</small>
-        </div>
-    )
-}
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const ChatContainer = styled.div`
+    width: 800px;
+    height: 1200px;
+    padding: 10px 50px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 2px 3px 5px 0px;
+    background-color: white;
+`
+
+const ChatTitle = styled.h2`
+    text-align: center;
+    font-size: 35px;
+    font-weight: bold;
+    margin: 20px;
+    padding: 20px;
+`
+
+const ChatWrapper = styled.div`
+    height: 800px;
+    overflow: scroll;
+    background-color: rgba(204,204,204,0.3);
+
+    &:-webkit-scrollbar-track{
+        background-color: rgba(0,0,0,0);
+    }
+
+    &:-webkit-scrollbar-thumb{
+        background-color: rgba(255,255,255,1);
+        /* 스크롤바 둥글게 설정    */
+        border-radius: 10px; 
+        border: 7px solid rgba(0,0,0,0.8);
+    }
+`
+
+const ChatInputWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px;
+    padding: 50px;
+    height: 100px;
+
+    border: none;
+    border-radius: 15px;
+    box-shadow: 2px 3px 5px 3px;
+`
+
+const ChatInputBox = styled.input`
+    width: 300px;
+    height: 40px;
+    margin-right: 20px;
+    padding: 8px;
+    font-size: 15px;
+
+    border: none;
+    border-bottom: 3px solid black;
+`
+
+const ChatSendBtn = styled.button`
+    width: 80px;
+    height: 45px;
+    padding: 5px;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    background-color: aqua;
+
+    transition: scale 1s;
+    &:hover {
+        scale: 0.95;
+    }
+`
+
+const ChatLeftAlignBox = styled.div`
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 5px;
+`
+
+const ChatRightAlignBox = styled.div`
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding: 5px;
+`   
 
 let stomp = null
 
 // market_detail 에서 채팅하기 누르면 나타나는 페이지
 const Chatroom = () => {
-    const [ searchParams, setSearchParams ] = useSearchParams(); 
+    const location = useLocation();
     const [ receiveChatInfo, setReceiveChatInfo ] = useState([]);
     const [ otherNick, setOtherNick ] = useState("");
     const messageRef = useRef(null);
     const [ message, setMessage ] = useState("");
-
-    const chatroomID = searchParams.get("chatroomID");
-    const sender = searchParams.get("sender");
-    const recipient = searchParams.get("recipient");
+    const { chatroomID, sender, recipient } = location.state;
 
     useEffect(()=>{
 
@@ -117,9 +191,6 @@ const Chatroom = () => {
         viewChat();
     },[receiveChatInfo]);
 
-    
-    
-    console.log("출력할 채팅내용 : ", receiveChatInfo);
     // 채팅내역 저장
     const saveChat = async() => {
         console.log("채팅 axios: ",chatroomID, sender, recipient, message)
@@ -137,25 +208,30 @@ const Chatroom = () => {
         messageRef.current.value = "";
     }
     return (
-        <div>
-            <h1>{otherNick} 님과의 대화</h1>
-            {/* chat container */}
-            <div>
-            
-            { receiveChatInfo.map((chatInfo, index)=> (
-                chatInfo.sender === sender ? 
-                <MyChat key={index} chat={chatInfo} />
-                : 
-                <OtherChat key={index} chat={chatInfo} otherNick={otherNick}/>
+        <Container>
+            <ChatContainer>
+                <ChatTitle>{otherNick} 님과의 대화</ChatTitle>
+                {/* chat container */}
+                <ChatWrapper>
                 
-                ))}
-            </div>
-            {/* chat input */}
-            <div>
-                <input ref={messageRef} type="text" placeholder="typing chat!"/>
-                <button onClick={sendChat} >전송</button>
-            </div>
-        </div>
+                { receiveChatInfo.map((chatInfo, index)=> (
+                    chatInfo.sender === sender ? 
+                    <ChatLeftAlignBox>
+                        <MyChat key={index} chat={chatInfo} />
+                    </ChatLeftAlignBox>
+                    : 
+                    <ChatRightAlignBox>
+                        <OtherChat key={index} chat={chatInfo} otherNick={otherNick}/>
+                    </ChatRightAlignBox>
+                    ))}
+                </ChatWrapper>
+                {/* chat input */}
+                <ChatInputWrapper>
+                    <ChatInputBox ref={messageRef} type="text" placeholder="typing chat!"/>
+                    <ChatSendBtn onClick={sendChat} >전송</ChatSendBtn>
+                </ChatInputWrapper>
+            </ChatContainer>
+        </Container>
     );
 }
 export default Chatroom;

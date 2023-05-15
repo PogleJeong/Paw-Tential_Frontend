@@ -20,54 +20,79 @@ function Pawtens(){
         vertical: false, // 세로 캐러셀
         centerPadding: '0px' // 중앙 컨텐츠 padding 값
     };
+    // 데이터를 모두 읽을 때까지 rendering 조절하는 변수
+    const [loading, setLoading] = useState(false);
 
+    // 포텐스 목록 불러오기
     function getPawtenslist() {
         axios.get("http://localhost:3000/pawtens")
         .then(function(resp){
             setPawtensList(resp.data.list);
+            setLoading(true);   // 데이터를 다 읽어들임 -> rendering true
         })
         .catch(function(err){
             alert(err);
         });
     }
 
-    // 좋아요 처리
-    const likeHandler = async (pawtensNo) => {
-        axios.post("http://localhost:3000/pawtens/pawtensLike", null, {params:{"pawtens_seq":pawtensNo, "id":cookies.USER_ID}})
-        .then(function(res) {
-            console.log(res.data);
-            getPawtenslist();
-        })
-        .catch(function(err){
-            alert(err);
-        })
-    }
+    // 각 포텐스 내용 출력 + 좋아요 처리 component
+    const PawtensItem = ((props)=>{
 
-    // 결과 목록
-    const pawtensListMap = pawtensList.map((pawtens, i) => {
+        const [likeCount, setLikeCount] =useState(props.pawtens.likecount);
+        if(likeCount === undefined){
+            setLikeCount(0);
+        }
+
+        // 좋아요 처리
+        const likeHandler = async (pawtensNo) => {
+            axios.post("http://localhost:3000/pawtens/pawtensLike", null, {params:{"pawtens_seq":pawtensNo, "id":cookies.USER_ID}})
+            .then(function(res) {
+                console.log(res.data);
+                if(res.data === "좋아요 반영"){
+                    setLikeCount(likeCount +1);
+                } else {
+                    setLikeCount(likeCount -1);
+                }
+            })
+            .catch(function(err){
+                alert(err);
+            })
+        }
+
         return(
-            <div>
+            <>
                 <div className="pawtensItem">
                     <video controls>
-                        <source src={"http://localhost:3000/../upload/pawtens/" + pawtens.filename} type="video/mp4" />
+                        <source src={"http://localhost:3000/../upload/pawtens/" + props.pawtens.filename} type="video/mp4" />
                     </video>
+                    <p style={{margin:"15px auto 0 100px"}}>{props.pawtens.content}</p>
                     <div class="d-flex justify-content-between" style={{margin:"15px auto 0 100px"}}>
-                        <div class="me-3"><img class="rounded-circle img-fluid profile" src={"../feedimages/" + pawtens.profile + ".png"} alt="포텐스작성자프로필"/></div>
+                        <div class="me-3"><img class="rounded-circle img-fluid profile" src={"../feedimages/" + props.pawtens.profile + ".png"} alt="포텐스작성자프로필"/></div>
                         <div class="w-100"><div class="d-flex justify-content-between">
                             <div class="">
-                                <h5 class="mb-0 d-inline-block"><a href="#" class="">{pawtens.nickname}</a></h5>
-                                <p class="mb-0"><i class="ri-global-line pe-1"></i>{pawtens.date_created !== null && pawtens.date_created.substring(0, 10)}</p>
-                                
+                                <h5 class="mb-0 d-inline-block"><a href="#" class="">{props.pawtens.nickname}</a></h5>
+                                <p class="mb-0"><i class="ri-global-line pe-1"></i>{props.pawtens.date_created !== null && props.pawtens.date_created.substring(0, 10)}</p>
                             </div>
-                            <div onClick={()=>{likeHandler(pawtens.seq)}} class="like-block d-flex align-items-center pawtens-like">
+                            <div onClick={()=>{likeHandler(props.pawtens.seq)}} class="like-block d-flex align-items-center pawtens-like">
                                 <div class="total-like-block ms-2 me-3">
                                     <span><img src="/assets/images/icon/01.png" class="img-fluid" alt=""/></span>
-                                    <span class="mx-1">{pawtens.likecount === undefined ? 0 : pawtens.likecount} Likes</span>
+                                    <span class="mx-1">{likeCount} Likes</span>
                                 </div>
                             </div>
                         </div></div>
                     </div>
                 </div>
+            </>
+        )
+    });
+
+
+
+    // 결과 목록
+    const pawtensListMap = pawtensList.map((pawtens, i) => {
+        return(
+            <div>
+                
             </div>
         )
     });
@@ -77,14 +102,20 @@ function Pawtens(){
         getPawtenslist();
     }, []);
 
+    if(!loading){
+        return <div>Loading...</div>
+    }
+
     return (
         <div>
             <h1>포텐스</h1>
             <div className="pawtens">
-                { pawtensList !== ""
+                { pawtensList.length !== 0
                     ?
                     <Slider {...settings}>
-                        {pawtensListMap}
+                        {pawtensList.map((pawtens, i) => (
+                            <PawtensItem key={i} pawtens={pawtens} />
+                        ))}
                     </Slider> 
                     : 
                     <p>포텐스 항목이 없습니다.</p>
