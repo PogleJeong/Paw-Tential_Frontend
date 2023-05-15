@@ -17,7 +17,6 @@ const SearchFeed = (prop) => {
     .then(function(resp){
         setFeedList(resp.data.list);
         setTotalCnt(resp.data.cnt);
-        setPage(1);
     })
     .catch(function(err){
         alert(err);
@@ -27,7 +26,24 @@ const SearchFeed = (prop) => {
   // 피드 검색 결과 목록
   const feedListMap = feedList.map((feed, i) => {
     return(
-        <div className="searchItem" key={i}><FeedImage content={feed.content} /></div>
+
+        <div class="searchItem">
+          <div class="user-images position-relative overflow-hidden">
+            <a href="#">
+              <FeedImage content={feed.content} />
+            </a>
+            <div class="image-hover-data">
+                <div class="product-elements-icon">
+                  <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                      <li><a href="#" class="pe-3 text-white"> 60 <i class="ri-thumb-up-line"></i> </a></li>
+                      <li><a href="#" class="pe-3 text-white"> 30 <i class="ri-chat-3-line"></i> </a></li>
+                      <li><a href="#" class="pe-3 text-white"> 10 <i class="ri-bookmark-line"></i> </a></li>
+                  </ul>
+                </div>
+            </div>
+            
+          </div>
+      </div>
     )
   });
 
@@ -45,23 +61,37 @@ const SearchFeed = (prop) => {
     // 검색어가 변경될 때마다 검색을 수행
     const keyword = prop.keyword.trim();
     getSearchlist(keyword, 0);
+    setPage(1);
   }, [prop.keyword]);
 
   return (
-    <div>
-      <div className="searchList">
-          {feedListMap}
+    <>
+
+      <div class="friend-list-tab">
+          <div class="tab-content">
+          <div class="tab-pane fade active show" id="photosofyou" role="tabpanel">
+              <div class="card-body p-0">
+                  <div class="d-grid gap-2 d-grid-template-1fr-13">
+                    {feedListMap}
+                  </div>
+              </div>
+          </div>
+          </div>
       </div>
-      <Pagination
-          activePage={page}           // 현재 페이지
-          itemsCountPerPage={12}      // 보여줄 페이지 수
-          totalItemsCount={totalCnt}  // 글의 총 개수
-          pageRangeDisplayed={5}      // 페이지 버튼 개수
-          prevPageText={"‹"}
-          nextPageText={"›"}
-          onChange={pageChange}
-      />
-    </div>
+      
+      <div className="mt-3">
+        <Pagination
+            activePage={page}           // 현재 페이지
+            itemsCountPerPage={12}      // 보여줄 페이지 수
+            totalItemsCount={totalCnt}  // 글의 총 개수
+            pageRangeDisplayed={5}      // 페이지 버튼 개수
+            prevPageText={"‹"}
+            nextPageText={"›"}
+            onChange={pageChange}
+        />
+      </div>
+
+    </>
   );
 };
 
