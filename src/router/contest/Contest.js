@@ -47,11 +47,11 @@ const Contest = () => {
                                               onHide={()=>{setCreateFeedModal(false)}} />
         <input readOnly style={{border:'none'}} className="my-3 py-3" type="text" size="50" onClick={()=>{setCreateFeedModal(true)}} placeholder="무슨 일이 일어나고 있나요?" />
 
-        {feeds &&
+        {/* {feeds &&
           feeds.length > 0 &&
           feeds.map((feed, index) => (
             <MainFeed key={index} feedData={feed} />
-          ))}
+          ))} */}
       </div>
     </div>
   );

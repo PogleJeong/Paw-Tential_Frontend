@@ -4,6 +4,8 @@ import Reports from '../router/admin/Reports';
 import QnA from '../router/admin/QnA';
 import PetChart from '../router/admin/PetChart';
 
+import "../styles/Dashboard.css";
+
 function AdminDashboard() {
   return (
     <div className="admin-dashboard-container">

@@ -1,32 +1,194 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "axios";
+import { styled, keyframes } from 'styled-components';
 
 import PetCategoryModal from "./modals/PetCategory";
+import { useInput, maxLen, checkRegExp } from '../../utils/UseHook';
+import baseimage from '../../image/baseprofile.png';
 
-/** 실시간 입력값 체크 */
-const useInput = (initValue, validator, valid) => {
-    const [value, setValue] = useState(initValue);  
-    const onChange = (event) => {
-        const {target: { value }} = event;
-        let willUpdate = true;
-        if (typeof validator === "function") {
-            willUpdate = validator(value, valid);
-            if (willUpdate) {
-                setValue(value);
-            }
-        }
-        console.log(value);
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 40%;
+    flex-wrap: wrap;
+    
+    animation: ${fadeIn} 2s;
+`;
+
+const Title = styled.h1`
+    display: inline-block;
+    min-width: 800px;
+    font-size: 30px;
+    text-align: center;
+`;
+
+const Wrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 800px;
+
+    padding: 40px;
+    border-radius: 10px;
+    background-color: white;
+    text-align: center;
+
+    box-shadow: 2px 3px 5px 0px;
+`
+
+
+const HeaderWrapper = styled(Wrapper)`
+    position: relative;
+    height: 500px;
+`;
+
+const BodyWrapper = styled.div`
+    margin-top: 100px;
+    margin-bottom: 100px;
+    max-height: 400px;
+    min-width: 800px;
+    overflow: scroll;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    text-align: center;
+
+    box-shadow: 2px 3px 5px 0px;
+`;
+
+const FooterWrapper = styled(Wrapper)`
+    min-width: 800px;
+`
+
+const ImageBox= styled.div`
+    width: 300px;
+    height: 250px;
+    text-align: center;
+`;
+
+const Image = styled.img`
+  width: 200px;
+  height: 200px;
+  border: 2px solid white;
+  border-radius: 100px;
+`;
+
+const InfoBox = styled.div`
+    width: 400px;
+    height: 400px;
+    padding-left: 30px;
+    padding-right: 30px;
+`
+
+const CatogoryBtn = styled.button`
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: skyblue;
+`
+
+const Label = styled.label`
+    display: inline-block;
+    width: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+`;
+
+const InputBox = styled.input.attrs({required: true})`
+    width: 200px;
+    height: 40px;
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    border-bottom: 2px solid black;
+    font-size: 15px;
+
+    &:focus {
+        background-color: rgba(255, 207, 159, 0.4);
     }
-    return { value, onChange };
-}
+`
 
-/** 정규식 체크 함수 */
-const checkRegExp = (value, regExp) => {
-    return regExp.test(value);
-}
+const TextAreaBox = styled.textarea.attrs({required: true})`
+    width: 300px;
+    height: 200px;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 15px;
+    font-size: 15px;
+`
 
-const maxLen = (value, valid) => value.length <= valid;
+const AddBtn = styled.button`
+    margin: 50px;
+    width: 100px;
+    height: 60px;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    background-color: beige;
+`
+
+const RemoveBtn = styled.button`
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    background-color: greenyellow;
+`
+
+const AddPetInfoWrapper = styled.div`
+    margin: 10px 20px;
+    min-width: 750px;
+    height: 50px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 3px 5px 0px;
+    
+`
+
+const TextBox = styled.span`
+    display: inline-block;
+    height: 30px;
+    margin: 5px 20px;
+    color: black;
+    font-size: 18px;
+`
+
+const CompleteBtn = styled.button`
+    width: 120px;
+    height: 40px;
+    margin: 15px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: yellowgreen;
+`
+
+const PassRegiBtn = styled.button`
+    width: 120px;
+    height: 40px;
+    margin: 15px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: teal;
+`
 
 /** 만약 반려동물이 있다면 나오는 추가페이지 */
 function RegisterPage3() {
@@ -39,11 +201,14 @@ function RegisterPage3() {
 
     // 입력값
     const [ petCategory, setPetCategory ] = useState("반려동물 선택");
-    const [ imgFile, setImgFile ] = useState("baseprofile.png");
-    const petName = useInput("", checkRegExp, /^[가-힣a-zA-Z]+$/);
+    const [ imgFile, setImgFile ] = useState(baseimage);
+    const petName = useInput("", checkRegExp, /^[가-힣a-zA-Z]{0,10}$/);
     const petBirth = useInput("", checkRegExp, /^[0-9]{0,8}$/);
     const petIntro = useInput("", maxLen, 100);
     const [ petGender, setPetGender] = useState("");
+
+    const [ petInfoList, setPetInfoList ] = useState([]);
+    const [ imageList, setImageList ] = useState([]);
 
     // 입력값
     const petNameRef = useRef();
@@ -62,40 +227,22 @@ function RegisterPage3() {
     }
 
     const registerPet = async() => {
-        const petName = petNameRef.current.value;
-        const petBirth = petBirthRef.current.value;
-        const petIntro = petIntroRef.current.value;
-
-        // 입력값 체크
-        if (!petCategory || petCategory === "반려동물 선택") {
-            alert("카테고리가 선택되지 않았습니다.");
-            return;
-        }
-        if (!petName) {
-            alert("변려동물의 이름이 작성되지 않았습니다.");
-            return;
-        }
-        if (!petBirth) {
-            alert("반려동물의 생일이 작성되지 않았습니다.");
-            return;
-        }
-        if (petBirth.length !== 8) {
-            alert("생년월일 8글자를 입력해주세요.");
-            return;
-        }
-        if (!petIntro) {
-            alert("반려동물 소개를 입력해주세요!");
-            return;
-        }
-        if (!petGender) {
-            alert("반려동물의 성별을 입력해주세요!");
+        console.log(petInfoList);
+        if(petInfoList.length === 0){
+            alert("반려동물의 정보가 입력되지 않았습니다.");
             return;
         }
 
-        let petInfo = { id: userId, cate: petCategory, name: petName, birth: petBirth, intro: petIntro, gender: petGender };
+        const petInfoData = petInfoList.map((items) => items.data);
+        const imageData = imageList.map((items) => items.data);
+        console.log(petInfoData);
+        console.log(imageData);
+
         let formData = new FormData();
-        formData.append("file", imgRef.current.files[0]);
-        formData.append("petInfo", new Blob([JSON.stringify(petInfo)], {type: "application/json"}))
+        imageData.map((image)=>{
+            formData.append("file", image);
+        })
+        formData.append("petInfoList", new Blob([JSON.stringify(petInfoData)], {type: "application/json"}))
 
         await axios.post("http://localhost:3000/petRegister", formData, {"Content-Type": `multipart/form-data`})
         .then((response)=> {
@@ -115,24 +262,105 @@ function RegisterPage3() {
         });
     }
 
+    const passRegiPet = () => {
+        navigate("/login");
+        return;
+    }
+
+    const addPetInfo = () => {
+        // 입력값 체크
+        if (!petCategory || petCategory === "반려동물 선택") {
+            alert("카테고리가 선택되지 않았습니다.");
+            return;
+        }
+        if (!petName.value) {
+            alert("변려동물의 이름이 작성되지 않았습니다.");
+            return;
+        }
+        if (!petBirth.value) {
+            alert("반려동물의 생일이 작성되지 않았습니다.");
+            return;
+        }
+        console.log(petBirth)
+        if (petBirth.value.length !== 8) {
+            alert("생년월일 8글자를 입력해주세요.");
+            return;
+        }
+        if (!petIntro.value) {
+            alert("반려동물 소개를 입력해주세요!");
+            return;
+        }
+        if (petGender === null) {
+            alert("반려동물의 성별을 입력해주세요!");
+            return;
+        }
+        const key = Math.random().toString(36).substring(2, 11); // 랜덤키 생성
+        const petInfo = { key, data: { id: userId, cate: petCategory, name: petName.value, birth: petBirth.value, intro: petIntro.value, gender: petGender} };
+        const imageInfo = { key, data: imgRef.current.files[0]}
+        setPetInfoList(petInfoList => petInfoList.concat(petInfo));
+        setImageList(imageList => imageList.concat(imageInfo));
+
+        // 초기화
+        setPetCategory("반려동물 선택");
+        petNameRef.current.value = "";
+        petBirthRef.current.value = "";
+        petIntroRef.current.value = "";
+        setPetGender("");
+        imgRef.current.value = "";
+        setImgFile(baseimage);
+    }
+
+    const removePetInfo = (event) => {
+        const removedPetInfoList = petInfoList.filter((petInfo)=> petInfo.key !== event.target.dataset.key);
+        const removedImageList = imageList.filter((image) => image.key !== event.target.dataset.key)
+        setPetInfoList(removedPetInfoList);
+        setImageList(removedImageList);
+    }
+
     return(
-        <div>
-            <h1 style={{textAlign: "center"}}>대표 반려동물 추가하기</h1>
-            {activeModal ? <PetCategoryModal getPetCategory={setPetCategory} getModalActive={setActiveModal}/> : null}
-            <div>
-                <button onClick={()=>setActiveModal(true)}>{petCategory}</button><br/>
-                <img src={imgFile} style={{width: "200px", aspectRatio: "16/9"}} alt="" /><br/>
-                <input type="file" ref={imgRef} onChange={imgLoad} /><br/>
-                <input ref={petNameRef} {...petName} placeholder="이름을 입력하세요(1~10 글자(영문/한글)" /><br/>
-                <input ref={petBirthRef} {...petBirth} placeholder="생년월일 8자리를 입력해주세요" /><br/>
-                <textarea ref={petIntroRef} {...petIntro} rows="10" maxLength="100" placeholder="100자 이내로 소개해주세요" ></textarea>
-                <div>
-                    <label><input type="radio" onChange={()=>setPetGender(0)} name="petGender" />남아</label><br/>
-                    <label><input type="radio" onChange={()=>setPetGender(1)} name="petGender" />여아</label><br/>
-                </div>
-                <button onClick={registerPet}>가입하기</button>
-            </div>
-        </div>
+        <Container>
+            <Title>대표 반려동물 추가하기</Title>
+            <HeaderWrapper>
+                {activeModal ? <PetCategoryModal getPetCategory={setPetCategory} getModalActive={setActiveModal}/> : null}
+                <ImageBox>
+                    <Image src={imgFile} alt="" /><br/>
+                    <input type="file" ref={imgRef} onChange={imgLoad} /><br/>
+                    <AddBtn onClick={addPetInfo}>반려동물 추가하기</AddBtn>
+                </ImageBox>
+                <InfoBox>
+                    <Label>반려동물</Label><CatogoryBtn onClick={()=>setActiveModal(true)}>{petCategory}</CatogoryBtn><br/>
+                    <Label>반려동물 이름</Label><InputBox ref={petNameRef} {...petName} placeholder="이름을 입력하세요(1~10 글자(영문/한글)" /><br/>
+                    <Label>반려동물 생일</Label><InputBox ref={petBirthRef} {...petBirth} placeholder="생년월일 8자리를 입력해주세요" /><br/>
+                    <div>
+                        <Label><input type="radio" onChange={()=>setPetGender(0)} name="petGender" />남아</Label>
+                        <Label><input type="radio" onChange={()=>setPetGender(1)} name="petGender" />여아</Label>
+                    </div>
+                    <TextAreaBox ref={petIntroRef} {...petIntro} rows="10" maxLength="100" placeholder="100자 이내로 소개해주세요" ></TextAreaBox>
+                </InfoBox>
+            </HeaderWrapper>
+   
+            <BodyWrapper>
+                <h2>추가한 반려동물 정보</h2><br/>
+                <ul>
+                {petInfoList.map((petInfo, index)=>
+                    <li key={index}>
+                        <AddPetInfoWrapper>
+                        <TextBox>{petInfo.data.cate}</TextBox>
+                        <TextBox>{petInfo.data.name}</TextBox>
+                        <TextBox>{petInfo.data.birth}</TextBox>
+                        <TextBox>{`${petInfo.data.intro.substring(1,20)}`}</TextBox>
+                        <TextBox>{petInfo.data.gender === 0 ? "남자" : "여자"}</TextBox>
+                        <RemoveBtn data-key={petInfo.key} onClick={removePetInfo}>정보삭제</RemoveBtn>
+                        </AddPetInfoWrapper>
+                    </li>)}
+                </ul>
+            </BodyWrapper>
+
+            <FooterWrapper>
+                    <CompleteBtn onClick={registerPet}>가입하기</CompleteBtn>
+                    <PassRegiBtn onClick={passRegiPet}>나중에 입력하기</PassRegiBtn>
+            </FooterWrapper>
+        </Container>
     );
 }
 

@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const MyfeedDropdown_user = ({ id }) => {
+import QnAModal from './QnAModal';
 
+const MyfeedDropdown_user = ({ id, email }) => {
+  const [showQnAModal, setShowQnAModal] = useState(false);
+
+  const handleOpenQnAModal = () => {
+    setShowQnAModal(true);
+  };
+
+  const handleCloseQnAModal = () => {
+    setShowQnAModal(false);
+  };
 
   return (
     <>
       <ul style={{ position: "absolute", backgroundColor: "white" }}>
-      <Link to={{ pathname: "/myfeed/User_update", state: { userId: id } }} className="nav-link">
-        정보 수정
-        </Link> 
-           <li>문의</li>
+        <Link to={{ pathname: "/myfeed/User_update", state: { userId: id } }} className="nav-link">
+          정보 수정
+        </Link>
+        <Link to="#" className="nav-link" onClick={handleOpenQnAModal}>
+          문의
+        </Link>
       </ul>
+
+      {showQnAModal && <QnAModal show={showQnAModal} onClose={handleCloseQnAModal} id={id} email={email} />}
     </>
   );
 };

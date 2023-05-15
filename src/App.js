@@ -17,7 +17,7 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_Detail";
+import Place_detail from "./router/place/Place_detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import Myfeed2 from "./router/myfeed/Myfeed2";
@@ -34,8 +34,7 @@ import QnA from './router/admin/QnA';
 import Reports from './router/admin/Reports';
 import Users from './router/admin/Users';
 import Data from './router/admin/Data';
-import PetChart from './router/admin/PetChart';
-import UserChart from './router/admin/UserChart';
+
 
 import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
@@ -68,6 +67,7 @@ function App() {
       <BrowserRouter>
       <div className="wrapper">
           {/* 사이드메뉴 */}
+
           { window.location.pathname === "/admin/admin" ? <AdminSidebar /> :  <Navbar />}
           {/*쳇봇*/}
           {/* <ThemedExample/> */}
@@ -134,8 +134,6 @@ function App() {
             <Route path="/admin/reports" element={<Reports />} />
             <Route path="/admin/reports/:choice/:search" element={<Reports />} />
             <Route path="/admin/data" element={<Data />} />
-            <Route path="/admin/petChart" element={<PetChart />} />
-            <Route path="/admin/userChart" element={<UserChart />} />
 
             {/* 채팅 */}
             <Route path="/chat/home" element={<ChatroomHome />} />
@@ -144,7 +142,7 @@ function App() {
 
             {/* 마이피드 */}
             <Route path="/myfeed/myfeed" element={<Myfeed />} />
-            <Route path="/myfeed/Myfeed2/:userId" element={<Myfeed2 />} />
+            <Route path="/myfeed/myfeed2/:userId" element={<Myfeed2 />} />
             <Route path="/myfeed/user_update" element={<User_update />} />
             <Route path="/myfeed/pet_update" element={<Pet_update />} />
             <Route path="/searchUser" element={<SearchUser />} />
@@ -153,13 +151,13 @@ function App() {
       </BrowserRouter>
 
       {/* footer */}
-      <footer>
-        <div>
-          <p>
-            <small>Copyright &copy;Paw-Tential</small>
-          </p>
-        </div>
-      </footer>
+      <footer style={{ position: 'fixed', left: 0, bottom: 0, width: '100%', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
+      <div>
+        <p>
+          <small>&copy; Paw-Tential</small>
+        </p>
+      </div>
+    </footer>
     </div>
   );
 }

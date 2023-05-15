@@ -17,9 +17,7 @@ const MyFeed2 = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loadedFeed, setLoadedFeed] = useState([]);
 
-  const { userId } = useParams(); // 파라미터 추출
-
-
+  const { userId } = useParams();
   const observer = useRef();
   const lastFeedElementRef = useCallback(node => {
     if (loading) return;
