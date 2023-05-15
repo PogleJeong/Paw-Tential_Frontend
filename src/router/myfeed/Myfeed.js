@@ -70,7 +70,7 @@ const Myfeed = () => {
 
   const fetchBookmarkFeeds = async () => {
     try {
-      const response = await axios.get("/api/getBookmark", {
+      const response = await axios.get("http://localhost:3000/getBookmark", {
         params: {
           id: cookies.USER_ID,
         },
@@ -82,6 +82,7 @@ const Myfeed = () => {
   };
 
   
+
 
   useEffect(() => {
     fetchUserInfo();
@@ -100,6 +101,12 @@ const Myfeed = () => {
       fetchFeed();
     }
   }, [pageNumber]);
+  
+  const handleBookmarkClick = () => {
+    if (bookmarkFeeds.length > 0) {
+      setFeed(bookmarkFeeds);
+    }
+  };
 
   return (
     <div className="my-feed-container">
@@ -111,21 +118,30 @@ const Myfeed = () => {
   
       <div className="feed-container">
       <div className="feed-categories">
-  <div className="feed-category">
-    {/* 마이피드 */}
-    <div className="category-icon" onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>
-      <AiFillHome size={40} />
-    </div>
+      <div className="feed-category">
+  {/* 홈 아이콘 (마이피드) */}
+  <div
+    className="category-icon"
+    onMouseOver={(e) => (e.target.style.cursor = 'pointer')}
+    onClick={() => setFeed(loadedFeed)}
+  >
+    <AiFillHome size={40} />
   </div>
-  <div className="feed-category-divider">
-    <div className="divider-line"></div>
-  </div>
+</div>
+<div className="feed-category-divider">
+  <div className="divider-line"></div>
+</div>
 
-  <div className="feed-category">
-    <div className="category-icon" onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>
-      <BiBookmark size={40} />
-    </div>
+<div className="feed-category">
+  {/* 북마크 아이콘 (북마크 피드) */}
+  <div
+    className="category-icon"
+    onMouseOver={(e) => (e.target.style.cursor = 'pointer')}
+    onClick={handleBookmarkClick}
+  >
+    <BiBookmark size={40} />
   </div>
+</div>
 </div>
   
         {loadedFeed.map((feedData, index) => {

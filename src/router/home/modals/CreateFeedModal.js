@@ -5,10 +5,11 @@ import { Modal, Button, Form, Container, ButtonGroup } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import Session from "react-session-api"
+import { Cookies } from 'react-cookie';
 
 const CreateFeedModal = ({show, onHide}) => {
 
-  const [userId, setUserId] = useState('test33');
+  const [userId, setUserId] = useState('loserya123');
   const [showLocationInput, setShowLocationInput] = useState(false);
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');

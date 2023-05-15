@@ -93,7 +93,7 @@ const MainFeed = (props) => {
   const dropMenuRef = useRef(null);
 
   // 임시 아이디
-  const userId = 'test';
+  const userId = 'loserya123';
 
   // 피드 삭제하기
   const feedDelete = (seq) => {
