@@ -1,64 +1,56 @@
-import axios from "axios";
-import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import { styled, keyframes } from 'styled-components';
 
-const ChatroomInfo = ({chatInfo, user}) => {
-    const [ notReadChatCount, setNotReadChatCount ] = useState(0);
-    useEffect(()=>{
-        const getNotReadChatCount = async() => {
-            await axios.post("http://localhost:3000/chat/getNotReadChatCount", null, {params: {
-                chatroomID: chatInfo.chatroomID,
-                recipient: user
-            }})
-            .then((response)=>{
-                if (response.status === 200) {
-                    if (response.data) {
-                        console.log(response.data);
-                        setNotReadChatCount(response.data);
-                    }
-                }
-            })
-        }
-        getNotReadChatCount();
-    })
-    console.log(notReadChatCount);
-    return(
-        <>
-        {chatInfo.participant1 === user ? 
-            <Link to={`/chat/${chatInfo.chatroomID}?chatroomID=${chatInfo.chatroomID}&sender=${chatInfo.participant1}&recipient=${chatInfo.participant2}`}>
-                <li>
-                    <div style={{width: "500px", height: "200px", border: "2px solid red"}}>
-                        <p>상대방 : {chatInfo.participant2}</p>
-                        {notReadChatCount > 0 ? <small>읽지 않은 메세지 {notReadChatCount}</small> : null}
-                    </div>
-                </li>
-            </Link>
-            :
-            <Link to={`/chat/${chatInfo.chatroomID}?chatroomID=${chatInfo.chatroomID}&sender=${chatInfo.participant2}&recipient=${chatInfo.participant1}`}>
-                <li style={{width: "500px", height: "200px", border: "2px solid red"}}>
-                    <div>
-                        <h2>채팅방 ID: {chatInfo.chatroomID}</h2>
-                        <p>상대방 : {chatInfo.participant1}</p>
-                        {notReadChatCount > 0 ? <small>읽지 않은 메세지 {notReadChatCount}</small> : null}
-                    </div>
-                </li>
-            </Link>
-        }    
-        </>
-        )
-}
+import ChatroomInfo from './components/ChatroomInfo';
 
-const ChatroomList = ({chatInfoList, user}) => {
-    console.log("출력컴포넌트 >> ",chatInfoList)
-    return(
-        <ul>
-            {chatInfoList.map((chatInfo, index)=>
-                <ChatroomInfo chatInfo={chatInfo} user={user}/>
-            )}
-        </ul>
-    );
-}
+const fadeIn = keyframes`
+    0% {
+    opacity: 0;
+    }
+    100% {
+    opacity: 1;
+    }
+`;
+
+const Container = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    margin: 0px;
+    padding: 30px 100px;
+    width: 80%;
+    height: 800px;
+
+    animation: ${fadeIn} 2s;
+`;
+
+const Title = styled.h1`
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+`
+
+const ChatListContainer = styled.div`
+    width: 500px;
+    min-height: 600px;
+    overflow: scroll;
+    padding: 10px;
+    background-color: white;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 2px 3px 5px 0px;
+`
+/* const Title = styled.h1`
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+`; */
+
+
 
 const ChatroomHome = () => {
     const [ chatInfoList, setChatInfoList ] = useState([]);
@@ -90,16 +82,20 @@ const ChatroomHome = () => {
         }
         callChatroomInfo();
     },[]);
-    console.log(chatInfoList);
+
     return(
-        <div>
-            <h1>메시지 페이지</h1>
-            { !chatInfoList ? 
-            <h2>채팅내역이 존재하지 않습니다.</h2>
-            :
-            <ChatroomList chatInfoList={chatInfoList} user={cookie.USER_ID} />
-        }   
-        </div>
+        <Container>
+            <ChatListContainer>
+                <Title>Paw-tential chat!</Title>
+                { !chatInfoList ? 
+                <h2>채팅내역이 존재하지 않습니다.</h2>
+                :
+                <ul>
+                    {chatInfoList.map((chatInfo, index)=> <ChatroomInfo key={index} chatInfo={chatInfo} user={cookie.USER_ID}/>)}
+                </ul>
+                }   
+            </ChatListContainer>
+        </Container>
     )
 }
 

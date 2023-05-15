@@ -257,7 +257,6 @@ export default function NewsFeed() {
                                             onHide={()=>{setModifyCmtModal(false)}}
                                             grpCmtNo={grpCmtNo}/>
           {groupJoined === true ? (
-              <div className="wrapper">
                 <div id="content-page" className="content-page">
                   <div className="container">
                     <h1 className="my-3">NewsFeed</h1>
@@ -276,7 +275,6 @@ export default function NewsFeed() {
                     </div>
                   </div>
                 </div>
-              </div>
           ) : (
             <p>가입한 그룹이 없습니다.</p>
           )}

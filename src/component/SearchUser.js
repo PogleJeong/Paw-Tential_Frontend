@@ -14,6 +14,7 @@ const SearchUser = (prop) => {
   };
 
   useEffect(() => {
+
     if (prop.keyword === '') {
       setUsers([]); // 검색어가 비어있으면 검색 결과 초기화
       return;
@@ -21,16 +22,15 @@ const SearchUser = (prop) => {
 
     // 검색어가 변경될 때마다 검색을 수행
     const userId = prop.keyword.trim();
+
     fetchUsers(userId);
   }, [prop.keyword]);
 
   const fetchUsers = async (userId) => {
-    try {
-      const response = await axios.get('http://localhost:3000/userList', {
-        params: { search: userId }
-      });
-      console.log(response.data.list);
-      const filteredUsers = response.data.list.filter((user) =>
+    await axios.get('http://localhost:3000/userList', { params:{ "search": userId } })
+    .then(function(res){
+      console.log(res.data.list);
+      const filteredUsers = res.data.list.filter((user) =>
         user.id.includes(userId)
       );
 
