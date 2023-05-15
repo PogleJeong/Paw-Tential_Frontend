@@ -118,6 +118,19 @@ useEffect(() => {
     nickCheckMsgRef.current.innerText = checkRegExp(value, nickRegExp) ? null : "영문숫자조합 2~10 글자 가능합니다.";
   }, [nick.value]);
 
+
+  const nextPage = async () => {
+    // 입력값
+    const password = passwordRef.current.value;
+    const email = emailRef.current.value;
+    const nick = nickRef.current.value;
+    const number = numberRef.current.value;
+
+    // 정규식
+    const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
+    const nickRegExp = /^[가-힣a-zA-Z0-9]+$/;
+
+    
   const editMember = async (userInfo) => {
     try {
       const formData = new FormData();
@@ -138,17 +151,6 @@ useEffect(() => {
       // 오류 처리
     }
   };
-
-  const nextPage = async () => {
-    // 입력값
-    const password = passwordRef.current.value;
-    const email = emailRef.current.value;
-    const nick = nickRef.current.value;
-    const number = numberRef.current.value;
-
-    // 정규식
-    const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
-    const nickRegExp = /^[가-힣a-zA-Z0-9]+$/;
 
     // 1. 정보가 모두 입력되었는가
 
@@ -215,8 +217,8 @@ useEffect(() => {
 
   
 
-
     editMember(userInfo);
+
     // useNavigator 으로 데이터보내기 => useLocation 로 데이터 받기
     navigate("/myfeed/myfeed", {
       state: {

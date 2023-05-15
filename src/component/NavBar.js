@@ -193,9 +193,13 @@ export default function Navbar() {
                                                             <div className="rounded card-icon bg-soft-primary">
                                                                 <i className="ri-file-user-line" />
                                                             </div>
-                                                            <div className="ms-3">
+                                                            <div className="ms-3" >
                                                                 <h6 className="mb-0">My Feed</h6>
-                                                                <p className="mb-0 font-size-12">나의 피드로 이동하기</p>
+                                                                <Link className="nav-link" to="/myfeed/myfeed">
+                                                                    <p className="mb-0 font-size-12">나의 피드로 이동하기</p>
+                                                                    </Link>
+
+                                                                
                                                             </div>
                                                         </div>
                                                     </a>
@@ -207,7 +211,10 @@ export default function Navbar() {
                                                             </div>
                                                             <div className="ms-3">
                                                                 <h6 className="mb-0 ">Edit Profile</h6>
+                                                                <Link to={{ pathname: "/myfeed/User_update", state: { id : cookies.USER_ID } }} className="nav-link">
                                                                 <p className="mb-0 font-size-12">나의 정보 변경하기</p>
+                                                                        </Link>     
+                                                                
                                                             </div>
                                                         </div>
                                                     </a>

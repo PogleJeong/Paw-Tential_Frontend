@@ -6,11 +6,14 @@ import { FeedImage, FeedContent } from "./FeedData";
 import { FeedDropdown_user, FeedDropdown_writer } from "./FeedDropdown";
 import MainFeedComment from "./MainFeedComment";
 import ModifyMainFeedModal from "../router/Feed/modals/ModifyMainFeedModal";
+import ReportModal from "./ReportModal";
 import { Form } from "react-bootstrap";
+
 
 const MainFeed = (props) => {
 
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   // 피드 상세 모달로 넘겨줄 데이터(1) - 이미지 데이터
   // props로 받은 데이터 중, 이미지 데이터만 추려서 배열에 담기
@@ -56,6 +59,15 @@ const MainFeed = (props) => {
         alert(err);
     })    
 }
+
+// 신고 모달
+const handleOpenReportModal = () => {
+  setShowReportModal(true);
+};
+
+const handleCloseReportModal = () => {
+  setShowReportModal(false);
+};
 
   useEffect(()=>{
     getCommentList();
@@ -175,13 +187,15 @@ const MainFeed = (props) => {
                           </i>
                         </span>
                         <div className="dropdown-menu m-0 p-0">
-                          <a className="dropdown-item p-3" href="javascript:void(0);">
-                            <div className="d-flex align-items-top">
+                          <a className="dropdown-item p-3" href="javascript:void(0);" >
+                              {showReportModal && <ReportModal show={showReportModal} onClose={handleCloseReportModal} id={props.feedData.id} userId={cookies.USER_ID} type={2}/>}
+                            <div className="d-flex align-items-top" onClick={handleOpenReportModal}  >
                               <div className="h4">
                                 <i className="ri-alarm-warning-line">
                                 </i>
                               </div>
-                              <div className="data ms-2">
+                              <div className="data ms-2" >
+
                                 <h6>피드 신고하기</h6>
                                 <p className="mb-0">해당 피드에 우려되는 부분이 있습니다.</p>
                               </div>

@@ -111,6 +111,7 @@ const AdminReportList = () => {
             <th>신고유형</th>
             <th>사유</th>
             <th>신고일</th>
+            <th>신고 위치</th>
             <th>신고 관리</th>
           </tr>
         </thead>
@@ -162,8 +163,9 @@ function TableRow(props){
           <td>{props.report.rtype}</td>
           <td>{props.report.content}</td>
           <td>{props.report.rdate}</td>
+          <td>{props.report.type}</td>
           <td>
-        <button onClick={() => handleGoMyFeed(props.report.reported)}>피드로 이동</button>
+        <button onClick={() => handleGoMyFeed(props.report.reported)}>이동</button>
       </td>
       </tr>
   );

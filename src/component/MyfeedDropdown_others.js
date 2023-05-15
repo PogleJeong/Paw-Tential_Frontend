@@ -24,7 +24,7 @@ const MyfeedDropdown_others = ({ id }) => {
       </Link>
       </ul>
 
-      {showReportModal && <ReportModal show={showReportModal} onClose={handleCloseReportModal} id={id} userId={cookies.USER_ID} />}
+      {showReportModal && <ReportModal show={showReportModal} onClose={handleCloseReportModal} id={id} userId={cookies.USER_ID} type={1} />}
     </>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Form, FormControl, Toast } from 'react-bootstrap';
 import axios from 'axios';
 
-const ReportModal = ({ show, onClose, id, userId }) => {
+const ReportModal = ({ show, onClose, id, userId, type }) => {
   const [content, setContent] = useState("");
   const [reportType, setReportType] = useState("");
   const [toastMessage, setToastMessage] = useState("");
@@ -12,11 +12,13 @@ const ReportModal = ({ show, onClose, id, userId }) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post("http://localhost:3000/sendReport", null, {
-        params: {'reported' : id, 
-        "reporter" : userId , 
-        'content' : content, 
-        'rtype' : reportType
-    },
+        params: {
+          'reported': id,
+          'reporter': userId,
+          'content': content,
+          'rtype': reportType,
+          'type': type
+        },
       });
 
       if (response.data === "YES") {
