@@ -181,6 +181,7 @@ const MainFeed = (props) => {
                                 <i className="ri-alarm-warning-line">
                                 </i>
                               </div>
+                              {/* // TO-DO 피드 신고 모달창, 글 번호 넘겨주기 */}
                               <div className="data ms-2">
                                 <h6>피드 신고하기</h6>
                                 <p className="mb-0">해당 피드에 우려되는 부분이 있습니다.</p>
