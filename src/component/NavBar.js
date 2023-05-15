@@ -36,10 +36,10 @@ export default function Navbar() {
             }
         }
         return(
-            <div class="d-inline-block w-100 text-center p-3" onClick={logout}>
-                <a class="btn btn-primary iq-sign-btn" href="javascript:void(0);" role="button">
+            <div className="d-inline-block w-100 text-center p-3" onClick={logout}>
+                <a className="btn btn-primary iq-sign-btn" href="javascript:void(0);" role="button">
                     다음에 또 올게요!
-                <i class="ri-login-box-line ms-2" />
+                <i className="ri-login-box-line ms-2" />
                 </a>
             </div>
         );
@@ -219,6 +219,30 @@ export default function Navbar() {
                                 </ul>
                             </div>
                         </nav>
+                    </div>
+                </div>
+                <div className="right-sidebar-mini right-sidebar">
+                    <div className="right-sidebar-panel p-0">
+                        <div className="card shadow-none">
+                            <div className="card-body p-0">
+                                <div className="media-height p-3" data-scrollbar="init">
+                                    {/* TO-DO d-flex align-items 컴포넌트화 시켜주세요 */}
+                                    <div className="d-flex align-items-center mb-4">
+                                        <div className="iq-profile-avatar status-online">
+                                            <img className="rounded-circle avatar-50" src="/assets/images/user/01.jpg" alt="" />
+                                        </div>
+                                        <div className="ms-3">
+                                            <h6 className="mb-0">Test</h6>
+                                            <p className="mb-0">최근 활동 : 5분전</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="right-sidebar-toggle bg-primary text-white mt-3">
+                                    <i className="ri-arrow-left-line side-left-icon"></i>
+                                    <i className="ri-arrow-right-line side-right-icon"><span className="ms-3 d-inline-block">Close Menu</span></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
         </>
