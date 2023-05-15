@@ -508,7 +508,7 @@ const Place = () => {
     }, []);
 
     return (
-        <div>
+        <div className="container mt-3">
             <div style={{width: "1600px"}}>
                 <div className="map_wrap">
                     <div className="option">
@@ -529,7 +529,7 @@ const Place = () => {
                         <p>전체 검색 결과 {palceLength}개</p>
                         <br/>
                     </div>
-                    <div id="menu_wrap" className="bg_white">
+                    <div id="menu_wrap">
                         <ul id="placesList"></ul>
                         <div id="pagination"></div>
                     </div>

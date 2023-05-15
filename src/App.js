@@ -57,6 +57,7 @@ import Chatroom from "./router/chat/Chatroom";
 import NewGroupFeed from "./router/group/NewGroupFeed";
 import Search from "./router/search/Search";
 import Navbar from "./component/NavBar";
+import NewNewsFeed from "./router/group/NewNewsFeed";
 
 
 function App() {
@@ -115,7 +116,7 @@ function App() {
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
-            <Route path="/group/NewsFeed" element={<NewsFeed />} />
+            <Route path="/group/NewsFeed" element={<NewNewsFeed/>} />
             <Route path="/group/CreateGroup" element={<CreateGroup />} />
             <Route path="/group/GroupList" element={<GroupList />} />
             <Route path="/group/GroupList/:search" element={<GroupList />} />

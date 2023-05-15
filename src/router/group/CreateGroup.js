@@ -133,8 +133,8 @@ export default function CreateGroup() {
                                                 ></textarea>
                                             </div>
                                             <div style={{align:"center"}}>
-                                                <button type="submit" className="btn btn-primary">Submit</button>
-                                                <button type="button" className="btn bg-danger mx-1" onClick={()=>{window.history.back()}}>Cancel</button>
+                                                <button type="submit" className="btn btn-primary">그룹 생성하기</button>
+                                                <button type="button" className="btn bg-danger mx-1" onClick={()=>{window.history.back()}}>취소</button>
                                             </div>
                                         </form>
                                     </div> {/*end of card-body*/}

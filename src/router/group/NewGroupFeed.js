@@ -97,11 +97,26 @@ export default function NewGroupFeed() {
         })
     }
 
+     // 돌봄 그룹 피드 출력
+     const getCareGroupAllFeed = async () => {
+        axios.get("http://localhost:3000/group/getCareGroupAllFeed", {params:{"grpNo":params.grpNo}})
+        .then(function(res){
+            setCareGrpFeed(res.data.careGroupFeedList);
+            console.log(res.data.careGroupFeedList);
+        })
+        .catch(function(err){
+            alert(err);
+        })
+    }
+
     useEffect(()=>{
         getProfileImage();
         isMember();
         getGroupInfo();
         getGroupMemberImage();
+        if(grpName === "돌봄") {
+            getCareGroupAllFeed();
+        }
     },[grpName])
 
     return (
@@ -206,7 +221,10 @@ export default function NewGroupFeed() {
                                         ?
                                         <>
                                         {careGrpFeed.map((feed, i) => (
-                                            <CareGroupFeedItems key={i} data={feed} />
+                                            <CareGroupFeedItems key={i}
+                                                                                    data={feed}
+                                                                                    userId={userId}
+                                                                                    fn={getCareGroupAllFeed} />
                                         ))}
                                         </>
                                         :
