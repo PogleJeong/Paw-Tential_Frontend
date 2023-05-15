@@ -112,7 +112,7 @@ const Place_detail = () => {
     }, [location.state.address, location.state.category, location.state.categorycode, location.state.phone, location.state.title, location.state.url]);
 
     return (
-        <div>
+        <div className="container mt-3">
             <div style={{width: "1600px"}}>
                 <div id="menu_wrap" className="bg_white">
                     <div className="place_detail">
