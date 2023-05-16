@@ -48,6 +48,19 @@ const Home = () => {
     })
   }
 
+  /* 피드 2개씩 보여주고 더보기 클릭시, 더 보여주기*/
+  const [visibleFeeds, setVisibleFeeds] = useState([]);
+  useEffect(()=>{
+    if(feeds.length > 0) {
+      const nextVisibleFeeds = feeds.slice(0,2);
+      setVisibleFeeds(nextVisibleFeeds);
+    }
+  },[feeds])
+  const handleLoadMore = () => {
+    const nextVisibleFeeds = feeds.slice(0, visibleFeeds.length +2);
+    setVisibleFeeds(nextVisibleFeeds);
+  }
+
   useEffect(() => {
     saveCookie();
     getAllFeed();
@@ -84,10 +97,16 @@ const Home = () => {
                 </div> {/* end of card-body */}
               </div>
             </div> {/* end of col-sm-12 */}
-            {feeds && feeds.length > 0 ? (
-              feeds.map((feed) => (
+
+            {visibleFeeds && visibleFeeds.length > 0 ? (
+              <>
+              {visibleFeeds.map((feed) => (
                 <MainFeed feedData={feed} />
-              ))
+                ))}
+                {visibleFeeds.length < feeds.length && (
+                  <button className="btn mb-1 btn-primary rounded-pill container" onClick={handleLoadMore} style={{width:"100px"}}>더보기</button>
+                )}
+              </>
             ) : <p>표시할 피드가 없습니다.</p>
             }
           </div>
