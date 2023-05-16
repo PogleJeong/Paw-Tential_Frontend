@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useState } from "react"
 import axios from 'axios';
 import FeedDetailModal from "../router/home/modals/FeedDetailModal";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function MainFeedComment(props) {
 
@@ -9,6 +11,8 @@ export default function MainFeedComment(props) {
     const [commentList, setCommentList] = useState([]);
 
     const [feedDetailModal, setFeedDetailModal] = useState(false);
+
+    const navigate = useNavigate();
 
     // 피드 자세히 보기 함수
     const handleClick = () => {
@@ -93,6 +97,11 @@ export default function MainFeedComment(props) {
             }
         }
 
+          // 유저 아이디 클릭 시 피드로 이동
+  const handleUserClick = (userId) => {
+    navigate(`/myfeed/myfeed2/${userId}`); // Navigate to the user's MyFeed page
+  };
+
         if(isEditing) {
             return (
                 <li key={list.seq} className="mb-2">
@@ -117,7 +126,7 @@ export default function MainFeedComment(props) {
                     {list.profile === "baseprofile" || "test" && <img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
                     </div>
                     <div className="comment-data-block ms-3">
-                        <h6>{list.id}</h6>
+                        <h6 onClick={() => handleUserClick(list.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{list.id}</h6>
                         <p className="mb-0">{list.comment}</p>
                         <div className="d-flex flex-wrap align-items-center comment-activity">
                             {list.id === props.id && (

@@ -6,7 +6,7 @@ import { AiFillHome} from "react-icons/ai";
 import { BiBookmark } from "react-icons/bi";
 import { FiMinus } from 'react-icons/fi';
 import '../../styles/MyFeed.css';
-import { FeedImage } from '../../component/FeedData';
+import { PreFeedImage } from '../../component/FeedData';
 
 import ProfileCard from '../../component/ProfileCard';
 import FeedDetailModal from "../home/modals/FeedDetailModal";
@@ -191,7 +191,7 @@ const Myfeed = () => {
         </>
       )}
 
-
+          <div className='feed-categories'>
           <div className="feed-category">
             <div
               className="category-icon"
@@ -210,7 +210,7 @@ const Myfeed = () => {
               <BiBookmark size={40} />
             </div>
           </div>
-
+          </div>
 
         {feedDetailModal && (
           <FeedDetailModal
@@ -229,24 +229,24 @@ const Myfeed = () => {
               <div className="tab-content">
                 <div className="tab-pane fade active show" id="photosofyou" role="tabpanel">
                   <div className="card-body p-0">
-                    <div className="d-grid gap-2 d-grid-template-1fr-13">
+                    <div className="row justify-content-start">
                       {loadedFeed.map((feedData, i) => {
                         if (loadedFeed.length === i + 1) {
                           return (
-                            <div className="myfeeditem" key={i}>
+                            <div className="myfeeditem col-3 mb-2" key={i}>
                               <div className="user-images position-relative overflow-hidden" ref={lastFeedElementRef}>
                                 <a href="javascript:void(0);" onClick={() => { handleClick(feedData.seq) }}>
-                                  <FeedImage content={feedData.content} />
+                                  <PreFeedImage content={feedData.content} />
                                 </a>
                               </div>
                             </div>
                           );
                         } else {
                           return (
-                            <div className="myfeeditem" key={i}>
+                            <div className="myfeeditem col-3 mb-2" key={i}>
                               <div className="user-images position-relative overflow-hidden">
                                 <a href="javascript:void(0);" onClick={() => { handleClick(feedData.seq) }}>
-                                  <FeedImage content={feedData.content} />
+                                  <PreFeedImage content={feedData.content} />
                                 </a>
                               </div>
                             </div>

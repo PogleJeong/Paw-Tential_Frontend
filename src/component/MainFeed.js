@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Session from "react-session-api"
 import { useCookies } from "react-cookie";
+import { useNavigate } from 'react-router-dom';
 import { FeedImage, FeedContent } from "./FeedData";
 import { FeedDropdown_user, FeedDropdown_writer } from "./FeedDropdown";
 import MainFeedComment from "./MainFeedComment";
@@ -14,6 +15,9 @@ const MainFeed = (props) => {
 
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [showReportModal, setShowReportModal] = useState(false);
+
+  const navigate = useNavigate();
+
 
   // 피드 상세 모달로 넘겨줄 데이터(1) - 이미지 데이터
   // props로 받은 데이터 중, 이미지 데이터만 추려서 배열에 담기
@@ -152,6 +156,12 @@ const handleCloseReportModal = () => {
     })
   }
 
+  // 유저 아이디 클릭 시 피드로 이동
+  const handleUserClick = (userId) => {
+    navigate(`/myfeed/myfeed2/${userId}`); // Navigate to the user's MyFeed page
+  };
+
+
   // useRef current에 담긴 엘리먼트 외부 영역 클릭 시 dropdown 메뉴 닫힘
   // useEffect(() => {
   //   const handleOutsideClose = (e) => {
@@ -172,12 +182,12 @@ const handleCloseReportModal = () => {
               <div className="d-flex justify-content-between">
                 <div className="me-3">
                   {/* // TO-DO 유저 프로필 사진 넣어주세요 */}
-                  {props.feedData.profile === "baseprofile" && <img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"55px"}} />}
+                  <img className="rounded-circle img-fluid" src={`http://localhost:3000/uploads/${props.feedData.profile}`} alt="" style={{width:"60px", height:"55px"}} />
                 </div>
                 <div className="w-100">
                   <div className="d-flex justify-content-between">
                     <div>
-                      <h5 className="mb-0 d-inline-block">{props.feedData.id}</h5>
+                      <h5 className="mb-0 d-inline-block" onClick={() => handleUserClick(props.feedData.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{props.feedData.id}</h5>
                       <p className="mb-0 text-primary">{props.feedData.dateCreated.substring(0,10)}</p>
                     </div>
                     <div className="card-post-toolbar">
