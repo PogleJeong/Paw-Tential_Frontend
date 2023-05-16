@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Form, FormControl, Toast } from 'react-bootstrap';
 import axios from 'axios';
 
-const ReportModal = ({ show, onClose, id, userId, type }) => {
+const FeedReportModal = ({ show, onClose, userId, type, feedData }) => {
   const [content, setContent] = useState("");
   const [reportType, setReportType] = useState("");
   const [toastMessage, setToastMessage] = useState("");
@@ -13,20 +13,21 @@ const ReportModal = ({ show, onClose, id, userId, type }) => {
     try {
       const response = await axios.post("http://localhost:3000/sendReport", null, {
         params: {
-          'reported': id,
+          'reported': feedData.id,
           'reporter': userId,
           'content': content,
           'rtype': reportType,
-          'type': type
+          'type': type,
+          'feed_seq' : feedData.seq
         },
       });
 
       if (response.data === "YES") {
-        setToastMessage("문의가 성공적으로 전송되었습니다.");
+        setToastMessage("신고가 성공적으로 전송되었습니다.");
         setShowToast(true);
         onClose();
       } else {
-        setToastMessage("문의 전송 중 오류가 발생했습니다.");
+        setToastMessage("신고 전송 중 오류가 발생했습니다.");
         setShowToast(true);
       }
     } catch (error) {
@@ -44,7 +45,7 @@ const ReportModal = ({ show, onClose, id, userId, type }) => {
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="content">
-          <p>신고 대상자: {id}</p>
+          <p>신고 대상자: {feedData.id}</p>
             <p>신고자: {userId}</p>
 
             <Form.Group controlId="reportType">
@@ -61,6 +62,8 @@ const ReportModal = ({ show, onClose, id, userId, type }) => {
               <option value="etc">기타</option>
             </Form.Control>
           </Form.Group>
+          <p>신고 피드 번호: {feedData.seq}</p>
+
 
             <Form.Label>신고 내용</Form.Label>
             <FormControl
@@ -98,4 +101,4 @@ const ReportModal = ({ show, onClose, id, userId, type }) => {
   );
 };
 
-export default ReportModal;
+export default FeedReportModal;

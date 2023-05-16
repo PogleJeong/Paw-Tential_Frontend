@@ -34,14 +34,14 @@ const Home = () => {
   }
 
   // 사용자 임시 ID
-  const userId = 'contestAdmin';
+  const userId = cookies.USER_ID;
 
   // 메인 - 모든 피드 불러오기
   const getAllFeed = async () => {
     axios.get("http://localhost:3000/home/allFeed")
     .then(function(res){
       setFeeds(res.data.feedList);
-      console.log(res.data);
+      console.log("피드 데이터 : "+res.data);
     })
     .catch(function(err){
       alert(err);

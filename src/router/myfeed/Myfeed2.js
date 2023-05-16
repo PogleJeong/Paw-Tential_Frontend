@@ -9,7 +9,6 @@ import { FeedImage } from '../../component/FeedData';
 import ProfileCard from '../../component/ProfileCard';
 
 const MyFeed2 = () => {
-  const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [feed, setFeed] = useState([]);

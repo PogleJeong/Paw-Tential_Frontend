@@ -6,11 +6,14 @@ import { FeedImage, FeedContent } from "./FeedData";
 import { FeedDropdown_user, FeedDropdown_writer } from "./FeedDropdown";
 import MainFeedComment from "./MainFeedComment";
 import ModifyMainFeedModal from "../router/Feed/modals/ModifyMainFeedModal";
+import FeedReportModal from "../router/Feed/modals/FeedReportModal";
 import { Form } from "react-bootstrap";
+
 
 const MainFeed = (props) => {
 
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   // 피드 상세 모달로 넘겨줄 데이터(1) - 이미지 데이터
   // props로 받은 데이터 중, 이미지 데이터만 추려서 배열에 담기
@@ -57,6 +60,15 @@ const MainFeed = (props) => {
     })    
 }
 
+// 신고 모달
+const handleOpenReportModal = () => {
+  setShowReportModal(true);
+};
+
+const handleCloseReportModal = () => {
+  setShowReportModal(false);
+};
+
   useEffect(()=>{
     getCommentList();
     getPhoto();
@@ -93,7 +105,7 @@ const MainFeed = (props) => {
   const dropMenuRef = useRef(null);
 
   // 임시 아이디
-  const userId = 'test';
+  const userId = cookies.USER_ID;
 
   // 피드 삭제하기
   const feedDelete = (seq) => {
@@ -175,14 +187,20 @@ const MainFeed = (props) => {
                           </i>
                         </span>
                         <div className="dropdown-menu m-0 p-0">
-                          <a className="dropdown-item p-3" href="javascript:void(0);">
-                            <div className="d-flex align-items-top">
+                          <a className="dropdown-item p-3" href="javascript:void(0);" >
+                              {showReportModal && <FeedReportModal
+                              show={showReportModal} 
+                              onClose={handleCloseReportModal} 
+                              feedData={props.feedData}
+                              userId={cookies.USER_ID} 
+                              type={'피드'}/>}
+                            <div className="d-flex align-items-top" onClick={handleOpenReportModal}  >
                               <div className="h4">
                                 <i className="ri-alarm-warning-line">
                                 </i>
                               </div>
-                              {/* // TO-DO 피드 신고 모달창, 글 번호 넘겨주기 */}
-                              <div className="data ms-2">
+                              <div className="data ms-2" >
+
                                 <h6>피드 신고하기</h6>
                                 <p className="mb-0">해당 피드에 우려되는 부분이 있습니다.</p>
                               </div>

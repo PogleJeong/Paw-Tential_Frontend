@@ -4,13 +4,12 @@ import axios from 'axios';
 
 import Pagination from 'react-js-pagination';
 import AdminSidebar from "../../component/AdminSidebar";
-
+import FeedDetailModal from "../home/modals/FeedDetailModal";
 
 import "../../styles/page.css"
 
 const AdminReportList = () => {
   const [reports, setReports] = useState([]);
-
   const [choice, setChoice] = useState("");
   const [search, setSearch] = useState("");
 
@@ -29,6 +28,7 @@ const AdminReportList = () => {
         console.log(res.data.list);
 
         setReports(res.data.list);
+
 
         setTotalCnt(res.data.cnt);
         })
@@ -111,6 +111,7 @@ const AdminReportList = () => {
             <th>신고유형</th>
             <th>사유</th>
             <th>신고일</th>
+            <th>신고 위치</th>
             <th>신고 관리</th>
           </tr>
         </thead>
@@ -145,11 +146,96 @@ const AdminReportList = () => {
 };
 
 function TableRow(props){
-  const navigate = useNavigate();
 
-  const handleGoMyFeed = (userId) => {
-    navigate(`/myfeed/myfeed2/${userId}`);
+  const navigate = useNavigate();
+  const [feed, setFeed] = useState([]);
+  const [feedDetailModal, setFeedDetailModal] = useState(false);
+
+
+  
+  // 피드 상세 모달로 넘겨줄 데이터(1) - 이미지 데이터
+  // props로 받은 데이터 중, 이미지 데이터만 추려서 배열에 담기
+  const [photo, setPhoto] = useState([]);
+
+  const getPhoto = () => {
+    const regex = /<img src="([^"]+)"/g;
+    const urls = [];
+
+    let match;
+    while ((match = regex.exec(feed.content)) !== null) {
+      urls.push(match[1]);
+    }
+
+    setPhoto(urls);
+  }
+  // 피드 상세 모달로 넘겨줄 데이터(2) - 이미지 제외 데이터
+  // props로 받은 데이터 중, 이미지 제외한 데이터만 추려서 배열에 담기
+  const [noPhoto, setNoPhoto] = useState([]);
+
+  const getNoPhoto = () => {
+    const content = feed.content;
+
+    const regex = /<img.*?>|<figure.*?>|<\/figure>/gi;
+    const result = content.replace(regex, '');
+
+    setNoPhoto(result);
+  }
+
+  
+  
+  useEffect(() => {
+    fetchFeed(props);
+  }, []);
+  
+  
+  
+  
+  // 상세 페이지로 넘겨줄 댓글 리스트
+  const [commentList, setCommentList] = useState([]);
+
+  const getCommentList = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/home/getCommentList", { params: { "feedSeq": feed.seq } });
+      const data = response.data.commentList;
+      setCommentList(data);
+    } catch (error) {
+      alert(error);
+    }
   };
+
+
+  const handleGoToDetail = () => {
+  if (props.report.type === '유저') {
+    navigate(`/myfeed/myfeed2/${props.report.reported}`);
+
+  } else if (props.report.type === '피드') {
+    fetchFeed(props);
+    setFeedDetailModal(true);
+    console.log('포토 : '+photo);
+  } else if (props.report.type === '마켓') {
+    navigate(`/market/Market_detail/${props.report.reported}`);
+  }
+};
+
+
+
+
+
+const fetchFeed = async (props) => {
+  try {
+    const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': props.report.feed_seq } });
+    const data = response.data;
+    setFeed(data);
+    getPhoto();
+    getNoPhoto();
+    getCommentList();
+    console.log('피드 데이터:', data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 
 
   return (
@@ -162,9 +248,20 @@ function TableRow(props){
           <td>{props.report.rtype}</td>
           <td>{props.report.content}</td>
           <td>{props.report.rdate}</td>
+          <td>{props.report.type}</td>
           <td>
-        <button onClick={() => handleGoMyFeed(props.report.reported)}>피드로 이동</button>
+        <button onClick={() => handleGoToDetail(feed , props.report.reported)}>이동</button>
       </td>
+      {feedDetailModal && (
+      <FeedDetailModal
+        show={feedDetailModal}
+        onHide={() => setFeedDetailModal(false)}
+        feedData={feed}
+        photo={photo}
+        noPhoto={noPhoto}
+        getComment={getCommentList}
+      />
+    )}
       </tr>
   );
 }
