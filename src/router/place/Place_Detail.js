@@ -115,7 +115,7 @@ const Place_detail = () => {
 
         return (
             <div>
-                {reviewList && reviewList.length !== 0 && (
+                {reviewList && reviewList.length !== 0 ? (
                     <Carousel activeIndex={idx} interval={null} onSelect={handleSelect}>
                     {reviewList.map((review, index) => {
                         return (
@@ -125,7 +125,9 @@ const Place_detail = () => {
                         )
                     })}
                     </Carousel>
-                )}
+                )
+                :(<p>리뷰가 없습니다.</p>)
+                }
             </div>
         )
     }
@@ -229,13 +231,13 @@ const Place_detail = () => {
                 getComment={()=>{getCommentList(feed.seq)}}
                 />
             }
-            <div className="container mt-3">
-                <div style={{width: "1600px"}}>
+            <div className="container mt-4">
+                <div>
                     <div id="menu_wrap" className="bg_white">
                         <div className="place_detail">
                             <h1>{placeTitle}</h1>
                             <hr/>
-                            <h3>카테고리</h3>
+                            <h3 className="mt-3">카테고리</h3>
                             <p>{placeCategory}</p>
                             {
                                 // 전화번호가 있으면
@@ -249,13 +251,15 @@ const Place_detail = () => {
                             <p>{placeAddress}</p>
                             <button className="btn btn-primary"><Link to={placeUrl} target="_blank">정보 상세보기</Link></button>
                             <br/><br/><hr/>
-                            <div className="palce_review">
-                                <h1>포텐 리뷰</h1>
-                                <CarouselComponent />
+                            <div className="palce_review mt-3">
+                                <h2>포텐 리뷰</h2>
+                                <div className="mt-2">
+                                    <CarouselComponent />
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div id="map" style={{width:"800px", height:"800px", position:"relative", overflow:"hidden"}}></div>
+                    <div id="map" style={{width:"582px", height:"800px", position:"relative", overflow:"hidden"}}></div>
                 </div>
             </div>
         </>

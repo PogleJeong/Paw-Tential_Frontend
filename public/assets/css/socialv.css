@@ -3617,13 +3617,13 @@ fieldset:disabled .btn {
   border-color: #212529;
 }
 .btn-outline-primary {
-  color: #50b5ff;
-  border-color: #50b5ff;
+  color: #706464;
+  border-color: #706464;
 }
 .btn-outline-primary:hover {
-  color: #fff;
-  background-color: #50b5ff;
-  border-color: #50b5ff;
+  color: #706464;
+  background-color: #cee0c2;
+  border-color: #706464;
 }
 .btn-check:focus + .btn-outline-primary,
 .btn-outline-primary:focus {
@@ -3635,9 +3635,9 @@ fieldset:disabled .btn {
 .btn-outline-primary.active,
 .btn-outline-primary.dropdown-toggle.show,
 .btn-outline-primary:active {
-  color: #fff;
-  background-color: #50b5ff;
-  border-color: #50b5ff;
+  color: #706464;
+  background-color: #cee0c2;
+  border-color: #706464;
 }
 .btn-check:active + .btn-outline-primary:focus,
 .btn-check:checked + .btn-outline-primary:focus,
@@ -3649,7 +3649,7 @@ fieldset:disabled .btn {
 }
 .btn-outline-primary.disabled,
 .btn-outline-primary:disabled {
-  color: #50b5ff;
+  color: #cee0c2;
   background-color: transparent;
 }
 .btn-outline-secondary {
@@ -11846,18 +11846,18 @@ fieldset:disabled .btn {
 .iq-search-bar .searchbox .search-link {
   position: absolute;
   right: 0.938rem;
-  top: 0;
+  top: 0.42rem;
   font-size: 1rem;
 }
 .iq-search-bar .search-input {
   width: 100%;
-  height: 2.5rem;
+  height: 2.8rem;
   padding: 0.313rem 2.5rem 0.313rem 0.938rem;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   border: none;
   border: 1px solid #f1f1f1;
-  background: rgba(80, 181, 255, 0.2);
+  background: #fff;
 }
 .iq-navbar-logo {
   padding: 0;

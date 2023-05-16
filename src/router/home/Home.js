@@ -88,7 +88,7 @@ const Home = () => {
     <CreateFeedModal show={createFeedModal}
                                         onHide={()=>{setCreateFeedModal(false)}}/>
     <div id="content-page" className="content-page">
-      <div className="container">
+      <div className="container mb-5">
         <div className="row">
           <div className="col-lg-8 row m-0 p-0">
             <div className="col-sm-12">

@@ -62,7 +62,7 @@ function Pawtens(){
         return(
             <>
                 <div className="pawtensItem">
-                    <video controls>
+                    <video id="pawtensId" controls>
                         <source src={"http://localhost:3000/../upload/pawtens/" + props.pawtens.filename} type="video/mp4" />
                     </video>
                     <p style={{margin:"15px auto 0 30px"}}>{props.pawtens.content}</p>
