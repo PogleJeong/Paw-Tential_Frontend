@@ -238,7 +238,7 @@ export default function Navbar() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="right-sidebar-toggle bg-primary text-white mt-3">
+                                <div className="right-sidebar-toggle bg-success text-white mt-3">
                                     <i className="ri-arrow-left-line side-left-icon"></i>
                                     <i className="ri-arrow-right-line side-right-icon"><span className="ms-3 d-inline-block">Close Menu</span></i>
                                 </div>
