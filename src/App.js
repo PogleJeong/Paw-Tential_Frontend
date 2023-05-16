@@ -133,7 +133,7 @@ function App() {
 
             {/* 채팅 */}
             <Route path="/chat/home" element={<ChatroomHome />} />
-            <Route path="/chat/:id" element={<Chatroom />} />            {/* 검색 */}
+            <Route path="/chat/:id" element={<Chatroom />} />
 
 
             {/* 마이피드 */}
@@ -147,7 +147,7 @@ function App() {
       </BrowserRouter>
 
       {/* footer */}
-      <footer style={{ position: 'fixed', left: 0, bottom: 0, width: '100%', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
+      <footer style={{ position: 'fixed', left: 0, bottom: 0, width: '100%', backgroundColor: '#cee0c2', textAlign: 'center', zIndex: 1 }}>
       <div>
         <p>
           <small>&copy; Paw-Tential</small>
