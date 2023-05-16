@@ -3,8 +3,10 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import { FeedImage } from "./FeedData";
 import { useNavigate } from 'react-router-dom';
+import FeedDetailModal from "../router/home/modals/FeedDetailModal";
 
 const SearchFeed = (prop) => {
+  
   const [feedList, setFeedList] = useState([]);
   const navigate = useNavigate();
 
@@ -12,6 +14,7 @@ const SearchFeed = (prop) => {
   const [page, setPage] = useState(1);
   const [totalCnt, setTotalCnt] = useState(0);
 
+  // 검색 목록
   function getSearchlist(sea, p) {
     axios.get("http://localhost:3000/search", { params:{"search":sea, "pageNumber":p} })
     .then(function(resp){
@@ -23,14 +26,75 @@ const SearchFeed = (prop) => {
     });
   }
 
+  const [feedDetailModal, setFeedDetailModal] = useState(false);
+  const [feed, setFeed] = useState([]);
+
+  // 피드 상세 모달로 넘겨줄 데이터(1) - 이미지 데이터
+  // props로 받은 데이터 중, 이미지 데이터만 추려서 배열에 담기
+  const [photo, setPhoto] = useState([]);
+
+  const getPhoto = () => {
+    const regex = /<img src="([^"]+)"/g;
+    const urls = [];
+
+    let match;
+    while ((match = regex.exec(feed.content)) !== null) {
+      urls.push(match[1]);
+    }
+
+    setPhoto(urls);
+  }
+
+  // 피드 상세 모달로 넘겨줄 데이터(2) - 이미지 제외 데이터
+  // props로 받은 데이터 중, 이미지 제외한 데이터만 추려서 배열에 담기
+  const [noPhoto, setNoPhoto] = useState([]);
+
+  const getNoPhoto = () => {
+    const content = feed.content;
+
+    const regex = /<img.*?>|<figure.*?>|<\/figure>/gi;
+    const result = content.replace(regex, '');
+
+    setNoPhoto(result);
+  }
+
+  // 상세 페이지로 넘겨줄 댓글 리스트
+  const [commentList, setCommentList] = useState([]);
+
+  const getCommentList = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/home/getCommentList", { params: { "feedSeq": feed.seq } });
+      const data = response.data.commentList;
+      setCommentList(data);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const handleClick = async (seq) => {
+    try {
+      const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
+      const data = response.data;
+      console.log('피드 데이터:', data);
+      setFeed(data);
+      getPhoto();
+      getNoPhoto();
+      getCommentList();
+      setFeedDetailModal(true);
+      console.log('피드 데이터:', data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // 피드 검색 결과 목록
   const feedListMap = feedList.map((feed, i) => {
     return(
-
-        <div class="searchItem">
+      <>
+        <div class="searchItem" key={i}>
           <div class="user-images position-relative overflow-hidden">
-            <a href="#">
-              <FeedImage content={feed.content} />
+            <a href="javascript:void(0);" onClick={()=>{handleClick(feed.seq)}}>
+              <FeedImage content={feed.content}/>
             </a>
             <div class="image-hover-data">
                 <div class="product-elements-icon">
@@ -41,9 +105,9 @@ const SearchFeed = (prop) => {
                   </ul>
                 </div>
             </div>
-            
           </div>
-      </div>
+        </div>
+      </>
     )
   });
 
@@ -66,7 +130,16 @@ const SearchFeed = (prop) => {
 
   return (
     <>
-
+      {feedDetailModal && 
+        <FeedDetailModal
+          show={feedDetailModal}
+          onHide={() => setFeedDetailModal(false)}
+          feedData={feed}
+          photo={photo}
+          noPhoto={noPhoto}
+          getComment={getCommentList}
+        />
+      }
       <div class="friend-list-tab">
           <div class="tab-content">
           <div class="tab-pane fade active show" id="photosofyou" role="tabpanel">
