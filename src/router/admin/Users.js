@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Modal, Select, Input, Button, Pagination } from 'antd';
+
 import AdminSidebar from "../../component/AdminSidebar";
 import axios from 'axios';
 
-import Pagination from 'react-js-pagination';
 
 import "../../styles/page.css";
 import "../../styles/admin.css";
 
+const { Option } = Select;
 
 
 const AdminUserList = () => {
@@ -20,9 +22,13 @@ const AdminUserList = () => {
   const [page, setPage] = useState(1);
   const [totalCnt, setTotalCnt] = useState(0);
 
-  const choiceChange = (e) => setChoice(e.target.value);
-  const searchChange = (e) => setSearch(e.target.value);
+  const choiceChange = (value) => {
+    setChoice(value);
+  };
 
+  const searchChange = (e) => {
+    setSearch(e.target.value);
+  };
 
     const fetchUsers = async (c, s, p) => {
       
@@ -71,27 +77,35 @@ const AdminUserList = () => {
     
     
     return (
-      <div>
-      <h1>관리자 페이지</h1>
+      <div className='adminstyle'>
+      <div class="card">
 
-      <div className="admin-page">
+<div class="card-header d-flex justify-content-between">
+                     <div class="header-title">
+                     <h1>유저 관리</h1>
+
+                     </div>
+                  </div>
+
       <div className="admin-page-sidebar">
         <AdminSidebar />
       </div>
-    </div>
 
-      <table style={{ marginLeft:"auto", marginRight:"auto", marginTop:"3px", marginBottom:"3px" }}>
+      <div class="card-body">
+
+
+      <table class="table" style={{ marginLeft:"auto", marginRight:"auto", marginTop:"3px", marginBottom:"3px" }}>
             <tbody>
             <tr>
                 <td style={{ paddingLeft:"3px" }}>
-                    <select className="custom-select" value={choice} onChange={choiceChange}>
-                        <option value=''>검색</option>
-                        <option value="id">아이디</option>
-                        <option value="auth">회원상태</option>
-                    </select>
+                    <Select className="custom-select" value={choice} onChange={choiceChange} style={{ width: '200px' }}>
+                        <Option value=''>검색</Option>
+                        <Option value="id">아이디</Option>
+                        <Option value="auth">회원상태</Option>
+                    </Select>
                 </td>
                 <td style={{ paddingLeft:"5px" }} className="align-middle">
-                    <input type="text" className="form-control" placeholder="검색어"
+                    <Input type="text" className="form-control" placeholder="검색어"
                         value={search} onChange={searchChange}/>
                 </td>
                 <td style={{ paddingLeft:"5px" }}>
@@ -105,17 +119,17 @@ const AdminUserList = () => {
 
         <br/>
 
-      <table>
+      <table class="table">
         <thead>
           <tr>
-            <th>번호</th>
-            <th>ID</th>
-            <th>닉네임</th>
-            <th>이메일</th>
-            <th>가입일</th>
-            <th>연락처</th>
-            <th>상태</th>
-            <th>삭제</th>
+            <th scope="col">번호</th>
+            <th scope="col">ID</th>
+            <th scope="col">닉네임</th>
+            <th scope="col">이메일</th>
+            <th scope="col">가입일</th>
+            <th scope="col">연락처</th>
+            <th scope="col">상태</th>
+            <th scope="col">삭제</th>
           </tr>
         </thead>
         <tbody>
@@ -145,6 +159,9 @@ const AdminUserList = () => {
             onChange={handlePageChange} />
 
     </div>
+    </div>
+    </div>
+
   );
 };
 
@@ -177,7 +194,7 @@ function TableRow(props) {
       <td>{props.user.phone}</td>
       <td>{props.user.auth === 0 ? "일반회원" : "관리자"}</td>
       <td>
-        <button onClick={() => handleDeleteUser(props.user.id)}>삭제</button>
+        <button className="btn btn-success" onClick={() => handleDeleteUser(props.user.id)}>삭제</button>
       </td>
     </tr>
 

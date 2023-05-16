@@ -43,11 +43,7 @@ const AdminSidebar = () => {
               문의 관리
             </Link>
           </li>
-          <li className="nav-item">
-                <Link to="/admin/Data" className="nav-link">
-                  데이터 관리
-                </Link>
-              </li>
+
 
         </ul>
       </div>

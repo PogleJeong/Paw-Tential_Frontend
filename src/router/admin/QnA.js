@@ -112,20 +112,25 @@ const AdminQnAList = () => {
   };
 
   return (
-    <div>
-      <h1>문의 관리</h1>
+    <div className='adminstyle'>
+    <div class="card">
+   <div class="card-header d-flex justify-content-between">
+                     <div class="header-title">
+                     <h1>문의 관리</h1>
 
-      <div className="admin-page">
+                     </div>
+                  </div>
+
         <div className="admin-page-sidebar">
           <AdminSidebar />
         </div>
-      </div>
+        <div class="card-body">
 
-      <table style={{ marginLeft: "auto", marginRight: "auto", marginTop: "3px", marginBottom: "3px" }}>
+      <table class="table" style={{ marginLeft: "auto", marginRight: "auto", marginTop: "3px", marginBottom: "3px" }}>
         <tbody>
           <tr>
             <td style={{ paddingLeft: "3px" }}>
-              <Select className="custom-select" value={choice} onChange={choiceChange}>
+              <Select className="custom-select" value={choice} onChange={choiceChange} style={{ width: '200px' }}>
                 <Option value="">검색</Option>
                 <Option value="id">아이디</Option>
                 <Option value="whether">답변 상태</Option>
@@ -137,7 +142,7 @@ const AdminQnAList = () => {
             </td>
             <td style={{ paddingLeft: "5px" }}>
               <span>
-                <Button type="primary" onClick={searchBtn}>검색</Button>
+                <Button className="btn btn-primary" onClick={searchBtn}>검색</Button>
               </span>
             </td>
           </tr>
@@ -146,21 +151,21 @@ const AdminQnAList = () => {
 
       <br />
 
-      <table>
+      <table class="table">
         <thead>
           <tr>
-            <th>번호</th>
-            <th>문의 내용</th>
-            <th>아이디</th>
-            <th>이메일</th>
-            <th>문의일자</th>
-            <th>답변 여부</th>
+            <th scope="col">번호</th>
+            <th scope="col">문의 내용</th>
+            <th scope="col">아이디</th>
+            <th scope="col">이메일</th>
+            <th scope="col">문의일자</th>
+            <th scope="col">답변 여부</th>
           </tr>
         </thead>
         <tbody>
           {QnA.map((dto, i) => (
             <TableRow QnA={dto} cnt={i + 1} key={i} toggleModal={toggleModal} />
-          ))}
+            ))}
         </tbody>
       </table>
 
@@ -172,23 +177,23 @@ const AdminQnAList = () => {
         prevPageText={"‹"}
         nextPageText={"›"}
         onChange={handlePageChange}
-      />
+        />
 
       {selectedQnA && (
         <Modal
-          visible={showModal}
-          onCancel={toggleModal}
-          title={`${selectedQnA.id}님의 문의 내용`}
-          footer={null}
+        visible={showModal}
+        onCancel={toggleModal}
+        title={`${selectedQnA.id}님의 문의 내용`}
+        footer={null}
         >
-          <table>
+          <table class="table">
             <thead>
               <tr>
-                <th>번호</th>
-                <th>ID</th>
-                <th>이메일</th>
-                <th>작성일</th>
-                <th>답변 여부</th>
+                <th scope="col">번호</th>
+                <th scope="col">ID</th>
+                <th scope="col">이메일</th>
+                <th scope="col">작성일</th>
+                <th scope="col">답변 여부</th>
               </tr>
             </thead>
             <tbody>
@@ -213,9 +218,9 @@ const AdminQnAList = () => {
       rows={4}
       value={answer}
       onChange={(e) => setAnswer(e.target.value)}
-    />
+      />
   </Form.Group>
-  <Button type="primary" htmlType="submit">답변 보내기</Button>
+  <Button className="btn btn-secondary"  htmlType="submit">답변 보내기</Button>
 </Form>
                 </td>
               </tr>
@@ -224,6 +229,8 @@ const AdminQnAList = () => {
         </Modal>
       )}
     </div>
+</div>
+</div>
   );
 };
 

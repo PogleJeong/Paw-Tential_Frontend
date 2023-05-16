@@ -55,8 +55,17 @@ const FollowerCount = ({ userId }) => {
 
   return (
     <div>
-      <span onClick={openFollowerListModal}>팔로워 : {followerCount}</span>
-      <span onClick={openFollowingListModal}>팔로잉 : {followingCount}</span>
+      <ul class="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0">
+      <li class="text-center ps-3" onClick={openFollowerListModal}  onMouseOver={(e) => (e.target.style.cursor = 'pointer')} >
+      <h5>팔로워</h5>
+      <p class="mb-0">{followerCount}</p>
+       </li>
+       <li class="text-center ps-3" onClick={openFollowingListModal} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>
+       <h5>팔로잉</h5>
+      <p class="mb-0">{followingCount}</p>
+       </li>
+                        </ul>
+
       {showFollowerListModal && (
         <FollowerListModal userId={userId} closeModal={closeFollowerListModal} />
       )}

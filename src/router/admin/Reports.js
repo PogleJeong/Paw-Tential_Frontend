@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Modal, Select, Input, Button, Pagination } from 'antd';
 
-import Pagination from 'react-js-pagination';
 import AdminSidebar from "../../component/AdminSidebar";
 import FeedDetailModal from "../home/modals/FeedDetailModal";
 
 import "../../styles/page.css"
+
+const { Option } = Select;
+
 
 const AdminReportList = () => {
   const [reports, setReports] = useState([]);
@@ -16,11 +19,14 @@ const AdminReportList = () => {
   // paging
   const [page, setPage] = useState(1);
   const [totalCnt, setTotalCnt] = useState(0);
+  
+  const choiceChange = (value) => {
+    setChoice(value);
+  };
 
-  const choiceChange = (e) => setChoice(e.target.value);
-  const searchChange = (e) => setSearch(e.target.value);
-
-
+  const searchChange = (e) => {
+    setSearch(e.target.value);
+  };
     const fetchReports = async (c, s, p) => {
       
         await axios.get('http://localhost:3000/reportList', { params:{ "choice":c, "search":s, "pageNumber":p  } })
@@ -68,27 +74,31 @@ const AdminReportList = () => {
 
     
     return (
-      <div>
-      <h1>신고 관리</h1>
+      <div className='adminstyle'>
+      <div class="card">
+<div class="card-header d-flex justify-content-between">
+                     <div class="header-title">
+                     <h1>신고 관리</h1>
 
-      <div className="admin-page">
+                     </div>
+                  </div>
       <div className="admin-page-sidebar">
         <AdminSidebar />
       </div>
-    </div>
+      <div class="card-body">
 
-      <table style={{ marginLeft:"auto", marginRight:"auto", marginTop:"3px", marginBottom:"3px" }}>
+      <table class="table" style={{ marginLeft:"auto", marginRight:"auto", marginTop:"3px", marginBottom:"3px" }}>
             <tbody>
             <tr>
                 <td style={{ paddingLeft:"3px" }}>
-                    <select className="custom-select" value={choice} onChange={choiceChange}>
-                        <option value=''>검색</option>
-                        <option value="id">아이디</option>
-                        <option value="auth">신고 유형</option>
-                    </select>
+                    <Select className="custom-select" value={choice} onChange={choiceChange} style={{ width: '200px' }}>
+                        <Option value=''>검색</Option>
+                        <Option value="id">아이디</Option>
+                        <Option value="auth">신고 유형</Option>
+                    </Select>
                 </td>
                 <td style={{ paddingLeft:"5px" }} className="align-middle">
-                    <input type="text" className="form-control" placeholder="검색어"
+                    <Input type="text" className="form-control" placeholder="검색어"
                         value={search} onChange={searchChange}/>
                 </td>
                 <td style={{ paddingLeft:"5px" }}>
@@ -102,17 +112,17 @@ const AdminReportList = () => {
 
         <br/>
 
-      <table>
+      <table class="table">
         <thead>
           <tr>
-            <th>번호</th>
-            <th>신고자ID</th>
-            <th>피신고자ID</th>
-            <th>신고유형</th>
-            <th>사유</th>
-            <th>신고일</th>
-            <th>신고 위치</th>
-            <th>신고 관리</th>
+            <th scope="col">번호</th>
+            <th scope="col">신고자ID</th>
+            <th scope="col">피신고자ID</th>
+            <th scope="col">신고유형</th>
+            <th scope="col">사유</th>
+            <th scope="col">신고일</th>
+            <th scope="col">신고 위치</th>
+            <th scope="col">신고 관리</th>
           </tr>
         </thead>
         <tbody>
@@ -142,6 +152,9 @@ const AdminReportList = () => {
             onChange={handlePageChange} />
 
     </div>
+    </div>
+    </div>
+
   );
 };
 
@@ -250,7 +263,7 @@ const fetchFeed = async (props) => {
           <td>{props.report.rdate}</td>
           <td>{props.report.type}</td>
           <td>
-        <button onClick={() => handleGoToDetail(feed , props.report.reported)}>이동</button>
+        <button class="btn btn-secondary" onClick={() => handleGoToDetail(feed , props.report.reported)}>이동</button>
       </td>
       {feedDetailModal && (
       <FeedDetailModal

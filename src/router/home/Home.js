@@ -15,7 +15,7 @@ const Home = () => {
   const [feeds, setFeeds] = useState([]);
   const [comments, setComments] = useState([]);
   const [images, setImages] = useState([]);
-  
+  const [userInfo, setUserInfo] = useState([]);
   // SNS-login - 정은성
   const [ searchParams, setSearchParams ] = useSearchParams(); 
   const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID","USER_NICKNAME"]);
@@ -48,6 +48,8 @@ const Home = () => {
     })
   }
 
+
+
   /* 피드 2개씩 보여주고 더보기 클릭시, 더 보여주기*/
   const [visibleFeeds, setVisibleFeeds] = useState([]);
   useEffect(()=>{
@@ -66,6 +68,21 @@ const Home = () => {
     getAllFeed();
   }, []);
 
+  // 유저 정보 불러오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/userInfo', { params: { id: cookies.USER_ID } });
+        setUserInfo(res.data);
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUserInfo();
+  }, [cookies.USER_ID]);
+
+
   return (
     <>
     <CreateFeedModal show={createFeedModal}
@@ -80,7 +97,7 @@ const Home = () => {
                   <div className="d-flex align-items-center">
                     <div className="user-img">
                     {/* // TO-DO 유저 프로필 사진 넣어주세요 */}
-                      <img src="/assets/images/user/1.jpg" alt="userImg" className="avatar-60 rounded-circle" />
+                      <img src={`http://localhost:3000/uploads/${userInfo.profile}`} alt="userImg" className="avatar-60 rounded-circle" />
                     </div>
                     <form className="post-text ms-3 w-100" data-bs-target="#post-modal">
                       <input type="text"

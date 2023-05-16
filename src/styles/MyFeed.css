@@ -47,26 +47,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
+    margin-top: 20px;
   }
+  
   
   .feed-category {
-    display: flex;
-    align-items: center;
     margin-right: 10px;
   }
-  
   .category-icon {
-    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
   }
-  
   .category-divider {
     flex-grow: 1;
     height: 1px;
     background-color: #ccc;
   }
   
-
+.myfeeditem img{
+  width:250px;
+    height:250px;
+    object-fit: cover;
+}
   
   
   

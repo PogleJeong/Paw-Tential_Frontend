@@ -19,6 +19,23 @@ export const FeedImage = (props) => {
     );
 };
 
+// 미리보기용 feedImage
+export const PreFeedImage = (props) => {
+  function getImgSrc() {
+      let str = props.content;
+      if(str.includes('<img src="')){
+          return str.split('<img src="')[1].split('">')[0];
+      } else {
+          return "/feedimages/nofeed.png";
+      }
+  }
+  return (
+      <div>
+          <img src={getImgSrc()} alt="피드사진" className="img-fluid rounded" />
+      </div>
+  );
+};
+
 // content 문자열에서 피드 내용만 가져오기
 export const FeedContent = (props) => {
 
