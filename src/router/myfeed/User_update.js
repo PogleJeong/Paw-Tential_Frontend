@@ -307,7 +307,7 @@ const handleProfilePictureChange = (event) => {
 
 
   return (
-    <div>
+    <div className="container mt-3">
     <label>프로필 사진</label>
     <br />
     <br />

@@ -9,7 +9,7 @@ import { Cookies } from 'react-cookie';
 
 const CreateFeedModal = ({show, onHide}) => {
 
-  const [userId, setUserId] = useState('loserya123');
+  const [userId, setUserId] = useState('loserya1234');
   const [showLocationInput, setShowLocationInput] = useState(false);
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');

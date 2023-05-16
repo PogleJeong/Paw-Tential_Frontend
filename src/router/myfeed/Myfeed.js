@@ -103,13 +103,26 @@ const Myfeed = () => {
   }, [pageNumber]);
   
   const handleBookmarkClick = () => {
-    if (bookmarkFeeds.length > 0) {
-      setFeed(bookmarkFeeds);
-    }
+    setFeed(bookmarkFeeds);
+    setLoadedFeed(bookmarkFeeds);
+    setPageNumber(1);
+    setHasMore(false); 
   };
+  
+
+  const handleHomemarkClick = () => {
+    setFeed([]);
+    setLoadedFeed([]);
+    setPageNumber(1);
+    setHasMore(true); 
+    fetchFeed(); 
+  };
+  
+  
+  
 
   return (
-    <div className="my-feed-container">
+    <div className="container mt-3">
       {userInfo && (
         <>
           <ProfileCard userInfo={userInfo} isCurrentUser={true} />
@@ -120,13 +133,9 @@ const Myfeed = () => {
       <div className="feed-categories">
       <div className="feed-category">
   {/* 홈 아이콘 (마이피드) */}
-  <div
-    className="category-icon"
-    onMouseOver={(e) => (e.target.style.cursor = 'pointer')}
-    onClick={() => setFeed(loadedFeed)}
-  >
-    <AiFillHome size={40} />
-  </div>
+  <div className="category-icon" onMouseOver={(e) => (e.target.style.cursor = 'pointer')} onClick={handleHomemarkClick}>
+  <AiFillHome size={40} />
+</div>
 </div>
 <div className="feed-category-divider">
   <div className="divider-line"></div>
@@ -143,29 +152,32 @@ const Myfeed = () => {
   </div>
 </div>
 </div>
+
   
-        {loadedFeed.map((feedData, index) => {
-          if (loadedFeed.length === index + 1) {
-            return (
-              <div className="myfeedimg img" ref={lastFeedElementRef} key={index}>
-                <FeedImage content={feedData.content} />
-              </div>
-            );
-          } else {
-            return (
-              <div className="myfeedimg img" key={index}>
-                <FeedImage content={feedData.content} />
-              </div>
-            );
-          }
-        })}
-  
-        {loading && (
-          <div className="loading-container">
-            <div className="loader"></div>
+<div className="myfeedimg-container">
+    {loadedFeed.map((feedData, index) => {
+      if (loadedFeed.length === index + 1) {
+        return (
+          <div className="myfeedimg img" ref={lastFeedElementRef} key={index}>
+            <FeedImage content={feedData.content} />
           </div>
-        )}
-      </div>
+        );
+      } else {
+        return (
+          <div className="myfeedimg img" key={index}>
+            <FeedImage content={feedData.content} />
+          </div>
+        );
+      }
+    })}
+  </div>
+
+  {loading && (
+    <div className="loading-container">
+      <div className="loader"></div>
+    </div>
+  )}
+</div>
     </div>
   );
   

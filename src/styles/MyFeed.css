@@ -2,6 +2,7 @@
     max-width: 1500px;
     margin: 0 auto;
     padding: 20px;
+
   }
   
   .profile-card {
@@ -30,9 +31,10 @@
   .feed-container {
     margin-top: 30px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
-    align-content: flex-start
+    align-content: flex-start;
+    align-items: center;
   }
   
   .feed-card {
@@ -51,6 +53,8 @@
   .feed-categories {
     display: flex;
     align-items: center;
+    justify-content: center;
+
   }
   
   .feed-category {
@@ -69,6 +73,12 @@
     background-color: #ccc;
   }
   
+  .myfeedimg-container {
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   
   
   

@@ -6,7 +6,7 @@ import { FeedImage, FeedContent } from "./FeedData";
 import { FeedDropdown_user, FeedDropdown_writer } from "./FeedDropdown";
 import MainFeedComment from "./MainFeedComment";
 import ModifyMainFeedModal from "../router/Feed/modals/ModifyMainFeedModal";
-import ReportModal from "./ReportModal";
+import FeedReportModal from "../router/Feed/modals/FeedReportModal";
 import { Form } from "react-bootstrap";
 
 
@@ -105,7 +105,7 @@ const handleCloseReportModal = () => {
   const dropMenuRef = useRef(null);
 
   // 임시 아이디
-  const userId = 'loserya123';
+  const userId = cookies.USER_ID;
 
   // 피드 삭제하기
   const feedDelete = (seq) => {
@@ -188,7 +188,12 @@ const handleCloseReportModal = () => {
                         </span>
                         <div className="dropdown-menu m-0 p-0">
                           <a className="dropdown-item p-3" href="javascript:void(0);" >
-                              {showReportModal && <ReportModal show={showReportModal} onClose={handleCloseReportModal} id={props.feedData.id} userId={cookies.USER_ID} type={2}/>}
+                              {showReportModal && <FeedReportModal
+                              show={showReportModal} 
+                              onClose={handleCloseReportModal} 
+                              feedData={props.feedData}
+                              userId={cookies.USER_ID} 
+                              type={'피드'}/>}
                             <div className="d-flex align-items-top" onClick={handleOpenReportModal}  >
                               <div className="h4">
                                 <i className="ri-alarm-warning-line">
