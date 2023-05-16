@@ -1,5 +1,6 @@
 import ModifyCareFeedModal from "../router/group/modals/ModifyCareFeedModal";
 import React, {useState, useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Carousel } from "react-bootstrap";
 import ReactHtmlParser from "react-html-parser";
@@ -9,6 +10,7 @@ export default function CareGroupFeedItems(props){
 
     const [modifyCareFeedModal, setModifyCareFeedModal] = useState(false);
     const [selectedGrpFeedId, setSelectedGrpFeedId] = useState('');
+    const navigate = useNavigate();
 
     // content 내에서 이미지, 글 분리하기
      const [image, setImage] = useState([]);
@@ -68,6 +70,26 @@ export default function CareGroupFeedItems(props){
         .catch(function(err){
             alert(err);
         })
+    }
+
+    // 돌봄 신청하기(채팅)
+    const enterChat = async() => {
+        // 서버에서 처리.
+        await axios.post("http://localhost:3000/createChat",null, {params: {
+            sender: props.userId,
+            recipient: props.data.careGrpFeedWriter
+        }})
+        .then((response)=> {
+            if (response.status == 200) {
+                if (response.data){
+                    const { chatroomID, sender, recipient } = response.data;
+                    navigate(`/chat/${chatroomID}`, {
+                        state: {chatroomID, sender, recipient}
+                        }
+                    )
+                }
+            }
+        });
     }
 
     useEffect(()=>{
@@ -182,9 +204,11 @@ export default function CareGroupFeedItems(props){
                             </div>
                     </div>
                     {/* TO-DO 신청하기 클릭 시, 대화방 만들어주세요 */}
-                    <div className="mb-3">
-                        <a href="javascript:void(0)" tabIndex="-1">돌봄 신청하기<i className="ri-arrow-right-s-line"></i></a>
-                    </div>
+                        {props.userId !== props.data.careGrpFeedWriter &&
+                        <div className="mb-3" onClick={enterChat}>
+                            <a href="javascript:void(0)" tabIndex="-1">돌봄 신청하기<i className="ri-arrow-right-s-line"></i></a>
+                        </div>
+                        }
                 </div>
             </div>
         </div> {/* post-item */}
