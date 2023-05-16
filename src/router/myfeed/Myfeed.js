@@ -9,6 +9,7 @@ import '../../styles/MyFeed.css';
 import { FeedImage } from '../../component/FeedData';
 
 import ProfileCard from '../../component/ProfileCard';
+import FeedDetailModal from "../home/modals/FeedDetailModal";
 
 
 
@@ -18,7 +19,7 @@ const Myfeed = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [bookmarkFeeds, setBookmarkFeeds] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [feed, setFeed] = useState([]);
+  const [feeds, setFeeds] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadedFeed, setLoadedFeed] = useState([]);
@@ -59,7 +60,7 @@ const Myfeed = () => {
           page: pageNumber
         }
       });
-      setFeed(prevFeed => {
+      setFeeds(prevFeed => {
         return [...prevFeed, ...res.data];
       });
       setHasMore(res.data.length > 0);
@@ -82,6 +83,7 @@ const Myfeed = () => {
   };
 
   
+  
 
 
   useEffect(() => {
@@ -92,9 +94,9 @@ const Myfeed = () => {
 
   useEffect(() => {
     // 중복된 피드 항목 제거하기
-    const uniqueFeed = feed.filter((item) => !loadedFeed.find((loadedItem) => loadedItem.id === item.id));
+    const uniqueFeed = feeds.filter((item) => !loadedFeed.find((loadedItem) => loadedItem.id === item.id));
     setLoadedFeed(prevLoadedFeed => [...prevLoadedFeed, ...uniqueFeed]);
-  }, [feed]);
+  }, [feeds]);
 
   useEffect(() => {
     if (!loading && hasMore) {
@@ -103,7 +105,7 @@ const Myfeed = () => {
   }, [pageNumber]);
   
   const handleBookmarkClick = () => {
-    setFeed(bookmarkFeeds);
+    setFeeds(bookmarkFeeds);
     setLoadedFeed(bookmarkFeeds);
     setPageNumber(1);
     setHasMore(false); 
@@ -111,11 +113,72 @@ const Myfeed = () => {
   
 
   const handleHomemarkClick = () => {
-    setFeed([]);
+    setFeeds([]);
     setLoadedFeed([]);
     setPageNumber(1);
     setHasMore(true); 
     fetchFeed(); 
+  };
+
+  const [feed, setFeed] = useState([]);
+  const [feedDetailModal, setFeedDetailModal] = useState(false);
+
+  // 피드 상세 모달로 넘겨줄 데이터(1) - 이미지 데이터
+  // props로 받은 데이터 중, 이미지 데이터만 추려서 배열에 담기
+  const [photo, setPhoto] = useState([]);
+
+  const getPhoto = () => {
+    const regex = /<img src="([^"]+)"/g;
+    const urls = [];
+
+    let match;
+    while ((match = regex.exec(feed.content)) !== null) {
+      urls.push(match[1]);
+    }
+
+    setPhoto(urls);
+  }
+
+  // 피드 상세 모달로 넘겨줄 데이터(2) - 이미지 제외 데이터
+  // props로 받은 데이터 중, 이미지 제외한 데이터만 추려서 배열에 담기
+  const [noPhoto, setNoPhoto] = useState([]);
+
+  const getNoPhoto = () => {
+    const content = feed.content;
+
+    const regex = /<img.*?>|<figure.*?>|<\/figure>/gi;
+    const result = content.replace(regex, '');
+
+    setNoPhoto(result);
+  }
+
+  // 상세 페이지로 넘겨줄 댓글 리스트
+  const [commentList, setCommentList] = useState([]);
+
+  const getCommentList = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/home/getCommentList", { params: { "feedSeq": feed.seq } });
+      const data = response.data.commentList;
+      setCommentList(data);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const handleClick = async (seq) => {
+    try {
+      const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
+      const data = response.data;
+      console.log('피드 데이터:', data);
+      setFeed(data); 
+      getPhoto(data.seq);
+      getNoPhoto(data.seq);
+      getCommentList(data.seq);
+      setFeedDetailModal(true);
+      console.log('피드 데이터:', data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   
   
@@ -152,25 +215,41 @@ const Myfeed = () => {
   </div>
 </div>
 </div>
-
+{feedDetailModal && 
+        <FeedDetailModal
+          show={feedDetailModal}
+          onHide={() => setFeedDetailModal(false)}
+          feedData={feed}
+          photo={photo}
+          noPhoto={noPhoto}
+          getComment={getCommentList}
+        />
+      }
   
 <div className="myfeedimg-container">
-    {loadedFeed.map((feedData, index) => {
-      if (loadedFeed.length === index + 1) {
+    {loadedFeed.map((feedData, i) => {
+      if (loadedFeed.length === i + 1) {
         return (
-          <div className="myfeedimg img" ref={lastFeedElementRef} key={index}>
+          <div className="myfeedimg img" ref={lastFeedElementRef} key={i} >
+                       <a href="javascript:void(0);" onClick={()=>{handleClick(feedData.seq)}}>
+
             <FeedImage content={feedData.content} />
+          </a>
           </div>
         );
       } else {
         return (
-          <div className="myfeedimg img" key={index}>
-            <FeedImage content={feedData.content} />
-          </div>
+          <div className="myfeedimg img" key={i}>
+                       <a href="javascript:void(0);" onClick={()=>{handleClick(feedData.seq)}}>
+
+<FeedImage content={feedData.content} />
+</a>
+</div>
         );
       }
     })}
   </div>
+
 
   {loading && (
     <div className="loading-container">
@@ -180,6 +259,8 @@ const Myfeed = () => {
 </div>
     </div>
   );
+
+  
   
 };
 
