@@ -508,32 +508,42 @@ const Place = () => {
     }, []);
 
     return (
-        <div className="container mt-3">
-            <div style={{width: "1600px"}}>
+        <div className="container mt-4">
+            <div>
                 <div className="map_wrap">
                     <div className="option">
                         <div className="search">
-                            <input value={search} id="keyword" onChange={onchangeSearch} placeholder="찾고 싶은 장소를 입력하세요!" autocomplete='off' />
-                            <button id="submit_search" type="submit">검색하기</button>
-                            <button id="submit_research" type="submit">이 지역 재검색</button>
+                            <div class="iq-search-bar device-search">
+                                <div action="#" class="searchbox w-100">
+                                    <a id="submit_search" class="search-link" href="#"><i class="ri-search-line"></i></a>
+                                    <input class="text search-input"  value={search} id="keyword" onChange={onchangeSearch} placeholder="찾고 싶은 장소를 입력하세요!" autocomplete='off' />
+                                </div>
+                            </div>
                         </div >
-                        <br/>
-                        <div className="category" id="submit_category">
-                            <input type={'radio'} value="애견동반식당" onChange={onchangeCategory} checked={category === "애견동반식당"}/>식당
-                            <input type={'radio'} value="애견동반카페" onChange={onchangeCategory} checked={category === "애견동반카페"}/>카페
-                            <input type={'radio'} value="반려견놀이터" onChange={onchangeCategory} checked={category === "반려견놀이터"}/>놀이터
-                            <input type={'radio'} value="반려동물용품" onChange={onchangeCategory} checked={category === "반려동물용품"}/>쇼핑
-                            <input type={'radio'} value="애견동반숙소" onChange={onchangeCategory} checked={category === "애견동반숙소"}/>숙박
-                            <input type={'radio'} value="동물병원" onChange={onchangeCategory} checked={category === "동물병원"}/>병원
+                        <div class="btn-group mt-3 w-100 checkboxradio" role="group" aria-label="Basic radio toggle button group"  id="submit_category">
+                            <input type={'radio'} class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value="애견동반식당" onChange={onchangeCategory} checked={category === "애견동반식당"} />
+                            <label class="btn btn-outline-primary" style={{padding: "5px 27px"}} for="btnradio1">식당</label>
+                            <input type={'radio'} class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" value="애견동반카페" onChange={onchangeCategory} checked={category === "애견동반카페"} />
+                            <label class="btn btn-outline-primary" style={{padding: "5px 27px"}} for="btnradio2">카페</label>
+                            {/* <input type={'radio'} class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" value="반려견놀이터" onChange={onchangeCategory} checked={category === "반려견놀이터"} />
+                            <label class="btn btn-outline-primary" style={{padding: "5px 27px"}} for="btnradio3">놀이터</label> */}
+                            <input type={'radio'} class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" value="반려동물용품" onChange={onchangeCategory} checked={category === "반려동물용품"} />
+                            <label class="btn btn-outline-primary" style={{padding: "5px 27px"}} for="btnradio4">쇼핑</label>
+                            <input type={'radio'} class="btn-check" name="btnradio" id="btnradio5" autocomplete="off" value="애견동반숙소" onChange={onchangeCategory} checked={category === "애견동반숙소"} />
+                            <label class="btn btn-outline-primary" style={{padding: "5px 27px"}} for="btnradio5">숙박</label>
+                            <input type={'radio'} class="btn-check" name="btnradio" id="btnradio6" autocomplete="off" value="동물병원" onChange={onchangeCategory} checked={category === "동물병원"} />
+                            <label class="btn btn-outline-primary" style={{padding: "5px 27px"}} for="btnradio6">병원</label>
                         </div>
-                        <p>전체 검색 결과 {palceLength}개</p>
-                        <br/>
+                        <div className="mt-3 mb-2">
+                            <span>전체 검색 결과 {palceLength}개</span>
+                            <button className="btn btn-secondary rounded-pill" id="submit_research" type="submit">이 지역 재검색</button>
+                        </div>
                     </div>
                     <div id="menu_wrap">
                         <ul id="placesList"></ul>
                         <div id="pagination"></div>
                     </div>
-                    <div id="map" style={{width:"800px", height:"800px", position:"relative", overflow:"hidden"}}></div>            
+                    <div id="map" style={{width:"582px", height:"800px", position:"relative", overflow:"hidden"}}></div>            
                 </div>
             </div>
         </div>
