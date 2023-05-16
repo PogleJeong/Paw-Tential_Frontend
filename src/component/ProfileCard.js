@@ -5,6 +5,7 @@ import FollowButton from './FollowButton';
 import { useCookies } from 'react-cookie';
 import MyfeedDropdown_user from './MyfeedDropdown_user';
 import MyfeedDropdown_others from './MyfeedDropdown_others';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileCard = ({ userInfo }) => {
   const [cookies, setCookies] = useCookies(['USER_ID', 'USER_NICKNAME']);
@@ -15,6 +16,8 @@ const ProfileCard = ({ userInfo }) => {
 
   const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  const navigate = useNavigate(null);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -37,12 +40,32 @@ const ProfileCard = ({ userInfo }) => {
     fetchUserInfo();
   }, [userInfo.id]);
 
+  const enterChat = async() => {
+    // 서버에서 처리.
+    await axios.post("http://localhost:3000/createChat",null, {params: {
+        sender: cookies.USER_ID,
+        recipient: id,
+    }})
+    .then((response)=> {
+        if (response.status == 200) {
+            if (response.data){
+                const { chatroomID, sender, recipient } = response.data;
+                navigate(`/chat/${chatroomID}`, {
+                    state: {chatroomID, sender, recipient}
+                    }
+                )
+            }
+        }
+    });
+}
+
   return (
     <div className="profile-card">
       <img className="profile-image" src={previewUrl} alt={id} />
       <div className="profile-info">
         <h1>{id}</h1>
         <p className="bio">{intro}</p>
+        
         <FollowCount userId={id} />
         {!isCurrentUser && <FollowButton userId={id} />}
         {userInfo !== '' && (
@@ -60,6 +83,8 @@ const ProfileCard = ({ userInfo }) => {
           </div>
         )}
       </div>
+      {isCurrentUser ? null : <button className="btn-success" onClick={enterChat}>채팅하기</button>}
+      
     </div>
   );
 };

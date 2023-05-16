@@ -10,14 +10,14 @@ const ChatInfoBox = styled.li`
     align-items: center;
     width: 100%;
     height: 100px;
-    margin: 5px 0px;
+    margin: 20px 0px;
     border: none;
     border-radius: 10px;
-    box-shadow: 2px 3px 5px 0px;
+    box-shadow: 2px 3px 5px 2px;
 `;
 
 const Profile = styled.img`
-    width: 75px;
+    min-width: 75px;
     height: 75px;
     border: none;
     border-radius: 100px;
@@ -25,13 +25,14 @@ const Profile = styled.img`
 
 const Nickname = styled.span`
     display: inline-block;
-    width: 300px;
+    min-width: 150px;
     margin: 5px 20px;
     font-size: 12px;
 `;
 
 const NoReadCount = styled.span`
     display: inline-block;
+    min-width: 80px;
     font-size: 12px;
 `;
 
@@ -97,10 +98,10 @@ const ChatroomInfo = ({chatInfo, user}) => {
             :
             <Link to={`/chat/${chatInfo.chatroomID}`} state={{chatroomID: chatInfo.chatroomID, sender: chatInfo.participant2, recipient: chatInfo.participant1}}>
                 <ChatInfoBox>
-                    <Profile src={null} alt="" />
+                    <Profile src={`data:image/jpeg;base64,${profile}`} alt="" />
                     <Nickname>{othersNick}</Nickname><br/>
                     <NoReadCount>
-                        {notReadChatCount > 0 ? `읽지 않은 메세지 ${notReadChatCount}` : null}
+                        {notReadChatCount > 0 ? <small>읽지않은 메세지: {notReadChatCount}</small>  : null}
                     </NoReadCount>
                 </ChatInfoBox>
             </Link>
