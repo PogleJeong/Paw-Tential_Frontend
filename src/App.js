@@ -45,10 +45,8 @@ import GroupFeed from './router/group/GroupFeed';
 import ThemedExample from "./component/chatbot";
 
 import Pawtens from "./router/pawtens/Pawtens";
-import Pawtens_detail from "./router/pawtens/Pawtens_detail";
 
 import Contest from "./router/contest/Contest";
-import Contest_detail from "./router/contest/Contest_detail";
 
 import SearchUser from "./component/SearchUser";
 import ChatroomHome from "./router/chat/ChatroomHome";
@@ -57,6 +55,7 @@ import Chatroom from "./router/chat/Chatroom";
 import NewGroupFeed from "./router/group/NewGroupFeed";
 import Search from "./router/search/Search";
 import Navbar from "./component/NavBar";
+import NewNewsFeed from "./router/group/NewNewsFeed";
 
 
 function App() {
@@ -92,14 +91,12 @@ function App() {
 
             {/* 콘테스트 */}
             <Route path="/contest" element={<Contest />} />
-            <Route path="/contest/detail" element={<Contest_detail />} />
 
             {/* 검색 */}
             <Route path="/search" element={<Search />} />
 
             {/* 포텐스 */}
             <Route path="/pawtens" element={<Pawtens />} />
-            <Route path="/pawtens/detail" element={<Pawtens_detail />} />
 
             {/* 마켓 */}
             <Route path="/market" element={<MarketHome />} />
@@ -115,7 +112,7 @@ function App() {
 
             {/* 그룹 */}
             {/* TO-DO : NewsFeed 뒤에 Member 테이블 id 붙이기 */}
-            <Route path="/group/NewsFeed" element={<NewsFeed />} />
+            <Route path="/group/NewsFeed" element={<NewNewsFeed/>} />
             <Route path="/group/CreateGroup" element={<CreateGroup />} />
             <Route path="/group/GroupList" element={<GroupList />} />
             <Route path="/group/GroupList/:search" element={<GroupList />} />

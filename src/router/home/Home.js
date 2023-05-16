@@ -7,6 +7,7 @@ import MainFeed from "../../component/MainFeed";
 
 import CreateFeedModal from './modals/CreateFeedModal';
 import ReactHtmlParser from "react-html-parser";
+import PawtenContest from "../newContest/PawtenContest";
 
 const Home = () => {
 
@@ -33,7 +34,7 @@ const Home = () => {
   }
 
   // 사용자 임시 ID
-  const userId = 'test';
+  const userId = 'contestAdmin';
 
   // 메인 - 모든 피드 불러오기
   const getAllFeed = async () => {
@@ -45,6 +46,19 @@ const Home = () => {
     .catch(function(err){
       alert(err);
     })
+  }
+
+  /* 피드 2개씩 보여주고 더보기 클릭시, 더 보여주기*/
+  const [visibleFeeds, setVisibleFeeds] = useState([]);
+  useEffect(()=>{
+    if(feeds.length > 0) {
+      const nextVisibleFeeds = feeds.slice(0,2);
+      setVisibleFeeds(nextVisibleFeeds);
+    }
+  },[feeds])
+  const handleLoadMore = () => {
+    const nextVisibleFeeds = feeds.slice(0, visibleFeeds.length +2);
+    setVisibleFeeds(nextVisibleFeeds);
   }
 
   useEffect(() => {
@@ -62,11 +76,6 @@ const Home = () => {
           <div className="col-lg-8 row m-0 p-0">
             <div className="col-sm-12">
               <div id="post-modal-data" className="card card-block card-stretch card-height">
-                <div className="card-header d-flex justify-content-between">
-                  <div className="header-title">
-                    <h4 className="card-title">CREATE POST</h4>
-                  </div>
-                </div>
                 <div className="card-body">
                   <div className="d-flex align-items-center">
                     <div className="user-img">
@@ -88,13 +97,21 @@ const Home = () => {
                 </div> {/* end of card-body */}
               </div>
             </div> {/* end of col-sm-12 */}
-            {feeds && feeds.length > 0 ? (
-              feeds.map((feed) => (
+
+            {visibleFeeds && visibleFeeds.length > 0 ? (
+              <>
+              {visibleFeeds.map((feed) => (
                 <MainFeed feedData={feed} />
-              ))
+                ))}
+                {visibleFeeds.length < feeds.length && (
+                  <button className="btn mb-1 btn-primary rounded-pill container" onClick={handleLoadMore} style={{width:"100px"}}>더보기</button>
+                )}
+              </>
             ) : <p>표시할 피드가 없습니다.</p>
             }
           </div>
+          {/*포텐 콘테스트 영역*/}
+          <PawtenContest userId={userId} />
         </div>
       </div>
     </div>

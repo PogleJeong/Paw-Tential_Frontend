@@ -17,19 +17,25 @@ export default function ModifyGroup() {
     const [displayOriginImg, setDisplayOriginImg] = useState("block");
     const [displayChanged, setDisplayChanged] = useState("none");
 
-
     // 이미지 미리보기 관련 state 변수 및 함수
     const ref = useRef();
-
-    const imgLoad = () => {
+    const handleFileUpload = () => {
         const file = ref.current.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setDisplayOriginImg("none");
-            setDisplayChanged("block");
-            setGrpImage(reader.result);
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setGrpImage(e.target.result);
+            };
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                setDisplayOriginImg("none");
+                setDisplayChanged("block");
+            }
         }
+    };
+
+    const handleUploadButtonClick = () => {
+        document.querySelector('.file-upload').click();
     }
 
     useEffect(()=>{
@@ -56,9 +62,15 @@ export default function ModifyGroup() {
         let formData = new FormData();
         formData.append("grpNo", grpNo);
         formData.append("grpName", grpName);
-        formData.append("uploadFile", document.frm.uploadFile.files[0]);
+
+        const file = document.frm.uploadFile.files[0];
+        if (file !== undefined) {
+            // 이미지를 수정한 경우에만 파일을 추가하여 formData에 전송
+            formData.append("uploadFile", file);
+        }
+
         formData.append("grpIntro", grpIntro);
-        
+
         axios.post("http://localhost:3000/group/modifyGroup", formData)
         .then(function(res){
             alert(res.data);
@@ -96,18 +108,13 @@ export default function ModifyGroup() {
                             <div className="col-sm-12">
                                 <div className="card position-relative inner-page-bg bg-primary" style={{height: "150px"}}>
                                     <div className="inner-page-title">
-                                        <h3 className="text-white">Modify Group</h3>
-                                            <p className="text-white">그룹 수정</p>
+                                        <h3 className="text-white">그룹 수정</h3>
+                                            <p className="text-white">개설한 그룹의 상태를 수정할 수 있습니다.</p>
                                     </div>
                                 </div>
                             </div> {/*end of col-sm-12*/}
                             <div className="col-sm-12 col-lg-12">
                                 <div className="card">
-                                    <div className="card-header d-flex justify-content-between">
-                                        <div className="header-title">
-                                            <h4 className="card-title">Type Here...</h4>
-                                        </div>
-                                    </div> {/*end of card-header*/}
                                     <div className="card-body">
                                         <form name="frm" onSubmit={modifyGroup} encType="multipart/form-data">
                                             <div className="form-group">
@@ -120,32 +127,34 @@ export default function ModifyGroup() {
                                                             value={grpName}
                                                 />
                                             </div>
-                                            <div className="form-group">
-                                                <label className="form-label custom-file-input">그룹 대표 이미지</label>
-                                                {grpImage &&
-                                                <div className="my-3">
-                                                    {/*원본 대표 이미지 */}
-                                                    <img src={`http://localhost:3000/uploads/${grpImage}`}
+                                            <label className="form-label custom-file-input">그룹 대표 이미지</label>
+                                            <div className="form-group row align-items-center">
+                                                <div className="col-md-12">
+                                                    <div className="profile-img-edit">
+                                                        {/*원본 이미지*/}
+                                                        <img src={`http://localhost:3000/uploads/${grpImage}`}
                                                             alt=""
-                                                            className="img-fluid rounded w-30"
+                                                            className="profile-pic w-100 h-100"
                                                             style={{display : displayOriginImg}}
-                                                            />
-                                                    {/*바뀐 대표 이미지 */}
-                                                    <img src={grpImage}
+                                                        />
+                                                         {/*바뀐 대표 이미지 */}
+                                                        <img src={grpImage}
                                                             alt=""
-                                                            className="img-fluid rounded w-30"
+                                                            className="profile-pic"
                                                             style={{display : displayChanged}}
-                                                    />
+                                                        />
+                                                        <div className="p-image">
+                                                            <i className="ri-pencil-line upload-button text-white" onClick={handleUploadButtonClick}></i>
+                                                            <input type="file"
+                                                                        className="file-upload"
+                                                                        name="uploadFile"
+                                                                        accept="*"
+                                                                        ref={ref}
+                                                                        onChange={handleFileUpload}/>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                }
-                                                <input type="file"
-                                                            className="form-control" 
-                                                            name="uploadFile"
-                                                            accept='*' 
-                                                            ref={ref}
-                                                            onChange={imgLoad}
-                                                />
-                                            </div>
+                                           </div>
                                             <div className="form-group">
                                                 <label className="form-label">그룹 소개</label>
                                                 <textarea className="form-control"
@@ -156,8 +165,8 @@ export default function ModifyGroup() {
                                                 ></textarea>
                                             </div>
                                             <div style={{align:"center"}}>
-                                                <button type="submit" className="btn btn-primary">Modify</button>
-                                                <button type="button" className="btn bg-danger mx-1" onClick={deleteGroupBtn}>Delete</button>
+                                                <button type="submit" className="btn btn-primary">수정 완료</button>
+                                                <button type="button" className="btn bg-soft-danger mx-1" onClick={deleteGroupBtn}>그룹 삭제</button>
                                             </div>
                                         </form>
                                     </div> {/*end of card-body*/}
@@ -166,32 +175,6 @@ export default function ModifyGroup() {
                         </div> {/*end of row*/}
                     </div> {/*end of container*/}
                 </div> {/*end of content-page*/}
-        {/*
-        <h1>그룹 수정하기</h1>
-        <form name="frm" onSubmit={modifyGroup} encType="multipart/form-data">
-            <div id="grpName">
-                <label htmlFor='grpName'>그룹명 :</label>
-                <br />
-                <input type="text" name="grpName" value={grpName} onChange={(e)=>setGrpName(e.target.value)} />
-            </div>
-            <div id="grpImage">
-                <label htmlFor='grpImage'>그룹 대표 이미지 :</label>
-                <br />
-                <input type="file" name="uploadFile" accept='*'/>
-            </div>
-            <div id="grpIntro">
-                <label htmlFor='grpName'>그룹 소개 :</label>
-                <br />
-                <input type="text" name="grpIntro" value={grpIntro} onChange={(e)=>setGrpIntro(e.target.value)}/>
-            </div>
-            <br />
-            <button type="submit">그룹 수정</button>
-            &nbsp;
-            <button type="button" onClick={deleteGroupBtn}>그룹 삭제</button>
-        </form>
-        <br />
-        */}
-
         </>
     )
 

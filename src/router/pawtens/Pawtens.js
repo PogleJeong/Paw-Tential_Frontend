@@ -16,7 +16,7 @@ function Pawtens(){
         infinite: true, // 무한 캐러셀
         autoplay: false, // 자동 캐러셀
         draggable: true, // 드래그      
-        arrows: true, // 좌,우 버튼
+        arrows: false, // 좌,우 버튼
         vertical: false, // 세로 캐러셀
         centerPadding: '0px' // 중앙 컨텐츠 padding 값
     };
@@ -65,8 +65,8 @@ function Pawtens(){
                     <video controls>
                         <source src={"http://localhost:3000/../upload/pawtens/" + props.pawtens.filename} type="video/mp4" />
                     </video>
-                    <p style={{margin:"15px auto 0 100px"}}>{props.pawtens.content}</p>
-                    <div class="d-flex justify-content-between" style={{margin:"15px auto 0 100px"}}>
+                    <p style={{margin:"15px auto 0 30px"}}>{props.pawtens.content}</p>
+                    <div class="d-flex justify-content-between" style={{margin:"15px auto 0 30px"}}>
                         <div class="me-3"><img class="rounded-circle img-fluid profile" src={"../feedimages/" + props.pawtens.profile + ".png"} alt="포텐스작성자프로필"/></div>
                         <div class="w-100"><div class="d-flex justify-content-between">
                             <div class="">
@@ -86,18 +86,6 @@ function Pawtens(){
         )
     });
 
-
-
-    // 결과 목록
-    const pawtensListMap = pawtensList.map((pawtens, i) => {
-        return(
-            <div>
-                
-            </div>
-        )
-    });
-
-
     useEffect(function(){
         getPawtenslist();
     }, []);
@@ -107,21 +95,23 @@ function Pawtens(){
     }
 
     return (
-        <div>
-            <h1>포텐스</h1>
-            <div className="pawtens">
-                { pawtensList.length !== 0
-                    ?
-                    <Slider {...settings}>
-                        {pawtensList.map((pawtens, i) => (
-                            <PawtensItem key={i} pawtens={pawtens} />
-                        ))}
-                    </Slider> 
-                    : 
-                    <p>포텐스 항목이 없습니다.</p>
-                }
+        <>
+            <div className="container mt-3">
+                <h1>Pawtens</h1>
+                <div className="pawtens mt-3">
+                    { pawtensList.length !== 0
+                        ?
+                        <Slider {...settings}>
+                            {pawtensList.map((pawtens, i) => (
+                                <PawtensItem key={i} pawtens={pawtens} />
+                            ))}
+                        </Slider> 
+                        : 
+                        <p>포텐스 항목이 없습니다.</p>
+                    }
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
