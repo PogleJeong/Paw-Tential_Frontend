@@ -8,6 +8,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
 import { styled, keyframes } from "styled-components";
 
+import { useInput, maxLen } from '../../utils/UseHook';
+import dataURLtoFile from '../../utils/DataURL2File';
 import UploadAdapter from '../../utils/UploadAdaptor';
 import KakaoMapUpdate from './components/GeoAPI3';
 import './style/style.css';
@@ -25,14 +27,26 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
-    margin: 0px;
+    flex-wrap: wrap;
+    margin: 50px 10%;
     padding: 100px;
     width: 80%;
-    height: 1600px;
+    height: 1900px;
 
     animation: ${fadeIn} 2s;
 `;
+
+const FlexBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 450px;
+    min-height: 60px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 2px 3px 5px 0px;
+
+`
 
 const Wrappers = styled.div`
     width: 1000px;
@@ -50,17 +64,18 @@ const HeaderWrapper = styled.div`
 
 const ImageBox= styled.div`
     width: 450px;
-    height: 450px;
+    height: 430px;
     text-align: center;
 `;
 
 const Title = styled.h1`
     font-size: 30px;
     text-align: center;
-    padding: 30px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-    background-color: #99FFCC;
+    margin-bottom: 10px;
+    padding: 20px;
+    border-bottom: 3px solid black;
+    
+    color: black;
 `;
 
 const Label = styled.label`
@@ -73,11 +88,10 @@ const Label = styled.label`
 `;
 
 const Thumbnail = styled.img`
-    width: 400px;
+    width: 450px;
     height: 400px;
-    border: 5px solid black;
-    border-radius: 40px;
-`
+    border: 5px solid whitesmoke;
+`;
 
 const FileName = styled.span`
     display: inline-block;
@@ -169,38 +183,28 @@ const FooterWrapper = styled.div`
 
 const WriteBtn = styled.button`
     width: 100px;
+    margin: 0px 60px;
     height: 40px;
     border: none;
     border-radius: 10px;
-    background-color: blue;
+    background-color: saddlebrown;
+
+    transition: scale 1s;
+    &:hover {
+        scale: 0.9;
+        box-shadow: 2px 3px 5px 0px;
+    }
 `;
 
-const stateList = ["--분류--","나눔", "판매"];
-const categories = ["--카테고리--", "완구류", "침구류", "간식류", "주식", "음료", "기타"];
-const conditionList = ["--제품상태--","최상","상","중","하"];
+const stateList = ["-분류-","나눔", "판매"];
+const categories = ["-카테고리-", "완구류", "침구류", "간식류", "주식", "음료", "기타"];
+const conditionList = ["-제품상태-","최상","상","중","하"];
 
 function MyCustomUploadAdapterPlugin(editor) {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
         return new UploadAdapter(loader)
     }
 }
-
-const useInput = (initialValue, validator, valid) => {
-    const [ value, setValue ] = useState(initialValue);
-    const onChange = (event) => {
-        const value = event.currentTarget.value;
-        let willUpdate = true;
-        if (typeof validator === "function") {
-            willUpdate = validator(value, valid);
-            if( willUpdate) {
-                setValue(value);
-            }
-        }
-    }
-    return { value, onChange };
-}
-
-const maxLen = (value, valid) => ( value.length <= valid );
 
 const MarketUpdate = () => {
     // Link state 로 데이터를 보내고 useLocation 을 통해 받음.
@@ -219,8 +223,8 @@ const MarketUpdate = () => {
     const updateConditions = useInput(conditions, maxLen, 45);
     const [ updateGeoLat, setUpdateGeoLat ]= useState(geoLat);
     const [ updateGeoLng, setUpdateGeoLng ]= useState(geoLng);
-    const imgRef = useRef();
     const [ imgFile, setImgFile ] = useState(`data:image/jpeg;base64,${imgInfo}`);
+    const imgRef = useRef();
     const filenameRef = useRef();
     const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID","USER_NICKNAME"]);
     const navigate = useNavigate();
@@ -271,7 +275,7 @@ const MarketUpdate = () => {
             alert("제품개수를 확인해주세요");
             return;
         }
-        if (!imgRef.current.files[0]) {
+        if (!imgFile) {
             alert("대표이미지를 선택해주세요");
             return;
         }
@@ -291,8 +295,12 @@ const MarketUpdate = () => {
         }
 
         const formData = new FormData();
-        formData.append("file", imgRef.current.files[0])
+    
         formData.append("marketInfo", new Blob([JSON.stringify(updateMarketInfo)], {type: "application/json"}))
+        let file = dataURLtoFile(imgFile,"image.jpeg")
+        formData.append("file", file)
+        
+        
         await axios.post("http://localhost:3000/market/update", formData, {"Content-type": "multipart/form-data"})
         .then((response) =>{
             if (response.data === "MARKET_UPDATE_NO") {
@@ -318,7 +326,7 @@ const MarketUpdate = () => {
                 <Title>Market 수정하기</Title>
                 <HeaderWrapper>
                 <ImageBox>
-                        <Thumbnail src={imgFile} alt="" /><br/>
+                        <Thumbnail  src={imgFile} alt="" /><br/>
                         <FileName ref={filenameRef}>첨부파일</FileName>
                         <FileLabel>파일찾기
                             <FileBtn ref={imgRef} onChange={onLoadFile} />
@@ -384,9 +392,11 @@ const MarketUpdate = () => {
                 </BodyWrapper>
                 <FooterWrapper>
                     <KakaoMapUpdate setUpdateGeoLat={setUpdateGeoLat} setUpdateGeoLng={setUpdateGeoLng} prevLat={geoLat} prevLng={geoLng}/>
-                    <WriteBtn onClick={marketUpdate}>수정하기</WriteBtn>
                 </FooterWrapper>
             </Wrappers>
+            <FlexBox>
+                <WriteBtn onClick={marketUpdate}>수정하기</WriteBtn>
+            </FlexBox>
         </Container>
     );
 };

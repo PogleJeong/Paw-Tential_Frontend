@@ -17,7 +17,7 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_detail";
+import Place_detail from "./router/place/Place_Detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import Myfeed2 from "./router/myfeed/Myfeed2";
@@ -27,7 +27,7 @@ import MarketHome from "./router/market/Market_home";
 import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
-import FindAccount from './router/login/findAccount';
+import FindAccount from './router/login/FindAccount';
 
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';

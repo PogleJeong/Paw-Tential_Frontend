@@ -7,7 +7,7 @@ import Geolocation from '@react-native-community/geolocation';
 
 const MapContainer = styled.div`
     width: 500px;
-    height: 250px;
+    height: 350px;
     box-shadow: 2px 3px 5px 0px;
 `
 
@@ -16,7 +16,6 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
 
     const mapContentRef = useRef();
     const addressRef = useRef();
-    const infoRef = useRef();
 
     useEffect(()=>{
         // 초기설정 - 일단 위도경도를 정해놓고 로드시 현재위치로 이동됨.
@@ -98,7 +97,7 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
             // 좌표로 법정동 상세 주소 정보를 요청합니다
             geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
         }
-        console.log("랜더링");
+     
         // 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
         function displayCenterInfo(result, status) {
             if (status === kakao.maps.services.Status.OK) {
@@ -106,7 +105,6 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
                 for(let i = 0; i < result.length; i++) {
                     // 행정동의 region_type 값은 'H' 이므로
                     if (result[i].region_type === 'H') {
-                        infoRef.current.innerText = result[i].address_name;
                         break;
                     }
                 }
@@ -123,10 +121,10 @@ const KakaoMapWrite = ({ setGeoLat, setGeoLng }) => {
     
     return(
         <div>
-            <span ref={addressRef}></span>
+            
             <MapContainer ref={mapContentRef} ></MapContainer>
             <div>
-                <span ref={infoRef}></span>
+                <span ref={addressRef}></span>
             </div>
         </div>
     )
