@@ -33,12 +33,12 @@ const SearchFeed = (prop) => {
   // props로 받은 데이터 중, 이미지 데이터만 추려서 배열에 담기
   const [photo, setPhoto] = useState([]);
 
-  const getPhoto = () => {
+  const getPhoto = (content) => {
     const regex = /<img src="([^"]+)"/g;
     const urls = [];
 
     let match;
-    while ((match = regex.exec(feed.content)) !== null) {
+    while ((match = regex.exec(content)) !== null) {
       urls.push(match[1]);
     }
 
@@ -49,8 +49,7 @@ const SearchFeed = (prop) => {
   // props로 받은 데이터 중, 이미지 제외한 데이터만 추려서 배열에 담기
   const [noPhoto, setNoPhoto] = useState([]);
 
-  const getNoPhoto = () => {
-    const content = feed.content;
+  const getNoPhoto = (content) => {
 
     const regex = /<img.*?>|<figure.*?>|<\/figure>/gi;
     const result = content.replace(regex, '');
@@ -61,9 +60,9 @@ const SearchFeed = (prop) => {
   // 상세 페이지로 넘겨줄 댓글 리스트
   const [commentList, setCommentList] = useState([]);
 
-  const getCommentList = async () => {
+  const getCommentList = async (seq) => {
     try {
-      const response = await axios.get("http://localhost:3000/home/getCommentList", { params: { "feedSeq": feed.seq } });
+      const response = await axios.get("http://localhost:3000/home/getCommentList", { params: { "feedSeq": seq } });
       const data = response.data.commentList;
       setCommentList(data);
     } catch (error) {
@@ -74,14 +73,12 @@ const SearchFeed = (prop) => {
   const handleClick = async (seq) => {
     try {
       const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
-      const data = response.data;
-      console.log('피드 데이터:', data);
-      setFeed(data);
-      getPhoto();
-      getNoPhoto();
-      getCommentList();
+      setFeed(response.data);
+      getPhoto(response.data.content);
+      getNoPhoto(response.data.content);
+      getCommentList(response.data.seq);
       setFeedDetailModal(true);
-      console.log('피드 데이터:', data);
+      console.log('피드 데이터:', response.data);
     } catch (error) {
       console.log(error);
     }
@@ -133,11 +130,11 @@ const SearchFeed = (prop) => {
       {feedDetailModal && 
         <FeedDetailModal
           show={feedDetailModal}
-          onHide={() => setFeedDetailModal(false)}
+          onHide={() => {setFeedDetailModal(false);}}
           feedData={feed}
           photo={photo}
           noPhoto={noPhoto}
-          getComment={getCommentList}
+          getComment={()=>{getCommentList(feed.seq)}}
         />
       }
       <div class="friend-list-tab">
