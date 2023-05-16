@@ -127,12 +127,12 @@ const Myfeed = () => {
   // props로 받은 데이터 중, 이미지 데이터만 추려서 배열에 담기
   const [photo, setPhoto] = useState([]);
 
-  const getPhoto = () => {
+  const getPhoto = (content) => {
     const regex = /<img src="([^"]+)"/g;
     const urls = [];
 
     let match;
-    while ((match = regex.exec(feed.content)) !== null) {
+    while ((match = regex.exec(content)) !== null) {
       urls.push(match[1]);
     }
 
@@ -143,8 +143,7 @@ const Myfeed = () => {
   // props로 받은 데이터 중, 이미지 제외한 데이터만 추려서 배열에 담기
   const [noPhoto, setNoPhoto] = useState([]);
 
-  const getNoPhoto = () => {
-    const content = feed.content;
+  const getNoPhoto = (content) => {
 
     const regex = /<img.*?>|<figure.*?>|<\/figure>/gi;
     const result = content.replace(regex, '');
@@ -155,9 +154,9 @@ const Myfeed = () => {
   // 상세 페이지로 넘겨줄 댓글 리스트
   const [commentList, setCommentList] = useState([]);
 
-  const getCommentList = async () => {
+  const getCommentList = async (seq) => {
     try {
-      const response = await axios.get("http://localhost:3000/home/getCommentList", { params: { "feedSeq": feed.seq } });
+      const response = await axios.get("http://localhost:3000/home/getCommentList", { params: { "feedSeq": seq } });
       const data = response.data.commentList;
       setCommentList(data);
     } catch (error) {
@@ -170,10 +169,10 @@ const Myfeed = () => {
       const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
       const data = response.data;
       console.log('피드 데이터:', data);
-      setFeed(data); 
-      getPhoto(data.seq);
-      getNoPhoto(data.seq);
-      getCommentList(data.seq);
+      setFeed(response.data);
+      getPhoto(response.data.content);
+      getNoPhoto(response.data.content);
+      getCommentList(response.data.seq);
       setFeedDetailModal(true);
       console.log('피드 데이터:', data);
     } catch (error) {
@@ -191,77 +190,85 @@ const Myfeed = () => {
           <ProfileCard userInfo={userInfo} isCurrentUser={true} />
         </>
       )}
-  
-      <div className="feed-container">
-      <div className="feed-categories">
-      <div className="feed-category">
-  {/* 홈 아이콘 (마이피드) */}
-  <div className="category-icon" onMouseOver={(e) => (e.target.style.cursor = 'pointer')} onClick={handleHomemarkClick}>
-  <AiFillHome size={40} />
-</div>
-</div>
-<div className="feed-category-divider">
-  <div className="divider-line"></div>
-</div>
 
-<div className="feed-category">
-  {/* 북마크 아이콘 (북마크 피드) */}
-  <div
-    className="category-icon"
-    onMouseOver={(e) => (e.target.style.cursor = 'pointer')}
-    onClick={handleBookmarkClick}
-  >
-    <BiBookmark size={40} />
-  </div>
-</div>
-</div>
-{feedDetailModal && 
-        <FeedDetailModal
-          show={feedDetailModal}
-          onHide={() => setFeedDetailModal(false)}
-          feedData={feed}
-          photo={photo}
-          noPhoto={noPhoto}
-          getComment={getCommentList}
-        />
-      }
-  
-<div className="myfeedimg-container">
-    {loadedFeed.map((feedData, i) => {
-      if (loadedFeed.length === i + 1) {
-        return (
-          <div className="myfeedimg img" ref={lastFeedElementRef} key={i} >
-                       <a href="javascript:void(0);" onClick={()=>{handleClick(feedData.seq)}}>
 
-            <FeedImage content={feedData.content} />
-          </a>
+          <div className="feed-category">
+            <div
+              className="category-icon"
+              onMouseOver={(e) => (e.target.style.cursor = 'pointer')}
+              onClick={handleHomemarkClick}
+            >
+              <AiFillHome size={40} />
+            </div>
           </div>
-        );
-      } else {
-        return (
-          <div className="myfeedimg img" key={i}>
-                       <a href="javascript:void(0);" onClick={()=>{handleClick(feedData.seq)}}>
-
-<FeedImage content={feedData.content} />
-</a>
-</div>
-        );
-      }
-    })}
-  </div>
+          <div className="feed-category">
+            <div
+              className="category-icon"
+              onMouseOver={(e) => (e.target.style.cursor = 'pointer')}
+              onClick={handleBookmarkClick}
+            >
+              <BiBookmark size={40} />
+            </div>
+          </div>
 
 
-  {loading && (
-    <div className="loading-container">
-      <div className="loader"></div>
-    </div>
-  )}
-</div>
-    </div>
+        {feedDetailModal && (
+          <FeedDetailModal
+            show={feedDetailModal}
+            onHide={() => setFeedDetailModal(false)}
+            feedData={feed}
+            photo={photo}
+            noPhoto={noPhoto}
+            getComment={() => getCommentList(feed.seq)}
+          />
+        )}
+
+        <div className="card">
+          <div className="card-body">
+            <div className="friend-list-tab">
+              <div className="tab-content">
+                <div className="tab-pane fade active show" id="photosofyou" role="tabpanel">
+                  <div className="card-body p-0">
+                    <div className="d-grid gap-2 d-grid-template-1fr-13">
+                      {loadedFeed.map((feedData, i) => {
+                        if (loadedFeed.length === i + 1) {
+                          return (
+                            <div className="myfeeditem" key={i}>
+                              <div className="user-images position-relative overflow-hidden" ref={lastFeedElementRef}>
+                                <a href="javascript:void(0);" onClick={() => { handleClick(feedData.seq) }}>
+                                  <FeedImage content={feedData.content} />
+                                </a>
+                              </div>
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div className="myfeeditem" key={i}>
+                              <div className="user-images position-relative overflow-hidden">
+                                <a href="javascript:void(0);" onClick={() => { handleClick(feedData.seq) }}>
+                                  <FeedImage content={feedData.content} />
+                                </a>
+                              </div>
+                            </div>
+                          );
+                        }
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {loading && (
+              <div className="loading-container">
+                <div className="loader"></div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
   );
-
-  
-  
 };
 
 export default Myfeed;
