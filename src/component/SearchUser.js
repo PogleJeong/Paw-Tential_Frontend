@@ -21,6 +21,7 @@ const SearchUser = (prop) => {
     }
 
     // 검색어가 변경될 때마다 검색을 수행
+
 const userId = prop.keyword;
 
 

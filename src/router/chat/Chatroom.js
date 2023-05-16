@@ -110,7 +110,9 @@ const Chatroom = () => {
     const [ otherNick, setOtherNick ] = useState("");
     const messageRef = useRef(null);
     const [ message, setMessage ] = useState("");
+    const chatWrapperRef = useRef();
     const { chatroomID, sender, recipient } = location.state;
+
 
     useEffect(()=>{
 
@@ -174,7 +176,6 @@ const Chatroom = () => {
                 isViewed: "0",
                 message,
             }
-            console.log(JSON.stringify(chatInfo));
             //stomp.send(path, body, header) : body 부분에 chatInfo 들어가야함.
             stomp.send("/pub/chat/send",JSON.stringify(chatInfo));
             saveChat();
@@ -182,6 +183,9 @@ const Chatroom = () => {
     },[message])
 
     useEffect(()=>{
+        const element = chatWrapperRef.current;
+        element.scrollTop = element.scrollHeight;
+
         const viewChat = async() => {
             await axios.post("http://localhost:3000/chat/view", null, {params: {
                 chatroomID,
@@ -212,7 +216,7 @@ const Chatroom = () => {
             <ChatContainer>
                 <ChatTitle>{otherNick} 님과의 대화</ChatTitle>
                 {/* chat container */}
-                <ChatWrapper>
+                <ChatWrapper ref={chatWrapperRef}>
                 
                 { receiveChatInfo.map((chatInfo, index)=> (
                     chatInfo.sender === sender ? 

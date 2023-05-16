@@ -247,9 +247,7 @@ const Place_detail = () => {
                             }
                             <h3>주소</h3>
                             <p>{placeAddress}</p>
-                            <button className="btn btn-primary mx-1">정보 상세보기</button>
-                            <button className="btn btn-secondary mx-1">정보 상세보기</button>
-                            <button className="btn btn-success mx-1">정보 상세보기</button>
+                            <button className="btn btn-primary"><Link to={placeUrl} target="_blank">정보 상세보기</Link></button>
                             <br/><br/><hr/>
                             <div className="palce_review">
                                 <h1>포텐 리뷰</h1>
