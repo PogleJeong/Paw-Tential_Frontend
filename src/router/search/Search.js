@@ -27,7 +27,7 @@ function Search(){
                     <div class="card">
                     <div class="card-body">
                         <div class="iq-todo-page">
-                            <form class="position-relative">
+                            <div class="position-relative">
                                 <div class="form-group mb-0">
                                 <Input.Search
                                     placeholder="Search"
@@ -36,7 +36,7 @@ function Search(){
                                     onSearch={searchBtn}
                                 />
                                 </div>
-                            </form>
+                            </div>
                             {/* 유저 검색 목록 */}
                             <SearchUser keyword={search} />
                         </div>
