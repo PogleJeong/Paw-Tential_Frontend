@@ -113,7 +113,8 @@ const RightAlignBox = styled.div`
     justify-content: right;
 `
 
-function MarketReport({writer, setActiveReportModal}) {
+function MarketReport({writer, setActiveReportModal, market_seq}) {
+    console.log('마켓 번호 '+ market_seq);
     const title = useInput("", maxLen, 45);
     const category = useInput("--전체--", maxLen, 45);
     const content = useInput("", maxLen, 500);
@@ -121,12 +122,9 @@ function MarketReport({writer, setActiveReportModal}) {
     const location = useLocation();
     
     const sendReport = async() => {
+        const type = "마켓";
         const reporter = cookies.USER_ID;
         const { pathname } = location;
-        if (!title.value) {
-            alert("신고제목을 입력해주세요.");
-            return;
-        }
         if (!reporter) {
             alert("로그인 후 진행해주세요");
             return;
@@ -139,22 +137,25 @@ function MarketReport({writer, setActiveReportModal}) {
             alert("신고내용을 입력해주세요.");
             return;
         }
-        await axios.post("http://localhost:3000/market/report", null, {params: {
-            title: title.value,
-            reporter,
-            reported: writer,
-            category: category.value,
-            content: content.value,
-            url: pathname,
+
+        await axios.post("http://localhost:3000/sendReport", null, {params: {
+          
+                'reported': writer,
+                'reporter': reporter,
+                'content': content.value,
+                'rtype': category.value,
+                'type': type,
+                'market_seq' : market_seq
+              
         }})
         .then((response) => {
             if (response.status === 200){
-                if (response.data === "REPORT_MARKET_OK"){
+                if (response.data === "YES"){
                     alert("신고되었습니다.");
                     setActiveReportModal(false);
                     return;
                 }
-                if( response.data === "REPORT_MARKET_NO"){
+                if( response.data === "NO"){
                     alert("신고실패!!");
                 }
             }
@@ -168,8 +169,6 @@ function MarketReport({writer, setActiveReportModal}) {
         <Container >
             <Title>해당 게시물 신고</Title>
             <HeaderWrapper>
-                <Label>신고제목</Label>
-                <InputBox {...title} placeholder="신고제목(45글자)"/><br/>
                 <Label>신고분류</Label>
                 <SelectBox {...category}>
                     <option>-전체-</option>

@@ -27,7 +27,7 @@ import MarketHome from "./router/market/Market_home";
 import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
-import FindAccount from './router/login/FindAccount';
+import FindAccount from './router/login/findAccount';
 
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';
@@ -36,12 +36,10 @@ import Users from './router/admin/Users';
 import Data from './router/admin/Data';
 
 
-import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
 import GroupList from './router/group/GroupList';
 import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
-import GroupFeed from './router/group/GroupFeed';
 import ThemedExample from "./component/chatbot";
 
 import Pawtens from "./router/pawtens/Pawtens";
@@ -66,8 +64,7 @@ function App() {
       <BrowserRouter>
       <div className="wrapper">
           {/* 사이드메뉴 */}
-
-          { window.location.pathname === "/admin/admin" ? <AdminSidebar /> :  <Navbar />}
+          {window.location.pathname.startsWith("/admin") ? <AdminSidebar /> : <Navbar />}
           {/*쳇봇*/}
           {/* <ThemedExample/> */}
 
@@ -137,7 +134,7 @@ function App() {
 
             {/* 채팅 */}
             <Route path="/chat/home" element={<ChatroomHome />} />
-            <Route path="/chat/:id" element={<Chatroom />} />            {/* 검색 */}
+            <Route path="/chat/:id" element={<Chatroom />} />
 
 
             {/* 마이피드 */}
@@ -151,7 +148,7 @@ function App() {
       </BrowserRouter>
 
       {/* footer */}
-      <footer style={{ position: 'fixed', left: 0, bottom: 0, width: '100%', backgroundColor: '#f5f5f5', textAlign: 'center' }}>
+      <footer style={{ position: 'fixed', left: 0, bottom: 0, width: '100%', backgroundColor: '#cee0c2', textAlign: 'center', zIndex: 1 }}>
       <div>
         <p>
           <small>&copy; Paw-Tential</small>

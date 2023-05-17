@@ -17,14 +17,13 @@ const MyfeedDropdown_others = ({ id }) => {
 
   return (
     <>
-      <ul style={{ position: "absolute", backgroundColor: "white" }}>
-        <li>차단</li>
+      <ul style={{ position: "absolute", backgroundColor: "white", border:"1px solid #ccc" }}>
         <Link to='#' className="nav-link" onClick={handleOpenReportModal}>
             신고
       </Link>
       </ul>
 
-      {showReportModal && <ReportModal show={showReportModal} onClose={handleCloseReportModal} id={id} userId={cookies.USER_ID} />}
+      {showReportModal && <ReportModal show={showReportModal} onClose={handleCloseReportModal} id={id} userId={cookies.USER_ID} type={'유저'} />}
     </>
   );
 };

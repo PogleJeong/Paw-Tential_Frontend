@@ -118,6 +118,19 @@ useEffect(() => {
     nickCheckMsgRef.current.innerText = checkRegExp(value, nickRegExp) ? null : "영문숫자조합 2~10 글자 가능합니다.";
   }, [nick.value]);
 
+
+  const nextPage = async () => {
+    // 입력값
+    const password = passwordRef.current.value;
+    const email = emailRef.current.value;
+    const nick = nickRef.current.value;
+    const number = numberRef.current.value;
+
+    // 정규식
+    const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
+    const nickRegExp = /^[가-힣a-zA-Z0-9]+$/;
+
+    
   const editMember = async (userInfo) => {
     try {
       const formData = new FormData();
@@ -138,17 +151,6 @@ useEffect(() => {
       // 오류 처리
     }
   };
-
-  const nextPage = async () => {
-    // 입력값
-    const password = passwordRef.current.value;
-    const email = emailRef.current.value;
-    const nick = nickRef.current.value;
-    const number = numberRef.current.value;
-
-    // 정규식
-    const pwdRegExp = /(?=.*[a-zA-ZS])(?=.*?[#?!@$%^&*-]).{8,24}/;
-    const nickRegExp = /^[가-힣a-zA-Z0-9]+$/;
 
     // 1. 정보가 모두 입력되었는가
 
@@ -215,8 +217,8 @@ useEffect(() => {
 
   
 
-
     editMember(userInfo);
+
     // useNavigator 으로 데이터보내기 => useLocation 로 데이터 받기
     navigate("/myfeed/myfeed", {
       state: {
@@ -305,10 +307,12 @@ const handleProfilePictureChange = (event) => {
 
 
   return (
-    <div>
-    <label>프로필 사진</label>
-    <br />
-    <br />
+    <div className="container mt-3">
+<div class="card-header d-flex justify-content-between">
+                                    <div class="header-title">
+                                        <h4 class="card-title">회원 정보 수정</h4>
+                                    </div>
+                                </div>
 
     {previewUrl && (
       <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -356,41 +360,42 @@ const handleProfilePictureChange = (event) => {
     </Modal>
       <br />
       <label>
-        아이디<p>{id.value}</p>
-      </label>
-      <small ref={idCheckMsgRef}></small>
-      <br />
-      <label>비밀번호<input ref={passwordRef} {...password} type="password" placeholder='특수문자를 포함하는 8~24 자리의 비밀번호' required/></label><br/>
-      <small ref={pwdRegExpRef}></small><br/>
-       <label>비밀번호 확인<input ref={confirmRef} type="password" onChange={confirmPassword} required/></label><br/>
-       <small ref={pwdCheckMsgRef}></small><br/>
+        아이디
+      <h5>{id.value}</h5>
 
-      <label>
-        이메일<input ref={emailRef} {...email} type="email" required />
       </label>
       <br />
-      <small ref={emailRegExpRef}></small>
-      <br />
+            <br/>
       <label>
-        닉네임<input ref={nickRef} {...nick} required />
+        닉네임<input class="form-control" ref={nickRef} {...nick} required />
       </label>
-      <button onClick={checkNickname}>중복확인</button>
-      <br />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button class='btn btn-primary me-2' onClick={checkNickname}>중복확인</button>
       <small ref={nickCheckMsgRef}></small>
-      <br />
-      <div>
+      <br /><br />
+      <label>비밀번호<input class="form-control" ref={passwordRef} {...password} type="password" placeholder='특수문자를 포함하는 8~24 자리의 비밀번호' required/></label>
+      <small ref={pwdRegExpRef}></small>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+       <label>비밀번호 확인<input class="form-control" ref={confirmRef} type="password" onChange={confirmPassword} required/></label><br/>
+       <small ref={pwdCheckMsgRef}></small>
+       <br />
+      <label>
+        이메일<input class="form-control" ref={emailRef} {...email} type="email" required />
+      </label>
+      <small ref={emailRegExpRef}></small>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+
         <label>
-          전화번호<input ref={numberRef} {...number} required />
+          전화번호<input class="form-control" ref={numberRef} {...number} required />
         </label>
-        <br />
-      </div>
+
+
       <br />
       <label>소개</label>
-      <input {...intro} required />
+      <textarea class="form-control" rows="4" {...intro} required />
       <br />
-      <br />
+      <button class="btn btn-secondary me-2" onClick={nextPage}>정보수정</button>
 
-      <button onClick={nextPage}>정보수정</button>
     </div>
   );
 };

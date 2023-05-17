@@ -20,7 +20,7 @@ function Search(){
     }, []);
 
     return (
-        <div className="container mt-3">
+        <div className="container mt-4">
             <div className="row search">
 
                 <div class="col-lg-3">
@@ -48,7 +48,7 @@ function Search(){
                     <div class="card">
                     <div class="card-body">
                         {/* 피드 검색 목록 */}
-                        <SearchFeed keyword={searchFeed} />
+                        <SearchFeed keyword={searchFeed}/>
                     </div>
                     </div>
                 </div>

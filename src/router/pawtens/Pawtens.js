@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import "../../styles/pawtens.css";
@@ -22,6 +23,8 @@ function Pawtens(){
     };
     // 데이터를 모두 읽을 때까지 rendering 조절하는 변수
     const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     // 포텐스 목록 불러오기
     function getPawtenslist() {
@@ -59,18 +62,22 @@ function Pawtens(){
             })
         }
 
+        const handleUserClick = (userId) => {
+            navigate(`/myfeed/myfeed2/${userId}`); // Navigate to the user's MyFeed page
+        };
+
         return(
             <>
                 <div className="pawtensItem">
-                    <video controls>
+                    <video id="pawtensId" controls>
                         <source src={"http://localhost:3000/../upload/pawtens/" + props.pawtens.filename} type="video/mp4" />
                     </video>
                     <p style={{margin:"15px auto 0 30px"}}>{props.pawtens.content}</p>
                     <div class="d-flex justify-content-between" style={{margin:"15px auto 0 30px"}}>
-                        <div class="me-3"><img class="rounded-circle img-fluid profile" src={"../feedimages/" + props.pawtens.profile + ".png"} alt="포텐스작성자프로필"/></div>
+                        <div class="me-3"><img class="rounded-circle img-fluid profile" src={"http://localhost:3000/" + props.pawtens.profile} alt="포텐스작성자프로필"/></div>
                         <div class="w-100"><div class="d-flex justify-content-between">
                             <div class="">
-                                <h5 class="mb-0 d-inline-block"><a href="#" class="">{props.pawtens.nickname}</a></h5>
+                                <h5 class="mb-0 d-inline-block"><a href="#" onClick={() => handleUserClick(props.pawtens.id)}>{props.pawtens.nickname}</a></h5>
                                 <p class="mb-0"><i class="ri-global-line pe-1"></i>{props.pawtens.date_created !== null && props.pawtens.date_created.substring(0, 10)}</p>
                             </div>
                             <div onClick={()=>{likeHandler(props.pawtens.seq)}} class="like-block d-flex align-items-center pawtens-like">
@@ -98,8 +105,8 @@ function Pawtens(){
         <>
             <div className="container mt-3">
                 <h1>Pawtens</h1>
-                <div className="pawtens mt-3">
-                    { pawtensList.length !== 0
+                <div className="pawtens mt-3 mb-5">
+                    { pawtensList && pawtensList.length !== 0
                         ?
                         <Slider {...settings}>
                             {pawtensList.map((pawtens, i) => (
@@ -107,7 +114,7 @@ function Pawtens(){
                             ))}
                         </Slider> 
                         : 
-                        <p>포텐스 항목이 없습니다.</p>
+                        <p style={{textAlign:"center"}}>포텐스 항목이 없습니다.</p>
                     }
                 </div>
             </div>

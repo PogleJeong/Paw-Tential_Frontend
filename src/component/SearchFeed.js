@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "react-js-pagination";
-import { FeedImage } from "./FeedData";
+import { PreFeedImage } from "./FeedData";
 import { useNavigate } from 'react-router-dom';
 import FeedDetailModal from "../router/home/modals/FeedDetailModal";
 
@@ -88,17 +88,17 @@ const SearchFeed = (prop) => {
   const feedListMap = feedList.map((feed, i) => {
     return(
       <>
-        <div class="searchItem" key={i}>
+        <div class="col-4 searchItem" style={{marginBottom: "0.95rem"}} key={i}>
           <div class="user-images position-relative overflow-hidden">
             <a href="javascript:void(0);" onClick={()=>{handleClick(feed.seq)}}>
-              <FeedImage content={feed.content}/>
+              <PreFeedImage content={feed.content}/>
             </a>
             <div class="image-hover-data">
                 <div class="product-elements-icon">
                   <ul class="d-flex align-items-center m-0 p-0 list-inline">
-                      <li><a href="#" class="pe-3 text-white"> 60 <i class="ri-thumb-up-line"></i> </a></li>
-                      <li><a href="#" class="pe-3 text-white"> 30 <i class="ri-chat-3-line"></i> </a></li>
-                      <li><a href="#" class="pe-3 text-white"> 10 <i class="ri-bookmark-line"></i> </a></li>
+                      <li><span class="pe-3 text-white">{feed.FAVORITECOUNT !== undefined ? feed.FAVORITECOUNT : 0}<i class="ri-thumb-up-line"></i> </span></li>
+                      <li><span href="#" class="pe-3 text-white">{feed.COMMENTCOUNT !== undefined ? feed.COMMENTCOUNT : 0}<i class="ri-chat-3-line"></i> </span></li>
+                      <li><span href="#" class="pe-3 text-white">{feed.BOOKMARKCOUNT !== undefined ? feed.BOOKMARKCOUNT : 0}<i class="ri-bookmark-line"></i> </span></li>
                   </ul>
                 </div>
             </div>
@@ -138,18 +138,22 @@ const SearchFeed = (prop) => {
         />
       }
       <div class="friend-list-tab">
-          <div class="tab-content">
+          <h3>{ prop.keyword && prop.keyword !== "" ? "ฅ" + prop.keyword + "ฅ" : "인기" } 피드</h3>
+          <div class="tab-content mt-2">
           <div class="tab-pane fade active show" id="photosofyou" role="tabpanel">
               <div class="card-body p-0">
-                  <div class="d-grid gap-2 d-grid-template-1fr-13">
-                    {feedListMap}
+                  <div class="row justify-content-start">
+                  { feedList && feedList.length !== 0
+                    ? feedListMap
+                    : <p style={{textAlign:"center"}}>검색 결과가 없습니다.</p>
+                  }
                   </div>
               </div>
           </div>
           </div>
       </div>
       
-      <div className="mt-3">
+      <div className="mt-2">
         <Pagination
             activePage={page}           // 현재 페이지
             itemsCountPerPage={12}      // 보여줄 페이지 수

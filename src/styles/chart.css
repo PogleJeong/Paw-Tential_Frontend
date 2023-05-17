@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 200px 1fr;
   gap: 20px;
-  padding-left: 200px;
+  padding-left: 100px;
 }
 
 .admin-page-sidebar {

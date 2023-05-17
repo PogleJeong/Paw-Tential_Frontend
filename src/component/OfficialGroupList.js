@@ -82,8 +82,7 @@ export default function OfficialGroupList (props) {
                             memberProfile.map((profile, i) => {
                                 return (
                                     <a href="javascript:void(0);" className="iq-media" key={i}>
-                                    {profile.profile === "test" && <img className="img-fluid avatar-40 rounded-circle" src="/feedimages/baseprofile.png" alt="" />}
-                                    {profile.profile === "baseprofile" && <img className="img-fluid avatar-40 rounded-circle" src="/feedimages/baseprofile.png" alt="" />}
+                                        <img className="img-fluid avatar-40 rounded-circle" src={`http://localhost:3000/${profile.profile}`} alt="" />
                                     </a>
                                 )   
                             })
