@@ -220,6 +220,7 @@ const AdminQnAList = () => {
       onChange={(e) => setAnswer(e.target.value)}
       />
   </Form.Group>
+ <br/>
   <Button className="btn btn-secondary"  htmlType="submit">답변 보내기</Button>
 </Form>
                 </td>

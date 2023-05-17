@@ -146,6 +146,7 @@ function MarketReport({writer, setActiveReportModal}) {
             category: category.value,
             content: content.value,
             url: pathname,
+            type: '마켓'
         }})
         .then((response) => {
             if (response.status === 200){

@@ -20,6 +20,9 @@ const MyfeedDropdown_user = ({ id, email }) => {
         <Link to={{ pathname: "/myfeed/User_update", state: { userId: id } }} className="nav-link">
           정보 수정
         </Link>
+        <Link to={{ pathname: "/myfeed/pet_update", state: { userId: id } }} className="nav-link" onClick={handleOpenQnAModal}>
+          펫 정보 수정
+        </Link>
         <Link to="#" className="nav-link" onClick={handleOpenQnAModal}>
           문의
         </Link>
