@@ -64,6 +64,7 @@ export default function NewGroupFeed() {
         axios.get("http://localhost:3000/group/getGroupInfo", {params:{"grpNo":params.grpNo}})
         .then(function(res){
             setGroupInfo(res.data);
+            console.log(groupInfo);
         })
         .catch(function(err){
             alert(err);
@@ -237,7 +238,7 @@ export default function NewGroupFeed() {
                                 </div>
                             </div>
                         </div>
-                        {userId === groupInfo.grpleader && (
+                        {userId === groupInfo.grpLeader && (
                         <>
                             <div className="col-lg-4">
                                 <div className="card">
