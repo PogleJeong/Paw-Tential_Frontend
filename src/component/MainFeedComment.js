@@ -126,7 +126,7 @@ export default function MainFeedComment(props) {
                         <img className="rounded-circle img-fluid" src={`http://localhost:3000/${list.profile}`} alt="" style={{width:"60px", height:"60px"}} />
                     </div>
                     <div className="comment-data-block ms-3">
-                        <h6 onClick={() => handleUserClick(list.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{list.id}</h6>
+                        <h6 onClick={() => handleUserClick(list.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{list.nickname}</h6>
                         <p className="mb-0">{list.comment}</p>
                         <div className="d-flex flex-wrap align-items-center comment-activity">
                             {list.id === props.id && (

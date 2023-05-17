@@ -36,8 +36,7 @@ export default function ContestDetailModal(props) {
     const [contestModifyModal, setContestModifyModal] = useState(false);
 
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
-    // const userId = cookies.USER_ID;
-    const userId = 'contestAdmin';
+    const userId = cookies.USER_ID;
 
     // content 내에서 이미지, 글 분리하기
     const [image, setImage] = useState([]);

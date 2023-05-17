@@ -29,7 +29,7 @@ export const FeedImage = (props) => {
                                         noPhoto={props.noPhoto}
                                         getComment={props.getComment} />
         <div>
-            <img src={getImgSrc()} alt="피드사진" className="img-fluid rounded w-100" />
+            <img src={getImgSrc()} alt="피드사진" className="img-fluid rounded w-100" onClick={handleClick}/>
         </div>
       </>
     );
