@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { Carousel } from "react-bootstrap";
 import { history } from "../../component/history";
-import { FeedImage } from "../../component/FeedData";
+import { PreFeedImage } from "../../component/FeedData";
 import axios from 'axios';
 import "../../styles/Place.css";
 import FeedDetailModal from "../home/modals/FeedDetailModal";
@@ -120,7 +120,7 @@ const Place_detail = () => {
                     {reviewList.map((review, index) => {
                         return (
                             <Carousel.Item key={index} onClick={()=>{handleClick(review.seq)}}>
-                                <FeedImage content={review.content}/>
+                                <PreFeedImage content={review.content}/>
                             </Carousel.Item>
                         )
                     })}
