@@ -64,8 +64,10 @@ const ProfileCard = ({ userInfo }) => {
   <div className="social-info">
     <ul className="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0">
       <FollowCount userId={id} />
-      {!isCurrentUser && <FollowButton userId={id} />}
     </ul>
+    <br/>
+      {!isCurrentUser && <FollowButton userId={id} />}
+      <br/><br/>
     <p className="bio">{intro}</p>
   </div>
   {/* 드롭다운메뉴 */}

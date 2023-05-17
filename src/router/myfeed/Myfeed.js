@@ -12,7 +12,6 @@ import ProfileCard from '../../component/ProfileCard';
 import FeedDetailModal from "../home/modals/FeedDetailModal";
 
 
-
 const Myfeed = () => {
 
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
@@ -312,16 +311,28 @@ const Myfeed = () => {
                                 {showPetInfo && (
   <Slider {...settings}>
     {petInfoList.map((pet, index) => (
-      <div key={index}>
-        <div className="pet-card">
+      <div class="col-lg-6">
+      <div class="card mb-3">
+      <div className="row no-gutters" key={index}>
+        <div className="col-md-4">
           <img src={`data:image/jpeg;base64,${imageList[index].data}`} />
-          <h4>{pet.data.name}</h4>
-          <p>{pet.data.intro}</p>
+        </div>
+        <div className="col-md-8">
+          <div className="card-body">
+            <h4 className="card-title"><b>{pet.data.cate}</b></h4>
+            <p className="card-text">이름 : {pet.data.name}</p>
+            <p className="card-text">생년월일 : {pet.data.birth}</p>
+            <p className="card-text">소개 : {pet.data.intro}</p>
+          </div>
         </div>
       </div>
+      </div>
+            </div>
     ))}
   </Slider>
 )}
+
+
 
                     </div>
                   </div>
