@@ -9,6 +9,14 @@ export default function GroupList() {
     
     const navigate = useNavigate();
 
+    useEffect(()=> {
+        if (!cookies.USER_ID) {
+            alert("로그인 후 이용해주세요.");
+            navigate("/login");
+            return;
+        }
+    },[]);
+
     
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
     // cookie에 저장된 사용자 ID 및 닉네임

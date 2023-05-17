@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,6 +12,15 @@ import JoinRequestComponent from "../../component/JoinRequest";
 
 
 export default function NewGroupFeed() {
+
+    const navigate = useNavigate();
+    useEffect(()=> {
+        if (!cookies.USER_ID) {
+            alert("로그인 후 이용해주세요.");
+            navigate("/login");
+            return;
+        }
+    },[]);
 
     // parameter 값 조사
     let params = useParams();

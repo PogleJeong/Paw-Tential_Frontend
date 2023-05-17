@@ -5,11 +5,20 @@
 
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import NewsFeedComponent from '../../component/NewsFeedComponent';
 
 export default function NewNewsFeed() {
+
+    const navigate = useNavigate();
+    useEffect(()=> {
+        if (!cookies.USER_ID) {
+            alert("로그인 후 이용해주세요.");
+            navigate("/login");
+            return;
+        }
+    },[]);
 
     // 쿠키에 저장된 ID 값
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
