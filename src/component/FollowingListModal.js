@@ -62,7 +62,9 @@ const FollowingListModal = ({ userId, closeModal }) => {
         renderItem={(item) => (
           <List.Item>
             <span>{item}</span>
-            <FollowButton userId={item} isFollowing={checkIsFollowing(item)} />
+            {cookies.USER_ID !== item && (
+              <FollowButton userId={item} isFollowing={checkIsFollowing(item)} />
+            )}
           </List.Item>
         )}
       />
