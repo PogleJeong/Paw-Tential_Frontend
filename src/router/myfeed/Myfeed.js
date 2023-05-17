@@ -23,10 +23,11 @@ const Myfeed = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadedFeed, setLoadedFeed] = useState([]);
-  const [petList, setPetList] = useState([]);
+  const [petInfoList, setPetInfoList] = useState([]);
   const [showPetInfo, setShowPetInfo] = useState(false);
+  const [ imageList, setImageList ] = useState([]);
 
-
+  const imgRef = useRef();
 
 
 
@@ -198,31 +199,33 @@ const Myfeed = () => {
   };
   
   //펫정보 불러오기
-  useEffect(() => {
-    const fetchPetList = async () => {
-      try {
-        const res = await axios.get('http://localhost:3000/petList', { params: { id: cookies.USER_ID } });
-        const petListWithUrl = await Promise.all(
-          res.data.map(async (pet) => {
-            const blobResponse = await fetch(pet.imgUrl);
-            const blob = await blobResponse.blob();
-            const imgUrl = URL.createObjectURL(blob);
-            return {
-              ...pet,
-              imgUrl: imgUrl,
-            };
-          })
-        );
-        setPetList(petListWithUrl);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    
-    
+  useEffect(()=>{
+    const getPetInfoList = async() => {
+        await axios.post("http://localhost:3000/get/petInfo", null, {params: { id: cookies.USER_ID }})
+        .then((response)=> {
+            if (response.status === 200) {
+                // 랜덤키 생성하여 고유인덱스 키 사용.
+                if (response.data.length === 0) {
+                    alert("등록한 펫정보가 없습니다.");
+                    return;
+                }
+                for(let i=0; i<response.data.petInfoList.length; i++) {
+                  let key = Math.random().toString(36).substring(2, 11);
+                  let petInfoJson = { key, data: response.data.petInfoList[i] };
+                  let imageInfoJson = { key, data: response.data.imageList[i] };
+                  
+                  setPetInfoList(petInfoList => petInfoList.concat(petInfoJson));
+                  setImageList(imageList => imageList.concat(imageInfoJson));
+                  console.log('펫 정보 : '+JSON.stringify(response.data.petInfoList));
+                }
 
-  fetchPetList();
-}, [cookies.USER_ID]);
+
+            }
+        })
+    }
+    getPetInfoList();
+},[])
+
   
   
   const settings = {
@@ -308,12 +311,12 @@ const Myfeed = () => {
                                 {/* 반려동물 카드 */}
                                 {showPetInfo && (
   <Slider {...settings}>
-    {petList.map((pet, index) => (
+    {petInfoList.map((pet, index) => (
       <div key={index}>
         <div className="pet-card">
-          <img src={pet.imgUrl} alt={pet.name} className="avatar-130 img-fluid" />
-          <h4>{pet.name}</h4>
-          <p>{pet.intro}</p>
+          <img src={`data:image/jpeg;base64,${imageList[index].data}`} />
+          <h4>{pet.data.name}</h4>
+          <p>{pet.data.intro}</p>
         </div>
       </div>
     ))}
