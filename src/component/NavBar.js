@@ -15,7 +15,7 @@ export default function Navbar() {
     const [ loginState, setLoginState ] = useState(false);
     const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID"]);
     // 일반 유저인지 관리자인지 확인
-    {/*const userId = cookies.USER_ID;*/}
+    const userId = cookies.USER_ID;
     
     // 임시
     const userId = cookies.USER_ID;
@@ -59,8 +59,36 @@ export default function Navbar() {
         })
     }
 
+    // 나와 맞팔 관계인 유저의 목록 호출 및 컴포넌트
+    const [mutualUsers, setMutualUsers] = useState([]);
+    const getMutualUsers = async () => {
+        axios.get("http://localhost:3000/group/getMutualUsers", {params:{"following_id":userId}})
+        .then(function(res){
+            setMutualUsers(res.data.list);
+        })
+        .catch(function(err){
+            alert(err);
+        })
+    }
+    const MutualUsersComponent = (props) => {
+        return (
+            <>
+            <div className="d-flex align-items-center mb-4">
+                <div className="iq-profile">
+                <Link to={`/myfeed/myfeed2/${props.data.id}`}><img className="rounded-circle avatar-50" src={props.data.profile} alt="" /></Link>
+                </div>
+                <div className="ms-3">
+                    <Link to={`/myfeed/myfeed2/${props.data.id}`}><h6 className="mb-0">{props.data.id}</h6></Link>
+                    <p className="mb-0">{props.data.intro}</p>
+                </div>
+            </div>
+            </>
+        )
+    }
+
     useEffect(()=>{
         getProfile();
+        getMutualUsers();
     },[userId])
 
 
@@ -173,9 +201,7 @@ export default function Navbar() {
                                             aria-haspopup="true"
                                             aria-expanded="false"
                                         >
-                                            {profile === "" && <img className="img-fluid rounded-circle me-3" src="/feedimages/baseprofile.png" alt="" />}
-                                            {profile === "test" && <img className="img-fluid rounded-circle me-3" src="/feedimages/baseprofile.png" alt="" />}
-                                            {profile === "baseprofile" && <img className="img-fluid rounded-circle me-3" src="/feedimages/baseprofile.png" alt="" />}
+                                            <img className="img-fluid rounded-circle me-3" src={`http://localhost:3000/${profile}`} alt="" />
                                             <div className="caption">
                                                 <h6 className="mb-0 line-height">{userId}</h6>
                                             </div>
@@ -188,7 +214,6 @@ export default function Navbar() {
                                                     </div>
                                                 </div>
                                                 <div className="card-body p-0">
-                                                    {/* TO-DO 클릭 시, MYFEED로 이동 */}
                                                     <a href="javascript:void(0);" className="iq-sub-card iq-bg-primary-hover">
                                                         <div className="d-flex align-items-center">
                                                             <div className="rounded card-icon bg-soft-primary">
@@ -199,12 +224,9 @@ export default function Navbar() {
                                                                 <Link className="nav-link" to="/myfeed/myfeed">
                                                                     <p className="mb-0 font-size-12">나의 피드로 이동하기</p>
                                                                     </Link>
-
-                                                                
                                                             </div>
                                                         </div>
                                                     </a>
-                                                    {/* TO-DO 클릭 시, 내 정보 수정으로 이동 */}
                                                     <a href="javascript:void(0);" className="iq-sub-card iq-bg-danger-hover">
                                                         <div className="d-flex align-items-center">
                                                             <div className="rounded card-icon bg-soft-danger">
@@ -214,8 +236,7 @@ export default function Navbar() {
                                                                 <h6 className="mb-0 ">Edit Profile</h6>
                                                                 <Link to={{ pathname: "/myfeed/User_update", state: { id : cookies.USER_ID } }} className="nav-link">
                                                                 <p className="mb-0 font-size-12">나의 정보 변경하기</p>
-                                                                        </Link>     
-                                                                
+                                                                </Link>     
                                                             </div>
                                                         </div>
                                                     </a>
@@ -234,16 +255,15 @@ export default function Navbar() {
                         <div className="card shadow-none">
                             <div className="card-body p-0">
                                 <div className="media-height p-3" data-scrollbar="init">
-                                    {/* TO-DO d-flex align-items 컴포넌트화 시켜주세요 */}
-                                    <div className="d-flex align-items-center mb-4">
-                                        <div className="iq-profile-avatar status-online">
-                                            <img className="rounded-circle avatar-50" src="/assets/images/user/01.jpg" alt="" />
-                                        </div>
-                                        <div className="ms-3">
-                                            <h6 className="mb-0">Test</h6>
-                                            <p className="mb-0">최근 활동 : 5분전</p>
-                                        </div>
-                                    </div>
+                                    {mutualUsers && mutualUsers.length !== 0 ? (
+                                        mutualUsers.map((list,i) => {
+                                            return (
+                                                <MutualUsersComponent data={list} key={i}/>
+                                            )
+                                        })
+                                    ): (
+                                        <p>새로운 친구를 만들어보세요!</p>
+                                    )}
                                 </div>
                                 <div className="right-sidebar-toggle bg-success text-white mt-3">
                                     <i className="ri-arrow-left-line side-left-icon"></i>

@@ -17,7 +17,7 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_detail";
+import Place_detail from "./router/place/Place_Detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import Myfeed2 from "./router/myfeed/Myfeed2";
@@ -36,12 +36,10 @@ import Users from './router/admin/Users';
 import Data from './router/admin/Data';
 
 
-import NewsFeed from './router/group/NewsFeed';
 import CreateGroup from './router/group/CreateGroup';
 import GroupList from './router/group/GroupList';
 import MyGroup from './router/group/MyGroup';
 import ModifyGroup from './router/group/ModifyGroup';
-import GroupFeed from './router/group/GroupFeed';
 import ThemedExample from "./component/chatbot";
 
 import Pawtens from "./router/pawtens/Pawtens";

@@ -244,8 +244,7 @@ export default function NewsFeedComponent(props) {
                             <li className="mb-2" key={cmt.grpCmtNo}>
                                 <div className="d-flex">
                                     <div className="user-img">
-                                    {cmt.profile === "test" && <img className="avatar-35 rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" />}
-                                    {cmt.profile === "baseprofile" && <img className="avatar-35 rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" />}
+                                    <img className="avatar-35 rounded-circle img-fluid" src={`http://localhost:3000/${cmt.profile}`} alt="" />
                                     </div>
                                     <div className="comment-data-block ms-3">
                                         <h6>{cmt.grpFeedCmtId}</h6>

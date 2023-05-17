@@ -12,7 +12,7 @@ export default function GroupList() {
     
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
     // cookie에 저장된 사용자 ID 및 닉네임
-    const userId = 'test2';
+    const userId = cookies.USER_ID;
     const userNickName = cookies.USER_NICKNAME;
 
     // 검색어 state 변수
