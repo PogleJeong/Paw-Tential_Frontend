@@ -66,7 +66,7 @@ function App() {
           {/* 사이드메뉴 */}
           {window.location.pathname.startsWith("/admin") ? <AdminSidebar /> : <Navbar />}
           {/*쳇봇*/}
-          {/* <ThemedExample/> */}
+          <ThemedExample/>
 
           <Routes>
             {/* home */}
