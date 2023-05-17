@@ -363,7 +363,7 @@ function PetUpdate() {
                 formData.append("file", image);
             }else{
                 let blob = new Blob([image], { type: "image/jpeg" });
-                let file = new File([blob], `image${index}`, {type: "mime"});
+                let file = new File([blob], `image${index}.jpg`, {type: "mime"});
                 formData.append("file", file)
             }
         })
