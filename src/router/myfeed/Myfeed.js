@@ -224,8 +224,6 @@ const Myfeed = () => {
     getPetInfoList();
 },[])
 
-  
-  
   const settings = {
     dots: false,
     infinite: true,
@@ -235,8 +233,7 @@ const Myfeed = () => {
     autoplay: true,
     arrows:false
   };
-  
-  
+
 
   return (
     <div className="container mt-3">

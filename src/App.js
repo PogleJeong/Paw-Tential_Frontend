@@ -27,7 +27,7 @@ import MarketHome from "./router/market/Market_home";
 import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
-import FindAccount from './router/login/findAccount';
+import FindAccount from './router/login/FindAccount';
 
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';
