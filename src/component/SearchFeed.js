@@ -3,7 +3,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import { PreFeedImage } from "./FeedData";
 import { useNavigate } from 'react-router-dom';
-import FeedDetailModal from "../router/home/modals/FeedDetailModal";
+import FeedDetailModal from "../router/search/modals/FeedDetailModal";
 
 const SearchFeed = (prop) => {
   
@@ -72,7 +72,7 @@ const SearchFeed = (prop) => {
 
   const handleClick = async (seq) => {
     try {
-      const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
+      const response = await axios.get('http://localhost:3000/home/loadPost2', { params: { 'seq': seq } });
       setFeed(response.data);
       getPhoto(response.data.content);
       getNoPhoto(response.data.content);
