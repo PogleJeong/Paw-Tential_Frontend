@@ -428,7 +428,7 @@ function PetUpdate() {
                             <ImageBox>
                                 { 
                                 typeof imageList[index].data === "object" ?
-                                <Image src={imgLoadFile(imageList[index].data)}></Image>
+                                <Image src={URL.createObjectURL(imageList[index].data)}></Image>
                                 :
                                 <Image src={`data:image/jpeg;base64,${imageList[index].data}`}></Image>
                                 }
