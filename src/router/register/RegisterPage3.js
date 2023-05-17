@@ -258,12 +258,11 @@ function RegisterPage3() {
         }
     }
     
-    const imgLoadFile = (fileObject) => {
+    const imgLoadFile = async(fileObject) => {
         // File 객체 읽기
         const reader = new FileReader();
         reader.readAsDataURL(fileObject);
         reader.onloadend = () => {
-            console.log("파일읽기 결과>>" + reader.result)
             return reader.result;
         }
     }
@@ -384,14 +383,8 @@ function RegisterPage3() {
                     <li key={index}>
                         <AddPetInfoWrapper>
                             <PetInfoWrapper>
-                                {console.log(imageList[index].data)}
                                 <ImageBox>
-                                { 
-                                typeof imageList[index].data === "object" ?
-                                <Image src={imgLoadFile(imageList[index].data)}></Image>
-                                :
-                                <Image src={`data:image/jpeg;base64,${imageList[index].data}`}></Image>
-                                }
+                                    <Image src={imgLoadFile(imageList[index].data)}></Image>
                                     <br/><RemoveBtn data-key={petInfo.key} onClick={removePetInfo}>정보삭제</RemoveBtn>
                                 </ImageBox>
                                 <InfoBox>
@@ -399,7 +392,7 @@ function RegisterPage3() {
                                     <Label>반려동물 이름</Label><TextBox>{petInfo.data.name}</TextBox><br/>
                                     <Label>반려동물 생일</Label><TextBox>{petInfo.data.birth}</TextBox><br/>
                                     <Label>성별</Label><TextBox>{petInfo.data.gender === 0 ? "남자" : "여자"}</TextBox><br/>
-                                    <TextBox>{`${petInfo.data.intro.substring(1,20)}`}</TextBox><br/>
+                                    <TextBox>{`${petInfo.data.intro.substring(0,20)}`}</TextBox><br/>
                                 </InfoBox>
                             </PetInfoWrapper>
                         </AddPetInfoWrapper>
