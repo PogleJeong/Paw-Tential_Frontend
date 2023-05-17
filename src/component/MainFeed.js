@@ -256,7 +256,12 @@ const handleCloseReportModal = () => {
             <div className="user-post">
               {/* // TO-DO 이미지 클릭 시, 피드 상세보기 모달 띄어주세요 */}
               <a href="javascript:void(0);">
-                <FeedImage content={props.feedData.content} />
+                <FeedImage content={props.feedData.content}
+                                        feedData={props.feedData}
+                                        photo={photo}
+                                        noPhoto={noPhoto}
+                                        getComment={getCommentList}
+                />
               </a>
             </div>
             <div className="mt-3">
