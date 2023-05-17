@@ -7,7 +7,7 @@ function InitPage() {
     const navigate = useNavigate();
     useEffect(()=>{
         // 쿠키가 없으면
-        if(!cookies) {
+        if(!cookies.USER_ID) {
             navigate("/login");
             return
         }
