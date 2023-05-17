@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { AiFillHome} from "react-icons/ai"; 
-import { BiBookmark } from "react-icons/bi";
-import { FiMinus } from 'react-icons/fi';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import '../../styles/MyFeed.css';
 import { PreFeedImage } from '../../component/FeedData';
 
@@ -23,6 +23,10 @@ const Myfeed = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadedFeed, setLoadedFeed] = useState([]);
+  const [petList, setPetList] = useState([]);
+  const [showPetInfo, setShowPetInfo] = useState(false);
+
+
 
 
 
@@ -109,6 +113,8 @@ const Myfeed = () => {
     setLoadedFeed(bookmarkFeeds);
     setPageNumber(1);
     setHasMore(false); 
+    setShowPetInfo(false);
+
   };
   
 
@@ -118,7 +124,18 @@ const Myfeed = () => {
     setPageNumber(1);
     setHasMore(true); 
     fetchFeed(); 
+    setShowPetInfo(false);
+
   };
+
+  const handlePetInfoClick = () => {
+    setShowPetInfo(true);
+    setFeeds([]);
+    setLoadedFeed([]);
+
+
+  };
+  
 
   const [feed, setFeed] = useState([]);
   const [feedDetailModal, setFeedDetailModal] = useState(false);
@@ -180,6 +197,42 @@ const Myfeed = () => {
     }
   };
   
+  //펫정보 불러오기
+  useEffect(() => {
+    const fetchPetList = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/petList', { params: { id: cookies.USER_ID } });
+        const petListWithUrl = await Promise.all(
+          res.data.map(async (pet) => {
+            const blobResponse = await fetch(pet.imgUrl);
+            const blob = await blobResponse.blob();
+            const imgUrl = URL.createObjectURL(blob);
+            return {
+              ...pet,
+              imgUrl: imgUrl,
+            };
+          })
+        );
+        setPetList(petListWithUrl);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    
+    
+
+  fetchPetList();
+}, [cookies.USER_ID]);
+  
+  
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+  };
   
   
 
@@ -191,26 +244,25 @@ const Myfeed = () => {
         </>
       )}
 
-          <div className='feed-categories'>
-          <div className="feed-category">
-            <div
-              className="category-icon"
-              onMouseOver={(e) => (e.target.style.cursor = 'pointer')}
-              onClick={handleHomemarkClick}
-            >
-              <AiFillHome size={40} />
-            </div>
+          <div className="card">
+        <div className="card-body p-0">
+          <div className="user-tabing">
+            <ul className="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
+              <li className="nav-item col-12 col-sm-3 p-0">
+                <a className="nav-link active" href="#pills-timeline-tab" data-bs-toggle="pill" data-bs-target="#timeline" role="button" onClick={handleHomemarkClick}>피드</a>
+              </li>
+              <li className="nav-item col-12 col-sm-3 p-0">
+                <a className="nav-link" href="#pills-about-tab" data-bs-toggle="pill" data-bs-target="#about" role="button" onClick={handleBookmarkClick}>북마크</a>
+              </li>
+              <li className="nav-item col-12 col-sm-3 p-0">
+              <a className="nav-link" href="#pills-friends-tab" data-bs-toggle="pill" data-bs-target="#friends" role="button" onClick={handlePetInfoClick}>펫 정보</a>
+              </li>
+            </ul>
           </div>
-          <div className="feed-category">
-            <div
-              className="category-icon"
-              onMouseOver={(e) => (e.target.style.cursor = 'pointer')}
-              onClick={handleBookmarkClick}
-            >
-              <BiBookmark size={40} />
-            </div>
-          </div>
-          </div>
+        </div>
+      </div>
+
+
 
         {feedDetailModal && (
           <FeedDetailModal
@@ -253,6 +305,21 @@ const Myfeed = () => {
                           );
                         }
                       })}
+                                {/* 반려동물 카드 */}
+                                {showPetInfo && (
+  <Slider {...settings}>
+    {petList.map((pet, index) => (
+      <div key={index}>
+        <div className="pet-card">
+          <img src={pet.imgUrl} alt={pet.name} className="avatar-130 img-fluid" />
+          <h4>{pet.name}</h4>
+          <p>{pet.intro}</p>
+        </div>
+      </div>
+    ))}
+  </Slider>
+)}
+
                     </div>
                   </div>
                 </div>

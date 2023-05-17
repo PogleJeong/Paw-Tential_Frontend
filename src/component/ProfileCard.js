@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 import FollowCount from './FollowCount';
 import FollowButton from './FollowButton';
 import { useCookies } from 'react-cookie';
@@ -10,12 +11,12 @@ const ProfileCard = ({ userInfo }) => {
   const [cookies, setCookies] = useCookies(['USER_ID', 'USER_NICKNAME']);
   const { id,  intro } = userInfo;
   const [isDropdown, setIsDropdown] = useState(false);
-
   const isCurrentUser = cookies.USER_ID === id;
 
   const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
+  // 유저정보 불러오기
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -25,7 +26,6 @@ const ProfileCard = ({ userInfo }) => {
           setProfilePictureFile(profilePicturePath);
           setPreviewUrl(profilePicturePath);
         } else {
-          // Set a default profile picture URL for users without a profile picture
           setProfilePictureFile('default-profile-picture.png');
           setPreviewUrl('default-profile-picture.png');
         }
@@ -37,9 +37,12 @@ const ProfileCard = ({ userInfo }) => {
     fetchUserInfo();
   }, [userInfo.id]);
 
+
   const toggleDropdown = () => {
     setIsDropdown(!isDropdown);
   };
+
+
 
   return (
     <div className="col-sm-12 py-5">
@@ -88,26 +91,8 @@ const ProfileCard = ({ userInfo }) => {
           </div>
         </div>
       </div>
-      <div className="card">
-        <div className="card-body p-0">
-          <div className="user-tabing">
-            <ul className="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
-              <li className="nav-item col-12 col-sm-3 p-0">
-                <a className="nav-link active" href="#pills-timeline-tab" data-bs-toggle="pill" data-bs-target="#timeline" role="button">Timeline</a>
-              </li>
-              <li className="nav-item col-12 col-sm-3 p-0">
-                <a className="nav-link" href="#pills-about-tab" data-bs-toggle="pill" data-bs-target="#about" role="button">About</a>
-              </li>
-              <li className="nav-item col-12 col-sm-3 p-0">
-                <a className="nav-link" href="#pills-friends-tab" data-bs-toggle="pill" data-bs-target="#friends" role="button">Friends</a>
-              </li>
-              <li className="nav-item col-12 col-sm-3 p-0">
-                <a className="nav-link" href="#pills-photos-tab" data-bs-toggle="pill" data-bs-target="#photos" role="button">Photos</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      
+      
     </div>
   );
   
