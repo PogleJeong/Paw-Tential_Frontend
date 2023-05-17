@@ -1,71 +1,95 @@
-import React, { useState } from 'react';
-import { ResponsiveBump } from '@nivo/bump';
+import React, { useState, useEffect } from 'react';
+import { ResponsiveBar } from '@nivo/bar';
+import axios from 'axios';
 
 import AdminSidebar from "../../component/AdminSidebar";
 
-
 const UserChart = () => {
-    const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    // useEffect(() => {
-    //     axios.get('backend/data')
-    //       .then(response => setData(response.data))
-    //       .catch(error => console.log(error));
-    //   }, []);
-    
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get("http://localhost:3000/userChart");
+        const formattedData = response.data.reduce((result, item) => {
+          const ageGroup = item.age_group;
+          const gender = item.gender === 1 ? '남성' : '여성';
 
+          if (!result[ageGroup]) {
+            result[ageGroup] = { age_group: ageGroup };
+          }
+          result[ageGroup][gender] = item.count;
 
-    return (
-        <div className="admin-page">
-        <div className="admin-page-sidebar">
-          <AdminSidebar />
-        </div>
-        
-            <div className="chart-container" style={{ width: "50%" }}>
-            <ResponsiveBump
-            data={data}
-            colors={{ scheme: 'spectral' }}
-            lineWidth={3}
-            activeLineWidth={6}
-            inactiveLineWidth={3}
-            inactiveOpacity={0.15}
-            pointSize={10}
-            activePointSize={16}
-            inactivePointSize={0}
-            pointColor={{ theme: 'background' }}
-            pointBorderWidth={3}
-            activePointBorderWidth={3}
-            pointBorderColor={{ from: 'serie.color' }}
-            axisTop={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: '',
-                legendPosition: 'middle',
-                legendOffset: -36
-            }}
-            axisBottom={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: '',
-                legendPosition: 'middle',
-                legendOffset: 32
-            }}
-            axisLeft={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: 'ranking',
-                legendPosition: 'middle',
-                legendOffset: -40
-            }}
-            margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
-            axisRight={null}
-            />
-            </div>
-        </div>
-    );
-};
+          return result;
+        }, {});
+        const chartData = Object.values(formattedData);
+        setData(chartData);
+      } catch (error) {
+        console.log("Error fetching user chart data:", error);
+      }
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="admin-page">
+      <div className="admin-page-sidebar">
+        <AdminSidebar />
+      </div>
+      <div className="chart-container">
+        <h2 className="chart-title">유저 차트</h2>
+        <ResponsiveBar
+          data={data}
+          keys={['남성', '여성']}
+          indexBy="age_group"
+          groupMode="grouped"
+          colors={{ scheme: 'pastel1' }}
+          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+          }}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+          }}
+          legends={[
+            {
+              anchor: 'top',
+              direction: 'row',
+              justify: false,
+              translateX: 0,
+              translateY: -40,
+              itemsSpacing: 0,
+              itemDirection: 'left-to-right',
+              itemWidth: 80,
+              itemHeight: 20,
+              itemTextColor: '#999',
+              symbolSize: 12,
+              symbolShape: 'circle',
+              effects: [
+                {
+                  on: 'hover',
+                  style: {
+                    itemTextColor: '#000',
+                  },
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default UserChart;

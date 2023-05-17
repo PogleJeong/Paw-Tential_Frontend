@@ -1,87 +1,104 @@
-import React, { useState } from "react";
-import Modal from "react-modal";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+import FollowCount from './FollowCount';
+import FollowButton from './FollowButton';
+import { useCookies } from 'react-cookie';
+import MyfeedDropdown_user from './MyfeedDropdown_user';
+import MyfeedDropdown_others from './MyfeedDropdown_others';
+
+const ProfileCard = ({ userInfo }) => {
+  const [cookies, setCookies] = useCookies(['USER_ID', 'USER_NICKNAME']);
+  const { id,  intro } = userInfo;
+  const [isDropdown, setIsDropdown] = useState(false);
+  const isCurrentUser = cookies.USER_ID === id;
+
+  const [profilePictureFile, setProfilePictureFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  // 유저정보 불러오기
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/userInfo', { params: { id: userInfo.id } });
+        if (res.data.profile) {
+          const profilePicturePath = `http://localhost:3000/${res.data.profile}`;
+          setProfilePictureFile(profilePicturePath);
+          setPreviewUrl(profilePicturePath);
+        } else {
+          setProfilePictureFile('default-profile-picture.png');
+          setPreviewUrl('default-profile-picture.png');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchUserInfo();
+  }, [userInfo.id]);
 
 
-import "../styles/Profile.css";
-
-Modal.setAppElement("#root");
-
-const ProfileCard = ({ userInfo, setUserInfo, feed }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
-
-  const handleModalOpen = () => {
-    setModalOpen(true);
+  const toggleDropdown = () => {
+    setIsDropdown(!isDropdown);
   };
 
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
 
-  const handleModalImageUpload = async () => {
-    if (!imageFile) return;
-    const formData = new FormData();
-    formData.append("image", imageFile);
-    try {
-      const res = await axios.post("http://localhost:3000/images", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      const imageUrl = res.data.url;
-      const userData = { ...userInfo, profile: imageUrl };
-      await axios.put(`http://localhost:3000/users/${userInfo.id}`, userData);
-  
-      setUserInfo(userData);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      handleModalClose();
-    }
-  };
-
-  const handleModalImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setPreviewImage(URL.createObjectURL(file));
-    }
-  };
 
   return (
-    <div className="my-feed-container">
-      {userInfo && (
-        <div className="profile-card">
-          <img
-            className="profile-image"
-            src={previewImage || userInfo.profile}
-            alt={userInfo.id}
-          />
-          <div className="profile-info">
-            <h1>{userInfo.id}</h1>
-            <p className="bio">{userInfo.intro}</p>
+    <div className="col-sm-12 py-5">
+      <div className="card">
+        <div className="card-body profile-page p-5">
+          <div className="profile-header">
+            <div className="position-relative">
+              <div className="user-detail text-center mb-3">
+                {/* 프로필 사진 */}
+                <div className="profile-img">
+                  
+                  <img src={previewUrl} alt={id} className="avatar-130 img-fluid" />
+                </div>
+                <div className="profile-detail">
+                  <h3 className="">{id}</h3>
+                </div>
+              </div>
+              <div className="profile-info p-3 d-flex align-items-center justify-content-between position-relative">
+  <div className="social-info">
+    <ul className="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0">
+      <FollowCount userId={id} />
+    </ul>
+    <br/>
+      {!isCurrentUser && <FollowButton userId={id} />}
+      <br/><br/>
+    <p className="bio">{intro}</p>
+  </div>
+  {/* 드롭다운메뉴 */}
+  <ul>
+  {userInfo !== '' && (
+    <li>
+      <a href="#" className="d-flex align-items-center" onClick={toggleDropdown}>
+      <i className="ri-settings-4-line mx-5" style={{ fontSize: '24px' }}></i>
+
+      </a>
+      {isDropdown && (
+        cookies.USER_ID === userInfo.id ? (
+          <MyfeedDropdown_user id={userInfo.id} email={userInfo.email} />
+        ) : (
+          <MyfeedDropdown_others id={userInfo.id} />
+        )
+      )}
+    </li>
+  )}
+    </ul>
+</div>
+            </div>
           </div>
         </div>
-      )}
-      <div className="feed-container">
-        {feed.map((item) => (
-          <div key={item.id} className="feed">
-            <img src={item.image} alt={item.description} />
-            <p>{item.description}</p>
-          </div>
-        ))}
       </div>
-      <Modal
-        isOpen={modalOpen}
-        onRequestClose={handleModalClose}
-        contentLabel="Profile Image Modal"
-      >
-        <h2>Change Profile Image</h2>
-        <input type="file" accept="image/*" onChange={handleModalImageChange} />
-        <button onClick={handleModalImageUpload}>Upload</button>
-      </Modal>
+      
+      
     </div>
   );
-};
+  
+                    }
 
 export default ProfileCard;
+

@@ -162,27 +162,34 @@ export default function GroupFeed(){
         }
     }
 
-    // 좋아요 처리
-    const likeHandler = async (feedNo) => {
-        axios.post("http://localhost:3000/group/groupFeedLike", null, {params:{"grpFeedNo":feedNo, "grpFeedLikeId":userId}})
-        .then(function(res) {
-            alert(res.data);
-            window.location.reload();
-        })
-        .catch(function(err){
-            alert(err);
-        })
-    }
-
+    
     {/*일반 그룹 피드 및 해당 피드 댓글 출력 component*/}
     const FeedWithComments = ((props)=>{
-
+        
         const html = props.feed.grpFeedContent.replace(/<img /g, '<img class="img-fluid rounded w-100" ');
-
+        
         const commentList = useCommentList(props.feed.grpFeedNo);
-
+        
         const [count, setCount] = useState('');
         const [comment, setComment]= useState('');
+
+        const [likeCount, setLikeCount] =useState(props.feed.grpFeedLikeCount);
+
+        // 좋아요 처리
+        const likeHandler = async (feedNo) => {
+            axios.post("http://localhost:3000/group/groupFeedLike", null, {params:{"grpFeedNo":feedNo, "grpFeedLikeId":userId}})
+            .then(function(res) {
+                alert(res.data);
+                if(res.data === "좋아요가 반영되었습니다.") {
+                    setLikeCount(prevCount => prevCount +1);
+                } else {
+                    setLikeCount(prevCount => prevCount -1);
+                }
+            })
+            .catch(function(err){
+                alert(err);
+            })
+        }
 
         // 댓글 카운트
         axios.get("http://localhost:3000/group/getCommentList", {params:{"grpFeedNo":props.feed.grpFeedNo}})
@@ -296,8 +303,8 @@ export default function GroupFeed(){
                                                 <div className="total-like-block ms-2 me-3">
                                                     <span onClick={()=>{likeHandler(props.feed.grpFeedNo)}}>
                                                         <img src="/assets/images/icon/01.png" className="img-fluid" alt="" />
+                                                        <span className="mx-1">{likeCount} Likes</span>
                                                     </span>
-                                                    <span className="mx-1">{props.feed.grpFeedLikeCount} Likes</span>
                                                 </div>
                                             </div>
                                             <div className="total-comment-block">
@@ -460,13 +467,17 @@ export default function GroupFeed(){
                                                 <>
                                                     <li className="mb-3 d-flex align-items-center" key={i}>
                                                         {/* TO-DO 유저 프로필 사진 넣어주세요 */}
-                                                        <div className="avatar-40 rounded-circle bg-gray text-center me-3"><i className="ri-bank-card-line h4"></i></div>
-                                                        <h6 className="mb-0">{list.memberId}</h6>
-                                                        <button type="button"
-                                                                        className="btn btn-primary d-block mx-4"
-                                                                        onClick={()=>{acceptJoinRequest(list.memberId)}}>
-                                                            <i className="ri-add-line pe-2"></i>가입 승인
-                                                        </button>
+                                                        <div className="iq-profile-avatar status-online">
+                                                            <img className="rounded-circle avatar-50" src="/assets/images/user/01.jpg" alt="" />
+                                                        </div>
+                                                        <div className="ms-3">
+                                                            <h6 className="mb-0">{list.memberId}</h6>
+                                                            <p className="my-1">
+                                                                <button type="button" className="btn btn-primary" onClick={()=>{acceptJoinRequest(list.memberId)}}>
+                                                                    <i className="ri-add-line pe-2"></i>가입 승인
+                                                                </button>
+                                                            </p>
+                                                        </div>
                                                     </li>
                                                 </>
                                             )
@@ -495,52 +506,26 @@ export default function GroupFeed(){
 
     function NormalGroup() {
         return (
-                <div className="card">
-                    <div className="card-body">
-                        {groupFeed !== null && groupFeed.length !== 0
-                        ?
-                            <>
-                            {groupFeed.map((feed, i) => (
-                                <FeedWithComments key={i} feed={feed} />
-                            ))}
-                            </>
-                    // <table text-align="center">
-                    //     <colgroup>
-                    //         <col width='70' /><col width='600' /><col width='100' /><col width='70' />
-                    //     </colgroup>
-                    //     <thead>
-                    //         <tr>
-                    //             <th>작성자</th>
-                    //             <th>피드 내용</th>
-                    //             <th>작성일</th>
-                    //             <th>공개여부</th>
-                    //             <th>수정/삭제</th>
-                    //         </tr>
-                    //     </thead>
-                    //     <tbody>
-                    //         {groupFeed.map((feed, i) => (
-                    //             <>
-                    //             <FeedWithComments
-                    //                 key={i}
-                    //                 feed={feed}
-                    //             />
-                    //             <tr>
-                    //                 <td colSpan={5}>──────────────────────────────────────────────────────────────────────</td>
-                    //             </tr>
-                    //             </>
-                    //         ))}
-                    //     </tbody>
-                    // </table>
-            :
-            <>
-            <p>해당 그룹에 작성된 피드가 없습니다.</p>
-            </>
-            }
-                    </div>
+            <div className="card">
+                <div className="card-body">
+                    {groupFeed !== null && groupFeed.length !== 0
+                    ?
+                        <>
+                        {groupFeed.map((feed, i) => (
+                            <FeedWithComments key={i} feed={feed} />
+                        ))}
+                        </>
+                    :
+                        <>
+                            <p>해당 그룹에 작성된 피드가 없습니다.</p>
+                        </>
+                    }
                 </div>
+            </div>
         )
     }
 
+    
     function CareGroup(){
 
         // 피드 삭제
@@ -557,62 +542,133 @@ export default function GroupFeed(){
 
         return (
             <>
-             {careGroupFeed !== null && careGroupFeed.length !== 0
-            ?
-                    <table text-align="center">
-                        <colgroup>
-                            <col width='70' /><col width='200' /><col width='100' /><col width='200' /><col width='200' />
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th>분류</th>
-                                <th>피드 내용</th>
-                                <th>작성자</th>
-                                <th>시작일</th>
-                                <th>종료일</th>
-                                <th>시작시간</th>
-                                <th>종료시간</th>
-                                <th>체크사항</th>
-                                <th>작성일</th>
-                                <th>공개여부</th>
-                                <th>수정/삭제</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {careGroupFeed.map(function(feed,i){
-                                return(
-                                    <>
-                                    <tr key={i}>
-                                        {feed.careGrpType === 'care' ? <td>돌봄</td> : <td>산책</td> }
-                                        <td>{ReactHtmlParser(feed.careGrpContent)}</td>
-                                        <td>{feed.careGrpFeedWriter}</td>
-                                        <td>{moment(feed.careGrpStartDt).locale("ko").format("YY년 MM월 DD일")}</td>
-                                        <td>{moment(feed.careGrpEndDt).locale("ko").format("YY년 MM월 DD일")}</td>
-                                        <td>{moment(feed.careGrpStartTime).format("HH:mm")}</td>
-                                        <td>{moment(feed.careGrpEndTime).format("HH:mm")}</td>
-                                        <td>{feed.careGrpCheck}</td>
-                                        <td>{feed.careGrpFeedWd.substring(0,10)}</td>
-                                        <td>{feed.careGrpFeedSetting}</td>
-                                        <td>
-                                            <button
-                                                onClick={()=>{
-                                                    setModifyCareFeedModal(true);
-                                                    setSelectedGrpFeedId(feed.careGrpFeedNo);
-                                                }}>수정
-                                            </button>
-                                            <button onClick={()=>{deleteCareFeed(feed.careGrpFeedNo)}}>삭제</button>
-                                        </td>
-                                    </tr>
-                                    </>
-                                )
-                            })}
-                        </tbody>
-                    </table>
-            :
-            <>
-            <p>해당 그룹에 작성된 피드가 없습니다.</p>
-            </>
-            }
+            {careGroupFeed !== null && careGroupFeed.length !== 0 ? (
+                <>
+                    <div className="card card-block card-stretch card-height blog blog-detail">
+                    {careGroupFeed.map(function(feed){
+                        
+                        // 피드에서 이미지와 글 분리하기
+                        const imgRegex = /<img\s+[^>]*src="([^"]*)"[^>]*>/g;
+                        const matches = feed.careGrpContent.matchAll(imgRegex);
+                        const imgTags = Array.from(matches).map(match => match[1]);
+                        
+                        const nonImgTags = feed.careGrpContent.replace(imgRegex, '').split(/<\/?[a-zA-Z][^>]*>/g).filter(Boolean);
+
+                        return (
+                        <>
+                            <div className="card-body" key={feed.careGrpFeedNo}>
+                                <div className="user-post-data py-3">
+                                    <div className="d-flex justify-content-between">
+                                        <div className="me-3">
+                                            {/* TO-DO 유저 프로필 사진 넣어주세요 */}
+                                            <img className="rounded-circle img-fluid" src="/assets/images/user/04.jpg" alt=""/>
+                                        </div>
+                                        <div className="w-100">
+                                            <div className="d-flex justify-content-between">
+                                                <div>
+                                                    <h5 className="mb-0 d-inline-block">
+                                                        {/* 클릭 시, 유저 피드로 이동하게 해주세요 */}
+                                                        <a href="javascript:void(0)">{feed.careGrpFeedWriter}</a>
+                                                    </h5>
+                                                    <p className="mb-0">
+                                                        {feed.careGrpFeedWd.substring(0,10)}
+                                                    ㆍ{feed.careGrpFeedSetting === "전체 공개" ? <i className="ri-global-line pe-1"></i> : <i className="ri-lock-fill pe-1"></i>}
+                                                    </p>
+                                                </div>
+                                                <div className="card-post-toolbar">
+                                                    <div className="dropdown">
+                                                        <span className="dropdown-toggle"
+                                                                    data-bs-toggle="dropdown"
+                                                                    aria-haspopup="true"
+                                                                    aria-expanded="false"
+                                                                    role="button">
+                                                            <i className="ri-more-fill"></i>
+                                                        </span>
+                                                        <div className="dropdown-menu m-0 p-0">
+                                                            <a className="dropdown-item p-3" onClick={()=>{ 
+                                                                                                                                    setModifyCareFeedModal(true);
+                                                                                                                                    setSelectedGrpFeedId(feed.careGrpFeedNo);
+                                                                                                                                    }}>
+                                                                <div className="d-flex align-items-top">
+                                                                    <i className="ri-pencil-line h4"></i>
+                                                                    <div className="data ms-2">
+                                                                        <h6>피드 수정</h6>
+                                                                        <p className="mb-0">Update your post and saved items</p>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                            <a className="dropdown-item p-3"  onClick={()=>{ 
+                                                                                                                                    deleteCareFeed(feed.careGrpFeedNo)
+                                                                                                                                    }}>
+                                                                <div className="d-flex align-items-top">
+                                                                    <i className="ri-delete-bin-7-line h4"></i>
+                                                                    <div className="data ms-2">
+                                                                        <h6>피드 삭제</h6>
+                                                                        <p className="mb-0">Remove this Post on Timeline</p>
+                                                                    </div>
+                                                                </div>  
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="image-block">
+                                    {imgTags.map((image) => {
+                                        return (
+                                            <img src={image}
+                                                    alt="img"
+                                                    className="img-fluid rounded w-100" />
+                                        )
+                                    })}
+                                </div>
+                                <div className="blog-description mt-3">
+                                    <h5 className="mb-3 pb-3 border-bottom" style={{color:"#3f414d"}}>
+                                    {feed.careGrpType === 'care' ? <>🤱 돌봐주실 분을 찾고 있어요!</> : <>🐕‍🦺 산책 시켜주실 분을 찾고 있어요!</>}
+                                    </h5>
+                                    <div className="blog-meta d-flex align-items-center mb-3 position-right-side flex-wrap">
+                                        <div className="me-4">
+                                            <i className="ri-calendar-check-fill text-primary pe-2"></i>
+                                            {moment(feed.careGrpStartDt).locale("ko").format("YY.MM.DD")}
+                                            {feed.careGrpType === 'care' && <> ~ {moment(feed.careGrpEndDt).locale("ko").format("YY.MM.DD")} </>}
+                                        </div>
+                                        {feed.careGrpType === 'walk' &&
+                                        <>
+                                            <div className="me-4">
+                                                <i className="ri-time-line text-primary pe-2"></i>
+                                                {moment(feed.careGrpStartTime).format("HH:mm")} ~ {moment(feed.careGrpEndTime).format("HH:mm")}
+                                            </div>
+                                            <div className="me-4">
+                                                <i className="ri-chat-check-line text-primary pe-2"></i>
+                                                {feed.careGrpCheck}
+                                            </div>
+                                        </>
+                                        }
+                                            <div className="me-4">
+                                                <i className="ri-map-pin-line text-primary pe-2"></i>
+                                                서울특별시 구로구
+                                            </div>
+                                    </div>
+                                    {nonImgTags.map((nonImg, i) => {
+                                        return (
+                                            <div key={i}>{ReactHtmlParser(nonImg)}</div>
+                                            )
+                                    })}
+                                    <br />
+                                    {/* TO-DO 신청하기 클릭 시, 대화방 만들어주세요 */}
+                                    <a href="javascript:void(0)" tabIndex="-1">신청 하기<i className="ri-arrow-right-s-line"></i></a>
+                                </div>
+                            </div> {/*end of card-body*/}
+                        </>
+                        )
+                    })}
+                    </div> {/* end of card*/}
+                </>
+            ) : (
+                <p>해당 그룹에 작성된 피드가 없습니다.</p>
+            )}
             </>
         )
     }

@@ -10,10 +10,11 @@ const Logout = () => {
         if (cookies.USER_ID) {
             removeCookies("USER_ID");
             removeCookies("USER_NICKNAME");
+            window.location.href = "/login";
         }
     }
     return(
-        <li onClick={logout}><Link to="/login">로그아웃</Link></li>
+        <li onClick={logout}>로그아웃</li>
     );
 }
 
@@ -34,12 +35,14 @@ const Nav = () =>{
             <li><Link className="nav-link" to="/login">로그인</Link></li> 
             }
             <br />
+            <li><Link className="nav-link" to="/search">검색</Link></li>
             <li><Link className="nav-link" to="/place">포텐플레이스</Link></li>
             <li><Link className="nav-link" to="/market">마켓</Link></li>
             <li><Link className="nav-link" to="/pawtens">포텐스</Link></li>
             <li><Link className="nav-link" to="/contest">포텐콘테스트</Link></li>
             <li><Link className="nav-link" to="/group/newsfeed">그룹</Link></li>
             <li><Link className="nav-link" to="/myfeed/myfeed">프로필</Link></li>
+            <li><Link className="nav-link" to="/chat/home">메세지</Link></li>
             <br/><br/>
             <li><Link className="nav-link" to="/admin/admin" target="_blank">관리자페이지</Link></li>
         </ul>

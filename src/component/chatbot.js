@@ -107,7 +107,7 @@ const ThemedExample = () => {
             asMessage: true,
             component: (
                 <Link to="https://www.animal.go.kr/front/index.do">
-                    반려동물 등록 번호 조회 방법(저를 눌러주세요).
+                    반려동물 등록 번호 조회 방법(저를 눌러주세요)
                 </Link>
             ),
             trigger: "3",
@@ -117,7 +117,7 @@ const ThemedExample = () => {
             asMessage: true,
             component: (
                 <Link to="http://www.safekorea.go.kr/idsiSFK/neo/sfk/cs/contents/prevent/SDIJKM5306.html?menuSeq=136">
-                    반려동물을 위한 재난 대처법(저를 눌러주세요).
+                    반려동물을 위한 재난 대처법(저를 눌러주세요)
                 </Link>
             ),
             trigger: "3",

@@ -12,7 +12,7 @@ import TimePicker from "rc-time-picker";
 import "rc-time-picker/assets/index.css";
 import { Calendar } from 'react-date-range';
 
-export default function ModifyCareFeedModal({show, onHide, grpFeedNo}) {
+export default function ModifyCareFeedModal({show, onHide, grpFeedNo, fn}) {
 
     // 필요한 state 변수
     const [category, setCategory] = useState('');
@@ -87,11 +87,10 @@ export default function ModifyCareFeedModal({show, onHide, grpFeedNo}) {
       }
       if(show) {
         loadPost();
-        console.log(startTime);
       }
     },[show]);
 
-    // 댓글 수정 처리
+    // 돌봄그룹 피드 수정 처리
     const submitBtn = async (e) => {
       
       e.preventDefault();
@@ -110,7 +109,8 @@ export default function ModifyCareFeedModal({show, onHide, grpFeedNo}) {
       await axios.post("http://localhost:3000/group/modifyCareFeed", formData)
       .then(function(res){
         alert(res.data);
-        window.location.reload();
+        onHide();
+        fn();
       })
       .catch(function(err){
         alert(err);

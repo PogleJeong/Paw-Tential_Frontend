@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight } from 'react-feather';
 
 import '../styles/admin.css';
 
@@ -25,7 +24,7 @@ const AdminSidebar = () => {
       <div className="sidebar-sticky">
         <ul className="nav flex-column">
           <li className="nav-item">
-            <Link to="/admin/dashboard" className="nav-link">
+            <Link to="/admin/admin" className="nav-link">
               대시보드
             </Link>
           </li>
@@ -44,30 +43,8 @@ const AdminSidebar = () => {
               문의 관리
             </Link>
           </li>
-          <li className="nav-item">
-            <div
-              className="nav-link"
-              onClick={toggleDataSubMenu}
-              role="button"
-              tabIndex={0}
-            >
-              데이터 관리
-              <ChevronRight className={`chevron ${showDataSubMenu ? 'down' : 'up'}`} />
-            </div>
-            <ul className={`nav flex-column sub-menu ${showDataSubMenu ? 'show' : ''}`}>
-            
-              <li className="nav-item">
-                <Link to="/admin/PetChart" className="nav-link">
-                  반려견 카테고리
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/admin/UserChart" className="nav-link">
-                  유저 정보
-                </Link>
-              </li>
-            </ul>
-          </li>
+
+
         </ul>
       </div>
     </nav>

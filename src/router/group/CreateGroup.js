@@ -3,7 +3,7 @@
  * @Auth 해운
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from "react-cookie";
@@ -14,7 +14,6 @@ export default function CreateGroup() {
 
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
     // cookie에 저장된 사용자 ID 및 닉네임
-    const userId = cookies.USER_ID;
     const userNickName = cookies.USER_NICKNAME;
 
     // 그룹 생성 시, 입력할 사항
@@ -23,8 +22,20 @@ export default function CreateGroup() {
     const [grpImage, setGrpImage] = useState('');
     const [grpIntro, setGrpIntro] = useState('');
 
+    // 그룹 대표 이미지 미리보기 변수 및 함수
+    const ref = useRef();
+    const imgLoad = () => {
+        const file = ref.current.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setGrpImage(reader.result);
+        }
+    }
+
+
     useEffect(()=>{
-        setGrpLeader(userId);
+        setGrpLeader(cookies.USER_ID);
     },[]);
 
     // 그룹명 중복 확인
@@ -67,7 +78,6 @@ export default function CreateGroup() {
 
     return (
         <>
-            <div className="wrapper">
                 <div id="content-page" className="content-page">
                     <div className="container">
                         <div className="row">
@@ -83,7 +93,7 @@ export default function CreateGroup() {
                                 <div className="card">
                                     <div className="card-header d-flex justify-content-between">
                                         <div className="header-title">
-                                            <h4 className="card-title">Input Here</h4>
+                                            <h4 className="card-title">Type Here...</h4>
                                         </div>
                                     </div> {/*end of card-header*/}
                                     <div className="card-body">
@@ -102,24 +112,29 @@ export default function CreateGroup() {
                                             </div>
                                             <div className="form-group">
                                                 <label className="form-label custom-file-input">그룹 대표 이미지</label>
+                                                <div className="my-3"><img src={grpImage} /></div>
                                                 <input type="file"
                                                             className="form-control" 
                                                             name="uploadFile"
-                                                            onChange={(e)=>setGrpImage(e.target.value)}
-                                                            accept='*' 
+                                                            onChange={(e)=> {
+                                                                setGrpImage(e.target.value);
+                                                                imgLoad();
+                                                            }}
+                                                            accept='*'
+                                                            ref={ref} 
                                                 />
                                             </div>
-                                            <div class="form-group">
-                                                <label class="form-label">그룹 소개</label>
-                                                <textarea class="form-control"
+                                            <div className="form-group">
+                                                <label className="form-label">그룹 소개</label>
+                                                <textarea className="form-control"
                                                                 rows="5"
                                                                 name="grpIntro"
                                                                 onChange={(e)=>setGrpIntro(e.target.value)}
                                                 ></textarea>
                                             </div>
                                             <div style={{align:"center"}}>
-                                                <button type="submit" className="btn btn-primary">Submit</button>
-                                                <button type="button" className="btn bg-danger mx-1" onClick={()=>{window.history.back()}}>Cancel</button>
+                                                <button type="submit" className="btn btn-primary">그룹 생성하기</button>
+                                                <button type="button" className="btn bg-danger mx-1" onClick={()=>{window.history.back()}}>취소</button>
                                             </div>
                                         </form>
                                     </div> {/*end of card-body*/}
@@ -128,23 +143,6 @@ export default function CreateGroup() {
                         </div> {/*end of row*/}
                     </div> {/*end of container*/}
                 </div> {/*end of content-page*/}
-            </div> {/*end of wrapper*/}
-        {/* <form name="frm" onSubmit={submitBtn} encType="multipart/form-data">
-        <h3>그룹 생성하기</h3>
-            <label htmlFor="GRP_NAME">그룹명 : </label>
-            <br />
-            <input type="text" name="grpName" value={grpName} onChange={(e)=>setGrpName(e.target.value)} />
-            <button type="button" onClick={checkExistingGroup}>중복 확인</button>
-            <br />
-            <label htmlFor="GRP_IMAGE">그룹 대표 이미지 : </label>
-            <br />
-            <input type="file" name="uploadFile" onChange={(e)=>setGrpImage(e.target.value)} accept='*' />
-            <br />
-            <label htmlFor="GRP_IMAGE">그룹 소개 : </label>
-            <br />
-            <textarea cols="80" rows="5" name="grpIntro" onChange={(e)=>setGrpIntro(e.target.value)} />
-            <input type="submit" value="그룹 생성하기" />
-        </form> */}
         </>
     )
 }

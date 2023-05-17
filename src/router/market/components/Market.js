@@ -2,10 +2,66 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { styled } from 'styled-components';
 
 import activeHeartIcon from "../../../image/icon/active_heart.png"
 import inactiveHeartIcon from "../../../image/icon/inactive_heart.png"
 import viewIcon from "../../../image/icon/view_icon.png";
+
+const Container =styled.div`
+    margin : 15px;
+    padding: 15px; 
+    width: 18%; 
+    aspect-ratio: 3/4; 
+    border: none; 
+    border-radius: 15px;
+    box-shadow: 2px 3px 5px 3px;
+
+    transition: scale 1s;
+    &:hover {
+        scale: 0.95;
+    }
+`
+
+const ImageBox = styled.img`
+    width: 100%;
+    height: 300px;
+    border: 5px solid whitesmoke;
+    border-radius: 15px;
+`
+
+const InfoBox = styled.div`
+`
+const SubInfoBox = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+`
+
+const IconBox = styled.div`
+    display: flex;
+    justify-content: right;
+    margin: 5px;
+`
+
+const Title = styled.h4`
+    margin: 5px;
+`
+const Content = styled.small`
+`
+
+const Icon = styled.img`
+    width: 30px;
+    height: 30px;
+`
+
+const IconNumber = styled.small`
+    vertical-align: middle;
+    font-size: 15px;
+    font-weight: bold;
+    padding-left: 3px;
+    padding-right: 5px;
+`
 
 const MarketInfo = ({marketInfo, imgInfo}) => {
     const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID", "USER_NICKNAME"]);
@@ -86,38 +142,41 @@ const MarketInfo = ({marketInfo, imgInfo}) => {
     }
 
     return(
-        <div style={{margin : "30px", padding: "10px", width: "330px", aspectRatio: "3/4", border: "5px solid black", borderRadius: "15px"}}>
+        <Container>
             {/* 가로 330 세로 440 */}
             <Link to={`/market/detail/${marketInfo.posting}`} state={{marketInfo, imgInfo}}>
-                <img src={`data:image/jpeg;base64,${imgInfo}`} style={{width: "300px", height: "300px", borderRadius: "15px"}} />
+                <ImageBox src={`data:image/jpeg;base64,${imgInfo}`} />
             </Link>
-            <div>
-                <h4>{marketInfo.title}</h4>
-                <small>작성자: {writer}</small><br/>
-                <small>{marketInfo.state}/{marketInfo.category}</small>
+            <InfoBox>
+                <Title>{marketInfo.title.length < 10 ? marketInfo.title : `${marketInfo.title?.substring(0,10)}...`}</Title>
+                <SubInfoBox>
+                <Content>작성자: {writer}</Content>
+                <Content>{marketInfo.state}/{marketInfo.category}</Content>
+                </SubInfoBox>
+                <IconBox>
                 {likeHistroy ? 
-                <img src={activeHeartIcon} onClick={clickLike} alt="" style={{width: "30px", height: "30px"}}/>
-                :
-                <img src={inactiveHeartIcon} onClick={clickLike} alt="" style={{width: "30px", height: "30px"}}/>
-                }
-                <span style={{paddingLeft: "3px", paddingRight: "10px"}}>{likeNumber}</span>
-                <img src={viewIcon} alt="" style={{width:"30px", height: "30px"}} />
-                <span style={{paddingLeft: "3px", paddingRight: "10px"}}>{viewNumber}</span>
-            </div>
-        </div>
+                    <Icon src={activeHeartIcon} onClick={clickLike} alt="" />
+                    :
+                    <Icon src={inactiveHeartIcon} onClick={clickLike} alt="" />
+                    }
+                    <IconNumber>{likeNumber}</IconNumber>
+                    <Icon src={viewIcon} alt="" />
+                    <IconNumber>{viewNumber}</IconNumber>
+                </IconBox>
+            </InfoBox>
+        </Container>
     );
 }
 
 // 특정 스크롤 위치에 따라 market list 가 추가됨. 
 const MarketList = ({marketInfoList}) => {
-   
     return(
-        <div style={{display: "flex", width: "1800px", flexWrap: "wrap"}}>
-            
-            {marketInfoList.length? 
+        <div style={{display: "flex", width: "100%", flexWrap: "wrap"}}>
+
+            {marketInfoList?.length ? 
             (marketInfoList.map((marketInfo, index)=>(
                <MarketInfo key={index} marketInfo={marketInfo[0]} imgInfo={marketInfo[1]} /> 
-            )))
+               )))
             :
             (<span>검색결과 없음</span>)}
         </div>
