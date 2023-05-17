@@ -17,7 +17,7 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_detail from "./router/place/Place_detail";
+import Place_detail from "./router/place/Place_Detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import Myfeed2 from "./router/myfeed/Myfeed2";

@@ -13,7 +13,7 @@
 
 .pawtens .pawtensItem video {
     width: 100%;
-    max-height: 700px;
+    max-height: 650px;
     object-fit: cover;
 }
 
