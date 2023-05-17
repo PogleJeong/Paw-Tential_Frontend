@@ -58,7 +58,10 @@ const ThemedExample = () => {
         botFontColor: "#fff",
         userBubbleColor: "#fff",
         userFontColor: "#4a4a4a",
+        
     };
+
+    
     const steps = [
         {
             id: "1",
@@ -217,6 +220,7 @@ const ThemedExample = () => {
                 bottom: "80px",
                 right: "0",
                 margin: "20px",
+                zIndex : 999
             }}
         >
             {!showChatbot && (

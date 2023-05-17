@@ -229,6 +229,7 @@ const Place_detail = () => {
                 photo={photo}
                 noPhoto={noPhoto}
                 getComment={()=>{getCommentList(feed.seq)}}
+                profile={feed.profile}
                 />
             }
             <div className="container mt-4">
