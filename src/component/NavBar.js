@@ -59,8 +59,37 @@ export default function Navbar() {
         })
     }
 
+    // 나와 맞팔 관계인 유저의 목록 호출 및 컴포넌트
+    const [mutualUsers, setMutualUsers] = useState([]);
+    const getMutualUsers = async () => {
+        axios.get("http://localhost:3000/group/getMutualUsers", {params:{"following_id":"testid"}})
+        .then(function(res){
+            setMutualUsers(res.data.list);
+        })
+        .catch(function(err){
+            alert(err);
+        })
+    }
+    const MutualUsersComponent = (props) => {
+        return (
+            <>
+            <div className="d-flex align-items-center mb-4">
+                <div className="iq-profile">
+                {props.data.profile === "test" && <Link to={`/myfeed/myfeed2/${props.data.id}`}><img className="rounded-circle avatar-50" src="/feedimages/baseprofile.png" alt="" /></Link>}
+                {props.data.profile === "baseprofile" && <Link to={`/myfeed/myfeed2/${props.data.id}`}><img className="rounded-circle avatar-50" src="/feedimages/baseprofile.png" alt="" /></Link>}
+                </div>
+                <div className="ms-3">
+                    <Link to={`/myfeed/myfeed2/${props.data.id}`}><h6 className="mb-0">{props.data.id}</h6></Link>
+                    <p className="mb-0">{props.data.intro}</p>
+                </div>
+            </div>
+            </>
+        )
+    }
+
     useEffect(()=>{
         getProfile();
+        getMutualUsers();
     },[userId])
 
 
@@ -235,15 +264,15 @@ export default function Navbar() {
                             <div className="card-body p-0">
                                 <div className="media-height p-3" data-scrollbar="init">
                                     {/* TO-DO d-flex align-items 컴포넌트화 시켜주세요 */}
-                                    <div className="d-flex align-items-center mb-4">
-                                        <div className="iq-profile-avatar status-online">
-                                            <img className="rounded-circle avatar-50" src="/assets/images/user/01.jpg" alt="" />
-                                        </div>
-                                        <div className="ms-3">
-                                            <h6 className="mb-0">Test</h6>
-                                            <p className="mb-0">최근 활동 : 5분전</p>
-                                        </div>
-                                    </div>
+                                    {mutualUsers && mutualUsers.length !== 0 ? (
+                                        mutualUsers.map((list,i) => {
+                                            return (
+                                                <MutualUsersComponent data={list} key={i}/>
+                                            )
+                                        })
+                                    ): (
+                                        <p>새로운 친구를 만들어보세요!</p>
+                                    )}
                                 </div>
                                 <div className="right-sidebar-toggle bg-success text-white mt-3">
                                     <i className="ri-arrow-left-line side-left-icon"></i>
