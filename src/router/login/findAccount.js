@@ -5,6 +5,8 @@ import ChangePassword from "./components/ChangePassword";
 
 const Container = styled.div`
     display: flex;
+    margin-top: 50px;
+    margin-left: 300px;
     max-width: 800px;
     flex-flow : row wrap;
 `;
