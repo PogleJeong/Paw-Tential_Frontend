@@ -170,7 +170,7 @@ const handleCloseReportModal = () => {
             <div className="user-post-data">
               <div className="d-flex justify-content-between">
                 <div className="me-3">
-                  <img className="rounded-circle img-fluid" src={props.feedData.profile} alt="" style={{width:"60px", height:"55px"}} />
+                  <img className="rounded-circle img-fluid" src={`http://localhost:3000/${props.feedData.profile}`} alt="" style={{width:"60px", height:"55px"}} />
                 </div>
                 <div className="w-100">
                   <div className="d-flex justify-content-between">

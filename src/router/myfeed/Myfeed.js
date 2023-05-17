@@ -227,12 +227,13 @@ const Myfeed = () => {
   
   
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
+    arrows:false
   };
   
   
@@ -314,7 +315,7 @@ const Myfeed = () => {
       <div class="card mb-3">
       <div className="row no-gutters" key={index}>
         <div className="col-md-4">
-          <img src={`data:image/png;base64,${imageList[index].data}`} />
+          <img style={{width:"300px"}} src={`data:image/png;base64,${imageList[index].data}`} />
         </div>
         <div className="col-md-8">
           <div className="card-body">
