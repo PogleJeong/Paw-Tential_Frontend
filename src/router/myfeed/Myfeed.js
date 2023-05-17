@@ -249,13 +249,13 @@ const Myfeed = () => {
         <div className="card-body p-0">
           <div className="user-tabing">
             <ul className="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
-              <li className="nav-item col-12 col-sm-3 p-0">
+              <li className="nav-item col-12 col-sm-4 p-0">
                 <a className="nav-link active" href="#pills-timeline-tab" data-bs-toggle="pill" data-bs-target="#timeline" role="button" onClick={handleHomemarkClick}>피드</a>
               </li>
-              <li className="nav-item col-12 col-sm-3 p-0">
+              <li className="nav-item col-12 col-sm-4 p-0">
                 <a className="nav-link" href="#pills-about-tab" data-bs-toggle="pill" data-bs-target="#about" role="button" onClick={handleBookmarkClick}>북마크</a>
               </li>
-              <li className="nav-item col-12 col-sm-3 p-0">
+              <li className="nav-item col-12 col-sm-4 p-0">
               <a className="nav-link" href="#pills-friends-tab" data-bs-toggle="pill" data-bs-target="#friends" role="button" onClick={handlePetInfoClick}>펫 정보</a>
               </li>
             </ul>
