@@ -18,7 +18,7 @@ export default function Navbar() {
     {/*const userId = cookies.USER_ID;*/}
     
     // 임시
-    const userId = 'admin5';
+    const userId = cookies.USER_ID;
 
     useEffect(()=>{
         cookies.USER_ID ? setLoginState(true) : setLoginState(false)
@@ -158,7 +158,7 @@ export default function Navbar() {
                                             <i className="ri-message-2-line" />
                                         </Link>
                                     </li>
-                                    {userId === "admin5" && (
+                                    {userId === "pawtential" && (
                                     <li> {/*관리자페이지 버튼*/}
                                         <Link to="/admin/admin" target="_blank" className="d-flex align-items-center">
                                             <i className="ri-settings-5-line" />
