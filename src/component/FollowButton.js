@@ -45,7 +45,6 @@ const FollowButton = ({ userId, isFollowing }) => {
         // Additional actions on successful follow
       } else {
         console.log("팔로우 실패");
-        // Additional actions on failed follow
       }
     } catch (error) {
       console.error("팔로우 에러:", error);
