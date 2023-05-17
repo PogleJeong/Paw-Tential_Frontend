@@ -1,10 +1,10 @@
 .pawtens {
-    width: 1300px;
+    width: 100%;
     float: left;
 }
 
 .pawtens .pawtensItem {
-    width: 1300px;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,8 +12,9 @@
 }
 
 .pawtens .pawtensItem video {
-    width: 1300px;
+    width: 100%;
     max-height: 700px;
+    object-fit: cover;
 }
 
 .pawtens .pawtensItem .profile {

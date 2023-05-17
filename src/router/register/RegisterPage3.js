@@ -57,9 +57,8 @@ const HeaderWrapper = styled(Wrapper)`
 const BodyWrapper = styled.div`
     margin-top: 100px;
     margin-bottom: 100px;
-    max-height: 400px;
     min-width: 800px;
-    overflow: scroll;
+
     padding: 10px;
     border-radius: 10px;
     background-color: white;
@@ -72,6 +71,12 @@ const FooterWrapper = styled(Wrapper)`
     min-width: 800px;
 `
 
+const PetInfoWrapper = styled(HeaderWrapper)`
+    width: 750px;
+    height: 400px;
+    padding: 20px;
+`;
+
 const ImageBox= styled.div`
     width: 300px;
     height: 250px;
@@ -83,13 +88,13 @@ const Image = styled.img`
   height: 200px;
   border: 2px solid white;
   border-radius: 100px;
+  margin-bottom: 30px;
 `;
 
 const InfoBox = styled.div`
     width: 400px;
     height: 400px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding: 30px;
 `
 
 const CatogoryBtn = styled.button`
@@ -109,6 +114,21 @@ const Label = styled.label`
     text-align: center;
     font-weight: bold;
 `;
+
+const ImageBtnLabel = styled.label`
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background-color: blueviolet;
+    color: white;
+
+    transition: scale 1s;
+    &:hover {
+        scale: 0.9;
+    }
+`
+
 
 const InputBox = styled.input.attrs({required: true})`
     width: 200px;
@@ -134,13 +154,13 @@ const TextAreaBox = styled.textarea.attrs({required: true})`
 `
 
 const AddBtn = styled.button`
-    margin: 50px;
+    margin: 10px;
     width: 100px;
     height: 60px;
     border: none;
     border-radius: 10px;
     color: black;
-    background-color: beige;
+    background-color: #cee0c2;
 `
 
 const RemoveBtn = styled.button`
@@ -149,13 +169,13 @@ const RemoveBtn = styled.button`
     border: none;
     border-radius: 10px;
     color: black;
-    background-color: greenyellow;
+    background-color: #ffd1a7;
 `
 
 const AddPetInfoWrapper = styled.div`
     margin: 10px 20px;
-    min-width: 750px;
-    height: 50px;
+    width: 750px;
+    height: 400px;
     border: none;
     border-radius: 10px;
     box-shadow: 2px 3px 5px 0px;
@@ -177,7 +197,7 @@ const CompleteBtn = styled.button`
     border: none;
     border-radius: 10px;
     color: white;
-    background-color: yellowgreen;
+    background-color: #b85c52;
 `
 
 const PassRegiBtn = styled.button`
@@ -195,7 +215,7 @@ function RegisterPage3() {
     // 유저 id 정보가져오기
     const location = useLocation();
     const { userId } = location.state;
-
+    const [ count, setCount ] = useState(0);
     // 모달창
     const [ activeModal, setActiveModal ] = useState(false);
 
@@ -205,7 +225,7 @@ function RegisterPage3() {
     const petName = useInput("", checkRegExp, /^[ㄱ-ㅎ가-힣a-zA-Z]{0,10}$/);
     const petBirth = useInput("", checkRegExp, /^[0-9]{0,8}$/);
     const petIntro = useInput("", maxLen, 100);
-    const [ petGender, setPetGender] = useState("");
+    const [ petGender, setPetGender] = useState(0);
 
     const [ petInfoList, setPetInfoList ] = useState([]);
     const [ imageList, setImageList ] = useState([]);
@@ -217,6 +237,17 @@ function RegisterPage3() {
     const imgRef = useRef();
     const navigate = useNavigate();
 
+    useEffect(()=>{
+        // 초기화
+        setPetCategory("반려동물 선택");
+        petName.setValue("");
+        petBirth.setValue("");
+        petIntro.setValue("");
+        setPetGender("");
+        imgRef.current.value = "";
+        setImgFile(baseimage);
+    },[count])
+
     const imgLoad = () => {
         // 반환값 File 객체(file 변수)
         const file = imgRef.current.files[0];
@@ -226,9 +257,18 @@ function RegisterPage3() {
           setImgFile(reader.result); // reader 결과(이미지)를 img 태그에 설정
         }
     }
+    
+    const imgLoadFile = async(fileObject) => {
+        // File 객체 읽기
+        const reader = new FileReader();
+        reader.readAsDataURL(fileObject);
+        reader.onloadend = () => {
+            return reader.result;
+        }
+    }
 
     const registerPet = async() => {
-        console.log(petInfoList);
+  
         if(petInfoList.length === 0){
             alert("반려동물의 정보가 입력되지 않았습니다.");
             return;
@@ -236,8 +276,7 @@ function RegisterPage3() {
 
         const petInfoData = petInfoList.map((items) => items.data);
         const imageData = imageList.map((items) => items.data);
-        console.log(petInfoData);
-        console.log(imageData);
+
 
         let formData = new FormData();
         imageData.map((image)=>{
@@ -302,13 +341,7 @@ function RegisterPage3() {
         setImageList(imageList => imageList.concat(imageInfo));
 
         // 초기화
-        setPetCategory("반려동물 선택");
-        petNameRef.current.value = "";
-        petBirthRef.current.value = "";
-        petIntroRef.current.value = "";
-        setPetGender("");
-        imgRef.current.value = "";
-        setImgFile(baseimage);
+        setCount(prev => prev+1);
     }
 
     const removePetInfo = (event) => {
@@ -325,14 +358,17 @@ function RegisterPage3() {
                 {activeModal ? <PetCategoryModal getPetCategory={setPetCategory} getModalActive={setActiveModal}/> : null}
                 <ImageBox>
                     <Image src={imgFile} alt="" /><br/>
-                    <input type="file" ref={imgRef} onChange={imgLoad} /><br/>
-                    <AddBtn onClick={addPetInfo}>반려동물 추가하기</AddBtn>
+                    <ImageBtnLabel>이미지 추가
+                        <input type="file" ref={imgRef} onChange={imgLoad} style={{width: "0px", height: "0px"}} /><br/>
+                    </ImageBtnLabel>
+                    <br/><AddBtn onClick={addPetInfo}>반려동물<br/>추가하기</AddBtn>
                 </ImageBox>
                 <InfoBox>
                     <Label>반려동물</Label><CatogoryBtn onClick={()=>setActiveModal(true)}>{petCategory}</CatogoryBtn><br/>
                     <Label>반려동물 이름</Label><InputBox ref={petNameRef} {...petName} placeholder="이름을 입력하세요(1~10 글자(영문/한글)" /><br/>
                     <Label>반려동물 생일</Label><InputBox ref={petBirthRef} {...petBirth} placeholder="생년월일 8자리를 입력해주세요" /><br/>
                     <div>
+                        <Label>성별</Label>
                         <Label><input type="radio" onChange={()=>setPetGender(0)} name="petGender" />남아</Label>
                         <Label><input type="radio" onChange={()=>setPetGender(1)} name="petGender" />여아</Label>
                     </div>
@@ -346,12 +382,19 @@ function RegisterPage3() {
                 {petInfoList.map((petInfo, index)=>
                     <li key={index}>
                         <AddPetInfoWrapper>
-                        <TextBox>{petInfo.data.cate}</TextBox>
-                        <TextBox>{petInfo.data.name}</TextBox>
-                        <TextBox>{petInfo.data.birth}</TextBox>
-                        <TextBox>{`${petInfo.data.intro.substring(1,20)}`}</TextBox>
-                        <TextBox>{petInfo.data.gender === 0 ? "남자" : "여자"}</TextBox>
-                        <RemoveBtn data-key={petInfo.key} onClick={removePetInfo}>정보삭제</RemoveBtn>
+                            <PetInfoWrapper>
+                                <ImageBox>
+                                    <Image src={imgLoadFile(imageList[index].data)}></Image>
+                                    <br/><RemoveBtn data-key={petInfo.key} onClick={removePetInfo}>정보삭제</RemoveBtn>
+                                </ImageBox>
+                                <InfoBox>
+                                    <Label>반려동물</Label><TextBox>{petInfo.data.cate}</TextBox><br/>
+                                    <Label>반려동물 이름</Label><TextBox>{petInfo.data.name}</TextBox><br/>
+                                    <Label>반려동물 생일</Label><TextBox>{petInfo.data.birth}</TextBox><br/>
+                                    <Label>성별</Label><TextBox>{petInfo.data.gender === 0 ? "남자" : "여자"}</TextBox><br/>
+                                    <TextBox>{`${petInfo.data.intro.substring(0,20)}`}</TextBox><br/>
+                                </InfoBox>
+                            </PetInfoWrapper>
                         </AddPetInfoWrapper>
                     </li>)}
                 </ul>

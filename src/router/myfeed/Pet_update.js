@@ -57,9 +57,8 @@ const HeaderWrapper = styled(Wrapper)`
 const BodyWrapper = styled.div`
     margin-top: 100px;
     margin-bottom: 100px;
-    //max-height: 400px;
     min-width: 800px;
-    //overflow: scroll;
+
     padding: 10px;
     border-radius: 10px;
     background-color: white;
@@ -160,7 +159,7 @@ const AddBtn = styled.button`
     border: none;
     border-radius: 10px;
     color: black;
-    background-color: beige;
+    background-color: #cee0c2;
 
     transition: scale 1s, border 1s;
     &:active {
@@ -175,7 +174,7 @@ const RemoveBtn = styled.button`
     border: none;
     border-radius: 10px;
     color: black;
-    background-color: greenyellow;
+    background-color: #ffd1a7;
 
     transition: scale 1s, border 1s;
     &:active {
@@ -209,7 +208,7 @@ const CompleteBtn = styled.button`
     border: none;
     border-radius: 10px;
     color: white;
-    background-color: yellowgreen;
+    background-color: #b85c52;
 `
 
 const PassRegiBtn = styled.button`
@@ -233,7 +232,7 @@ function PetUpdate() {
     const petName = useInput("", checkRegExp, /^(?:[A-Za-zㄱ-ㅎ가-힣]{0,8}|)$/);
     const petBirth = useInput("", checkRegExp, /^[0-9]{0,8}$/);
     const petIntro = useInput("", maxLen, 100);
-    const [ petGender, setPetGender] = useState("");
+    const [ petGender, setPetGender] = useState("0");
 
     const nameRef = useRef();
 
@@ -298,8 +297,6 @@ function PetUpdate() {
         setPetInfoList(petInfoList => petInfoList.concat(petInfo));
         setImageList(imageList => imageList.concat(imageInfo));
         setCount(prev => prev+1);
-        
-        
     }
 
     useEffect(()=>{
@@ -344,15 +341,6 @@ function PetUpdate() {
                         setPetInfoList(petInfoList => petInfoList.concat(petInfoJson));
                         setImageList(imageList => imageList.concat(imageInfoJson));
                     }
-
-                  /*   console.log(gettingPetInfoList);
-                    gettingPetInfoList.map((info)=>{
-                        let key = Math.random().toString(36).substring(2, 11);
-                        let petInfoJson = { key, data: info }
-                        let imageInfoJson = { key, data: petInfoJson.img }
-                        setPetInfoList(petInfoList => petInfoList.concat(petInfoJson));
-                        setImageList(imageList => imageList.concat(imageInfoJson));
-                    }) */
                 }
             })
         }
@@ -432,7 +420,6 @@ function PetUpdate() {
 
         <BodyWrapper>
             <h2>추가한 반려동물 정보</h2><br/>
-            {console.log(imageList)}
             <ul>
             {petInfoList.map((petInfo, index)=>
                 <li key={index}>
@@ -452,7 +439,7 @@ function PetUpdate() {
                                 <Label>반려동물 이름</Label><TextBox>{petInfo.data.name}</TextBox><br/>
                                 <Label>반려동물 생일</Label><TextBox>{petInfo.data.birth}</TextBox><br/>
                                 <Label>성별</Label><TextBox>{petInfo.data.gender === 0 ? "남자" : "여자"}</TextBox><br/>
-                                <TextBox>{petInfo.data.intro}</TextBox><br/>
+                                <TextBox>{`${petInfo.data.intro.substring(1,20)}`}</TextBox><br/>
                             </InfoBox>
                         </PetInfoWrapper>
                     </AddPetInfoWrapper>
