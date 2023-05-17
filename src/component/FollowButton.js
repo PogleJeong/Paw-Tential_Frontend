@@ -61,10 +61,16 @@ const FollowButton = ({ userId, isFollowing }) => {
           'following_id': userId
         }
       });
-      console.log('언팔로우 성공:', response.data);
-      setFollowing(false); // Set following to false after successfully unfollowing
+      const result = response.data;
+  
+      if (result === "YES") {
+        console.log("언팔로우 성공");
+        setFollowing(false); 
+      } else {
+        console.log("언팔로우 실패");
+      }
     } catch (error) {
-      console.error('언팔로우 에러:', error);
+      console.error("언팔로우 에러:", error);
     }
   };
 

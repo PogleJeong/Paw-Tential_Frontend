@@ -4,6 +4,14 @@ import FeedDetailModal from "../router/home/modals/FeedDetailModal";
 
 // content 문자열에서 피드 이미지만 가져오기
 export const FeedImage = (props) => {
+
+  const [feedDetailModal, setFeedDetailModal] = useState(false);
+
+    // 피드 자세히 보기 함수
+    const handleClick = () => {
+        setFeedDetailModal(true);
+    }
+    
     function getImgSrc() {
         let str = props.content;
         if(str.includes('<img src="')){
@@ -13,9 +21,17 @@ export const FeedImage = (props) => {
         }
     }
     return (
+      <>
+      <FeedDetailModal show={feedDetailModal}
+                                        onHide={()=>{setFeedDetailModal(false)}}
+                                        feedData={props.feedData}
+                                        photo={props.photo}
+                                        noPhoto={props.noPhoto}
+                                        getComment={props.getComment} />
         <div>
             <img src={getImgSrc()} alt="피드사진" className="img-fluid rounded w-100" />
         </div>
+      </>
     );
 };
 

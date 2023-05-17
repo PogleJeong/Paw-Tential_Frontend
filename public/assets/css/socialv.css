@@ -16717,13 +16717,13 @@ ul.header-nav li a {
 .profile-feed-items li a.nav-link {
   text-decoration: none;
   text-transform: capitalize;
-  color: #777d74;
+  color: #b85c52;
   text-align: center;
   padding: 1.25rem 0.625rem;
 }
 .nav-pills.profile-feed-items li a.active {
   color: #fff;
-  background: #50b5ff;
+  background: #b85c52;
 }
 .news-icon {
   font-size: 1.125rem;
