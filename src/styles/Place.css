@@ -1,7 +1,7 @@
 .map_wrap, .map_wrap * {margin:0;padding:0;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
 .map_wrap {width:100%;}
-#menu_wrap {float: left; width:500px; height: 800px; overflow-y:auto;z-index: 1;border-radius: 10px;}
+#menu_wrap {float: left; width:400px; height: 800px; overflow-y:auto;z-index: 1;border-radius: 10px;}
 #menu_wrap::-webkit-scrollbar {display: none;}
 #menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
 #menu_wrap .option{text-align: center;}
@@ -27,15 +27,21 @@
 #pagination .on {font-weight: bold; cursor: default;color:#777;}
 
 .place_detail {
-    width: 460px;
+    width: 383px;
     height: 800px;
     float: left;
 }
 #submit_research {
-    position: relative;
-    top: 60px;
-    left: 600px;
-    z-index: 2;
+    /* position: absolute;
+    top: 255px;
+    right: 680px;
+    z-index: 2; */
     font-size: 12pt;
-    padding: 7px;
+    padding: 5px 10px;
+    margin-left: 540px;
+}
+
+.palce_review img {
+    height:315px;
+    object-fit: cover;
 }

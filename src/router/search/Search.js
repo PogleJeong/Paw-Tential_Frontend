@@ -20,7 +20,7 @@ function Search(){
     }, []);
 
     return (
-        <div className="container mt-3">
+        <div className="container mt-4">
             <div className="row search">
 
                 <div class="col-lg-3">
