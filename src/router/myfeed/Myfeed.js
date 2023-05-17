@@ -224,8 +224,6 @@ const Myfeed = () => {
     getPetInfoList();
 },[])
 
-  
-  
   const settings = {
     dots: true,
     infinite: true,
@@ -234,8 +232,7 @@ const Myfeed = () => {
     slidesToScroll: 1,
     autoplay: true,
   };
-  
-  
+
 
   return (
     <div className="container mt-3">
