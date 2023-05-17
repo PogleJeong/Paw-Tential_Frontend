@@ -57,6 +57,7 @@ import Chatroom from "./router/chat/Chatroom";
 import NewGroupFeed from "./router/group/NewGroupFeed";
 import Search from "./router/search/Search";
 import Navbar from "./component/NavBar";
+import InitPage from "./router/home/InitPage";
 
 
 function App() {
@@ -72,6 +73,9 @@ function App() {
           {/* <ThemedExample/> */}
 
           <Routes>
+            {/* home */}
+            <Route path="/" element={<InitPage />} />
+
             {/* 메인 홈 */}
             <Route path="/home/home" element={<Home />} />
 
