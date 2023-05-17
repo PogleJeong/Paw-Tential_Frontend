@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 
-const ModifyFeedModal = ({show, onHide, grpFeedNo, fn}) => {
+const ModifyFeedModal2 = ({show, onHide, grpFeedNo, fn}) => {
 
     useEffect(()=>{
         if(show){
@@ -45,8 +45,8 @@ const ModifyFeedModal = ({show, onHide, grpFeedNo, fn}) => {
         axios.post("http://localhost:3000/group/feedModify", formData)
         .then(function(res){
             alert(res.data);
-            onHide();
             fn();
+            onHide();
         })
         .catch(function(err){
             alert(err);
@@ -164,4 +164,4 @@ const ModifyFeedModal = ({show, onHide, grpFeedNo, fn}) => {
 
 }
 
-export default ModifyFeedModal
+export default ModifyFeedModal2

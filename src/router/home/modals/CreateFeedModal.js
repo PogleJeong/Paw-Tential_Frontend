@@ -7,7 +7,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CreatePawtensData } from '../../../component/FeedModalTabs';
 
-const CreateFeedModal = ({show, onHide}) => {
+const CreateFeedModal = ({show, onHide, fn}) => {
 
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [showLocationInput, setShowLocationInput] = useState(false);
@@ -16,13 +16,6 @@ const CreateFeedModal = ({show, onHide}) => {
   const [location, setLocation] = useState('');
 
   const [tabKey, setTabKey] = useState('feed');
-
-  // useEffect(()=>{
-  //   let user = Session.get("user");
-  //   if(user !== undefined){ // 세션에 저장해둔 문자열이 있을 때
-  //       setUserId(user);
-  //   }
-  // }, []);
 
   const customUploadAdapter = (loader) => {
     return {
@@ -126,11 +119,6 @@ const CreateFeedModal = ({show, onHide}) => {
                   setContent(data);
                 }}
               />
-              {/* <Form.Control
-                placeholder="내용을 입력해주세요"
-                onChange={(e)=>{setContent(e.target.value)}}
-                
-                /> */}
             </Form.Group>
             <ButtonGroup className="mb-3">
               <Button variant="secondary" onClick={() => setShowLocationInput(true)}>장소 추가</Button>

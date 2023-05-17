@@ -113,7 +113,7 @@ export default function GroupFeedItems(props){
                                 <>
                                 {likes.map((mem, i) => {
                                     return (
-                                        <a key={i} className="dropdown-item" href="javascript:void(0);">{mem.grpFeedLikeId}</a>
+                                        <a key={i} className="dropdown-item" href="javascript:void(0);">{mem.nickname}</a>
                                     )
                                 })}   
                                 </>
@@ -221,8 +221,7 @@ export default function GroupFeedItems(props){
                             <li className="mb-2" key={cmt.grpCmtNo}>
                                 <div className="d-flex">
                                     <div className="user-img">
-                                    {cmt.profile === "test" && <img className="avatar-35 rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" />}
-                                    {cmt.profile === "baseprofile" && <img className="avatar-35 rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" />}
+                                        <img className="avatar-35 rounded-circle img-fluid" src={`http://localhost:3000/${cmt.profile}`} alt="" />
                                     </div>
                                     <div className="comment-data-block ms-3">
                                         <h6>{cmt.grpFeedCmtId}</h6>
@@ -323,19 +322,17 @@ export default function GroupFeedItems(props){
 
     return (
         <>
-            <ModifyFeedModal show={modifyFeedModal} onHide={()=>{setModifyFeedModal(false)}} grpFeedNo={selectedGrpFeedId} />
+            <ModifyFeedModal show={modifyFeedModal} onHide={()=>{setModifyFeedModal(false)}} grpFeedNo={selectedGrpFeedId} fn={props.isMember} />
             <div className="post-item">
                 <div className="user-post-data py-3">
                     <div className="d-flex justify-content-between">
                         <div className="me-3">
-                            {/* TO-DO 유저 프로필 사진 넣어주세요 */}
-                            {props.data.profile === "test" && <img className="avatar-60 rounded-circle" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
-                            {props.data.profile === "baseprofile" && <img className="avatar-60 rounded-circle" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
+                            <img className="avatar-60 rounded-circle" src={`http://localhost:3000/${props.data.profile}`} alt="" style={{width:"60px", height:"60px"}} />
                         </div>
                         <div className="w-100">
                             <div className="d-flex justify-content-between">
                                 <div>
-                                    <h5 className="mb-0 d-inline-block">{props.data.grpFeedId}</h5>
+                                    <h5 className="mb-0 d-inline-block">{props.data.nickname}</h5>
                                     <p className="mb-0">{props.data.grpFeedWd.substring(0,10)}ㆍ<i className={`ri-${props.data.grpFeedSetting === "전체 공개" ? 'lock-fill pe-1' : 'global-line pe-1' }`} /></p>
                                 </div>
                                 <div className="card-post-toolbar">

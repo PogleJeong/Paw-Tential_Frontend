@@ -1,5 +1,5 @@
 const dataURLtoFile = (dataurl, fileName) => {
- 
+    console.log(dataurl);
     var arr = dataurl.split(','),
         mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]), 

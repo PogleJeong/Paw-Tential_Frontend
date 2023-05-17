@@ -19,8 +19,8 @@ export default function NewGroupFeed() {
 
     // cookie에 저장된 사용자 ID
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
-    {/*const userId = cookies.USER_ID;*/}
-    const userId = 'test2';
+    const userId = cookies.USER_ID;
+    
 
     // 로그인 한 유저의 프로필 사진
     const [profile, setProfile] = useState('');
@@ -33,7 +33,7 @@ export default function NewGroupFeed() {
 
     // 특정 그룹에 가입된 멤버인지 확인
     const [hasJoinedMember, setHasJoinedMember] = useState(false);
-    
+
     // 특정 그룹의 피드(일반 그룹)
     const [grpFeed, setGrpFeed] = useState([]);
     // 특정 그룹의 피드(돌봄 그룹)
@@ -46,11 +46,13 @@ export default function NewGroupFeed() {
     const [modifyCareFeedModal, setModifyCareFeedModal] = useState(false);
     const [modifyMainFeedModal, setModifyMainFeedModal] = useState(false);
 
-    // 로그인 한 유저의 프로필 사진 가져오기
+    // 로그인 한 유저의 프로필 사진, 닉네임 가져오기
+    const [nickname, setNickname] = useState('');
     const getProfileImage = async () => {
         axios.get("http://localhost:3000/group/getProfileImage", {params:{"id":userId}})
         .then(function(res){
-            setProfile(res.data);
+            setProfile(res.data.profile);
+            setNickname(res.data.nickname);
         })
         .catch(function(err){
             alert(err);
@@ -87,9 +89,11 @@ export default function NewGroupFeed() {
             if(res.data.count !== 0) {
                 setHasJoinedMember(true);
                 setGrpFeed(res.data.groupAllFeed);
+                console.log(JSON.stringify(grpFeed))
             } else {
                 setHasJoinedMember(false);
                 setGrpFeed(res.data.groupFeed);
+                console.log(JSON.stringify(grpFeed))
             }
         })
         .catch(function(err){
@@ -110,6 +114,7 @@ export default function NewGroupFeed() {
     }
 
     useEffect(()=>{
+        console.log("hello");
         getProfileImage();
         isMember();
         getGroupInfo();
@@ -121,7 +126,7 @@ export default function NewGroupFeed() {
 
     return (
         <>
-            <CreateFeedModal show={createFeedModal} onHide={()=>{setCreateFeedModal(false)}} userId={userId} />
+            <CreateFeedModal show={createFeedModal} onHide={()=>{setCreateFeedModal(false)}} userId={userId} fn={isMember}/>
             
             <ModifyCmtModal show={modifyCmtModal} onHide={()=>{setModifyCmtModal(false)}}  />
             <CareFeedModal show={careFeedModal} onHide={()=>{setCareFeedModal(false)}} />
@@ -158,9 +163,8 @@ export default function NewGroupFeed() {
                                             <>
                                             {memberProfile.map((profile, i) => {
                                                 return (
-                                                <a href="javascript:void(0);" className="iq-media">
-                                                {profile.profile === "test" && <img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
-                                                {profile.profile === "baseprofile" && <img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
+                                                <a href="javascript:void(0);" className="iq-media" key={i}>
+                                                <img className="rounded-circle img-fluid" src={`http://localhost:3000/${profile.profile}`} alt="" style={{width:"60px", height:"60px"}}/>
                                                 </a>
                                                 )
                                             })}
@@ -177,9 +181,7 @@ export default function NewGroupFeed() {
                                     <div className="card-body">
                                         <div className="d-flex align-items-center">
                                             <div className="user-img">
-                                                {/* TO-DO 유저 프로필 사진 넣어주세요 */}
-                                                {profile === "test" && <img className="avatar-60 rounded-circle" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
-                                                {profile === "baseprofile" && <img className="avatar-60 rounded-circle" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
+                                                <img className="avatar-60 rounded-circle" src={`http://localhost:3000/${profile}`} alt="" style={{width:"60px", height:"60px"}} />
                                             </div>
                                             <div className="post-text ms-3 w-100">
                                                 <input
@@ -188,7 +190,7 @@ export default function NewGroupFeed() {
                                                     type="text"
                                                     size="50"
                                                     onClick={()=>{grpName === '돌봄' ? setCareFeedModal(true) : setCreateFeedModal(true)}}
-                                                    placeholder={grpName === '돌봄' ? `${userId}님, 돌봄이 필요하세요?` : `${userId}님, 무슨 생각을 하고 계신가요?`}
+                                                    placeholder={grpName === '돌봄' ? `${nickname}님, 돌봄이 필요하세요?` : `${nickname}님, 무슨 생각을 하고 계신가요?`}
                                                 />
                                             </div>
                                         </div>
@@ -235,6 +237,8 @@ export default function NewGroupFeed() {
                                 </div>
                             </div>
                         </div>
+                        {userId === groupInfo.grpleader && (
+                        <>
                             <div className="col-lg-4">
                                 <div className="card">
                                     <div className="card-header d-flex justify-content-between">
@@ -245,6 +249,8 @@ export default function NewGroupFeed() {
                                     <JoinRequestComponent grpNo={params.grpNo} />
                                 </div>
                             </div>
+                        </>
+                        )}
                         </div>
                     </div>
                 </div>

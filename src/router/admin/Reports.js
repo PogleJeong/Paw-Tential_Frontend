@@ -162,6 +162,8 @@ function TableRow(props){
 
   const navigate = useNavigate();
   const [feed, setFeed] = useState([]);
+  const [market, setMarket] = useState([]);
+
   const [feedDetailModal, setFeedDetailModal] = useState(false);
 
 
@@ -198,8 +200,8 @@ function TableRow(props){
   
   useEffect(() => {
     fetchFeed(props);
+    fetchMarket(props);
   }, []);
-  
   
   
   
@@ -216,38 +218,52 @@ function TableRow(props){
     }
   };
 
+  
+  
+  
+  
+  // 해당 피드 정보 가져오기
+  const fetchFeed = async (props) => {
+    try {
+      const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': props.report.feed_seq} });
+      const data = response.data;
+      setFeed(data);
+      getPhoto(data.content);
+      getNoPhoto(data.content);
+      getCommentList(data.seq);
+    } catch (error) {
+    console.log(error);
+  }
+};
+
+// 해당 마켓 정보 가져오기
+const fetchMarket = async (props) => {
+  try {
+    const response = await axios.get('http://localhost:3000/marketDetail', { params: { 'seq': props.report.market_seq } });
+    const data = response.data;
+    setMarket(data);
+    
+    console.log('마켓 데이터:' + JSON.stringify(data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+console.log(market);
+
 
   const handleGoToDetail = () => {
   if (props.report.type === '유저') {
     navigate(`/myfeed/myfeed2/${props.report.reported}`);
 
   } else if (props.report.type === '피드') {
-    fetchFeed(props);
     setFeedDetailModal(true);
-    console.log('포토 : '+photo);
+    console.log('포토 : '+ photo);
   } else if (props.report.type === '마켓') {
-    navigate(`/market/Market_detail/${props.report.reported}`);
+    console.log(props);
+    console.log(market);
+    navigate(`/market/detail/${props.report.market_seq}`,{ state: {marketInfo: market.marketInfo, imgInfo: market.imgInfo}});
   }
 };
-
-
-
-
-
-const fetchFeed = async (props) => {
-  try {
-    const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': props.report.feed_seq } });
-    const data = response.data;
-    setFeed(data);
-    getPhoto();
-    getNoPhoto();
-    getCommentList();
-    console.log('피드 데이터:', data);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 
 
 
@@ -263,7 +279,7 @@ const fetchFeed = async (props) => {
           <td>{props.report.rdate}</td>
           <td>{props.report.type}</td>
           <td>
-        <button class="btn btn-secondary" onClick={() => handleGoToDetail(feed , props.report.reported)}>이동</button>
+        <button class="btn btn-secondary" onClick={() => handleGoToDetail(feed , props.report.reported, market)}>이동</button>
       </td>
       {feedDetailModal && (
       <FeedDetailModal

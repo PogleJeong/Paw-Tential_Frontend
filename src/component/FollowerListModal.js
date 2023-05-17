@@ -47,6 +47,7 @@ const FollowerListModal = ({ userId, closeModal }) => {
       return false;
     }
   };
+  
 
   return (
     <Modal

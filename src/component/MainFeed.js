@@ -161,17 +161,6 @@ const handleCloseReportModal = () => {
     navigate(`/myfeed/myfeed2/${userId}`); // Navigate to the user's MyFeed page
   };
 
-
-  // useRef current에 담긴 엘리먼트 외부 영역 클릭 시 dropdown 메뉴 닫힘
-  // useEffect(() => {
-  //   const handleOutsideClose = (e) => {
-  //     if(isDropdown && (!dropMenuRef.current.contains(e.target))) setIsDropdown(false);
-  //   };
-  //   document.addEventListener('click', handleOutsideClose);
-    
-  //   return () => document.removeEventListener('click', handleOutsideClose);
-  // }, [isDropdown]);
-
   return (
     <>
       <ModifyMainFeedModal show={modifyMainFeedModal} onHide={()=>{setModifyMainFeedModal(false)}} seq={props.feedData.seq} />
@@ -181,13 +170,12 @@ const handleCloseReportModal = () => {
             <div className="user-post-data">
               <div className="d-flex justify-content-between">
                 <div className="me-3">
-                  {/* // TO-DO 유저 프로필 사진 넣어주세요 */}
-                  <img className="rounded-circle img-fluid" src={`http://localhost:3000/uploads/${props.feedData.profile}`} alt="" style={{width:"60px", height:"55px"}} />
+                  <img className="rounded-circle img-fluid" src={props.feedData.profile} alt="" style={{width:"60px", height:"55px"}} />
                 </div>
                 <div className="w-100">
                   <div className="d-flex justify-content-between">
                     <div>
-                      <h5 className="mb-0 d-inline-block" onClick={() => handleUserClick(props.feedData.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{props.feedData.id}</h5>
+                      <h5 className="mb-0 d-inline-block" onClick={() => handleUserClick(props.feedData.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{props.feedData.nickname}</h5>
                       <p className="mb-0 text-primary">{props.feedData.dateCreated.substring(0,10)}</p>
                     </div>
                     <div className="card-post-toolbar">
@@ -318,49 +306,6 @@ const handleCloseReportModal = () => {
         </div>
       </div>
     </>
-
-    // <div>
-    //   <div className="feed-post" ref={dropMenuRef}>
-
-    //     <div>
-    //       <div className="feed-icon" style={{float:"left"}}>
-    //         <img src={"feedimages/"+ feedData.feedData.profile +".png"} alt="프로필" />
-    //       </div>
-    //       {cookies.USER_ID !== '' &&
-    //         <div className="feed-icon" style={{float:"left"}}>
-    //           <img src="feedimages/icon.png" alt="더보기" onClick={() => setIsDropdown(!isDropdown)}/>
-    //           {cookies.USER_ID === feedData.feedData.id
-    //           ? isDropdown && <FeedDropdown_writer seq={feedData.feedData.seq} />
-    //           : isDropdown && <FeedDropdown_user seq={feedData.feedData.seq} />}
-    //         </div>
-    //       }
-    //     </div>
-
-    //     <FeedImage content={feedData.feedData.content} />
-
-    //     <div className="post-actions">
-    //       <button onClick={onClickLike}>
-    //         <img src={"feedimages/"+(isLike?"likeon.png" : "likeoff.png")} alt="좋아요" />
-    //       </button>
-    //       <button>
-    //         <img src="feedimages/comment.png" alt="댓글" />
-    //       </button>
-    //       <button>
-    //         <img src="feedimages/bookmarkoff.png" alt="북마크" />
-    //       </button>
-    //     </div>
-
-    //     <div className="post-info">
-    //       <FeedContent content={feedData.feedData.content} />
-    //     </div>
-
-    //     <hr/>
-    //     <div className="feed-comment">
-    //       <p>댓글란</p>
-    //     </div>
-
-    //   </div>
-    // </div>
   );
 };
 

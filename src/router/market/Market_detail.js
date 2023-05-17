@@ -21,11 +21,12 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 
-    margin: 0px;
+    margin: 10px 10%;
     padding: 100px;
     width: 80%;
-    height: 1600px;
+    height: 1900px;
 
     animation: ${fadeIn} 2s;
 `;
@@ -250,7 +251,7 @@ const MarketDetail = () => {
                     </>
                     : 
                     null}
-                <ReportBtn onClick={clickReportBtn}>신고</ReportBtn>
+                <ReportBtn onClick={clickReportBtn} >신고</ReportBtn>
                 </UserSelfWrapper> 
                 <HeaderWrapper>
                     <ImageBox>
@@ -279,7 +280,7 @@ const MarketDetail = () => {
             </Wrappers>
             
             {activeReportModal ?
-            <MarketReport writer={id} setActiveReportModal={setActiveReportModal}/> : null}
+            <MarketReport writer={id} market_seq={posting} setActiveReportModal={setActiveReportModal}/> : null}
         </Container>
     );
 }

@@ -19,7 +19,7 @@ import RegisterPage3 from "./router/register/RegisterPage3";
 import FeedPost from "./router/Feed/FeedPost";
 
 import Place from "./router/place/Place.js";
-import Place_Detail from "./router/place/Place_Detail";
+import Place_detail from "./router/place/Place_Detail";
 
 import Myfeed from "./router/myfeed/Myfeed";
 import Myfeed2 from "./router/myfeed/Myfeed2";
@@ -29,7 +29,7 @@ import MarketHome from "./router/market/Market_home";
 import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
-import FindAccount from "./router/login/findAccount";
+import FindAccount from "./router/login/FindAccount";
 
 import Admin from "./router/admin/Admin";
 import QnA from "./router/admin/QnA";
@@ -37,12 +37,11 @@ import Reports from "./router/admin/Reports";
 import Users from "./router/admin/Users";
 import Data from "./router/admin/Data";
 
-import NewsFeed from "./router/group/NewsFeed";
 import CreateGroup from "./router/group/CreateGroup";
 import GroupList from "./router/group/GroupList";
 import MyGroup from "./router/group/MyGroup";
 import ModifyGroup from "./router/group/ModifyGroup";
-import GroupFeed from "./router/group/GroupFeed";
+import ThemedExample from "./component/chatbot";
 
 import Pawtens from "./router/pawtens/Pawtens";
 
@@ -65,14 +64,14 @@ function App() {
             <BrowserRouter>
                 <div className="wrapper">
                     {/* 사이드메뉴 */}
-
-                    {window.location.pathname === "/admin/admin" ? (
+                    {window.location.pathname.startsWith("/admin") ? (
                         <AdminSidebar />
                     ) : (
                         <Navbar />
                     )}
                     {/*쳇봇*/}
-                    <ChatBot />
+                    {/* <ThemedExample/> */}
+
                     <Routes>
                         {/* home */}
                         <Route path="/" element={<InitPage />} />

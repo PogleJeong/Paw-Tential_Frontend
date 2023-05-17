@@ -13,8 +13,7 @@ export default function NewNewsFeed() {
 
     // 쿠키에 저장된 ID 값
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
-    // const userId = cookies.USER_ID;
-    const userId = 'test33';
+    const userId = cookies.USER_ID;
 
     // 가입한 그룹이 있는지 확인
     const [groupJoined, setGroupJoined] = useState(false);
@@ -34,7 +33,6 @@ export default function NewNewsFeed() {
         axios.get("http://localhost:3000/group/newsFeed", {params:{"memberId":userId}})
         .then(function(res){
             setGroupFeeds(res.data.newsFeed);
-            console.log(res.data.newsFeed);
         })
         .catch(function(err){
             alert(err);
@@ -64,7 +62,7 @@ export default function NewNewsFeed() {
                         <NewsFeedComponent feed={feed}
                                                                     key={i}
                                                                     userId={userId}
-                                                                    fn={getMemberGroupsFeeds}
+                                                                    fn={()=>{getMemberGroupsFeeds();}}
                                                                     />
                                                                     )
                                                                 })}
