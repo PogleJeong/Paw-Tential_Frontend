@@ -375,7 +375,7 @@ function PetUpdate() {
             if (response.status === 200){
                 if (response.data === "YES") {
                     alert("반려동물 등록이 완료되었습니다!.");
-                    navigate("/myfeed");
+                    navigate(`/myfeed/myfeed`);
                     return;
                 }
                 else {
