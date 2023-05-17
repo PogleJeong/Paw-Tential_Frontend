@@ -31,7 +31,7 @@ export default function ContestComment (props) {
     const writeComment = async () => {
         if(comment !== '' && comment.trim() !== '') {
             if(window.confirm("댓글을 등록하시겠습니까?")) {
-                axios.post("http://localhost:3000/contest/writeContestCmt", null, {params:{"contestSeq":props.seq, "id":'test33', "content":comment}})
+                axios.post("http://localhost:3000/contest/writeContestCmt", null, {params:{"contestSeq":props.seq, "id":props.userId, "content":comment}})
                 .then(function(res){
                     setComment('');
                     setCommentCount(prevCount => prevCount +1);
@@ -111,8 +111,7 @@ export default function ContestComment (props) {
                         <li className="mb-2" key={list.seq}>
                             <div className="d-flex">
                                 <div className="user-img">
-                                {list.profile === "test" && <img className="avatar-35 rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" />}
-                                {list.profile === "baseprofile" && <img className="avatar-35 rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" />}
+                                    <img className="avatar-35 rounded-circle img-fluid" src={`http://localhost:3000/${list.profile}`} />
                                 </div>
                                 <div className="comment-data-block ms-2">
                                     <h6>{list.id}</h6>

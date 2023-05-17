@@ -14,7 +14,7 @@ export default function MyGroup(){
     
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
     // cookie에 저장된 사용자 ID 및 닉네임
-    const userId = 'test33';
+    const userId = cookies.USER_ID;
     const userNickName = cookies.USER_NICKNAME;
 
     useEffect(()=>{
@@ -64,9 +64,6 @@ export default function MyGroup(){
                             <>
                             <div className="col-sm-12">
                                 <div className="card">
-                                    {/* <h3 className="card-header text-center font-weight-bold text-uppercase py-4">
-                                        그룹 목록
-                                    </h3> */}
                                     <div className="card-body">
                                         <div id="table" className="table-editable">
                                             <table className="table table-bordered table-responsive-md table-striped text-center">
@@ -105,38 +102,6 @@ export default function MyGroup(){
                         </div>
                     </div>
                 </div>
-        {/* <h1>내가 가입한 그룹</h1>
-        {myGroup !== null && myGroup.length !== 0
-        ?
-        <table>
-            <thead>
-                <tr>
-                    <th>그룹번호</th>
-                    <th>그룹리더</th>
-                    <th>그룹이름</th>
-                    <th>그룹 대표 이미지</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                myGroup.map(function(list, i){
-                    return (
-                    <tr key={i}>
-                        <td>{list.grpNo}</td>
-                        <td>{list.grpLeader}</td>
-                        <td><Link to={`/group/GroupFeed/${list.grpNo}`}>{list.grpName}</Link></td>
-                        <td><img alt="profile-img" className="rounded-circle img-fluid avatar-120" src={`http://localhost:3000/${list.grpImage}`}/></td>
-                        {list.grpLeader === userId && <td><Link to={`/group/ModifyGroup/${list.grpNo}`}>수정하기</Link></td>}
-                        {list.grpLeader !== userId && <td><button type="button" onClick={()=>leaveGroup(list.grpNo)}>그룹 탈퇴</button></td>}
-                    </tr>
-                    )
-                })
-                }
-            </tbody>
-        </table>
-        :
-        <p>가입한 그룹이 없습니다.</p>
-        } */}
         </>
     )
 }

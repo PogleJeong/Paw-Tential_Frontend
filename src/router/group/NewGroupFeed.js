@@ -19,8 +19,8 @@ export default function NewGroupFeed() {
 
     // cookie에 저장된 사용자 ID
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
-    {/*const userId = cookies.USER_ID;*/}
-    const userId = 'test2';
+    const userId = cookies.USER_ID;
+    
 
     // 로그인 한 유저의 프로필 사진
     const [profile, setProfile] = useState('');
@@ -158,9 +158,8 @@ export default function NewGroupFeed() {
                                             <>
                                             {memberProfile.map((profile, i) => {
                                                 return (
-                                                <a href="javascript:void(0);" className="iq-media">
-                                                {profile.profile === "test" && <img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
-                                                {profile.profile === "baseprofile" && <img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
+                                                <a href="javascript:void(0);" className="iq-media" key={i}>
+                                                <img className="rounded-circle img-fluid" src={`http://localhost:3000/${profile.profile}`} alt="" style={{width:"60px", height:"60px"}}/>
                                                 </a>
                                                 )
                                             })}
@@ -177,9 +176,7 @@ export default function NewGroupFeed() {
                                     <div className="card-body">
                                         <div className="d-flex align-items-center">
                                             <div className="user-img">
-                                                {/* TO-DO 유저 프로필 사진 넣어주세요 */}
-                                                {profile === "test" && <img className="avatar-60 rounded-circle" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
-                                                {profile === "baseprofile" && <img className="avatar-60 rounded-circle" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
+                                                <img className="avatar-60 rounded-circle" src={`http://localhost:3000/${profile}`} alt="" style={{width:"60px", height:"60px"}} />
                                             </div>
                                             <div className="post-text ms-3 w-100">
                                                 <input

@@ -13,8 +13,7 @@ export default function NewNewsFeed() {
 
     // 쿠키에 저장된 ID 값
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
-    // const userId = cookies.USER_ID;
-    const userId = 'test33';
+    const userId = cookies.USER_ID;
 
     // 가입한 그룹이 있는지 확인
     const [groupJoined, setGroupJoined] = useState(false);
