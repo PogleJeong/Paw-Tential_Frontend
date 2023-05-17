@@ -7,6 +7,7 @@ import { styled, keyframes } from 'styled-components';
 import baseimage from '../../image/baseprofile.png';
 import PetCategoryModal from '../register/modals/PetCategory';
 import { useInput, maxLen, checkRegExp } from '../../utils/UseHook';
+import dataURLtoFile from '../../utils/DataURL2File';
 
 const fadeIn = keyframes`
   0% {
@@ -362,8 +363,7 @@ function PetUpdate() {
             if (typeof image == "object") {
                 formData.append("file", image);
             }else{
-                let blob = new Blob([image], { type: "image/jpeg" });
-                let file = new File([blob], `image${index}.jpg`, {type: "mime"});
+                let file = dataURLtoFile(`data:image/jpeg;base64,${image}`, `image${index}`);
                 formData.append("file", file)
             }
         })
@@ -428,9 +428,9 @@ function PetUpdate() {
                             <ImageBox>
                                 { 
                                 typeof imageList[index].data === "object" ?
-                                <Image src={imgLoadFile(imageList[index].data)}></Image>
+                                <Image src={URL.createObjectURL(imageList[index].data)} />
                                 :
-                                <Image src={`data:image/jpeg;base64,${imageList[index].data}`}></Image>
+                                <Image src={`data:image/jpeg;base64,${imageList[index].data}`} />
                                 }
                                 <br/><RemoveBtn data-key={petInfo.key} onClick={removePetInfo}>정보삭제</RemoveBtn>
                             </ImageBox>
