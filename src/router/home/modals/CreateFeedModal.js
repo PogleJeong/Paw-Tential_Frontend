@@ -1,19 +1,21 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-import { Modal, Button, Form, Container, ButtonGroup } from 'react-bootstrap';
+import { useCookies } from "react-cookie";
+import { Modal, Button, Form, Container, ButtonGroup, Tab, Tabs } from 'react-bootstrap';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Session from "react-session-api"
-import { Cookies } from 'react-cookie';
+import { CreatePawtensData } from '../../../component/FeedModalTabs';
 
 const CreateFeedModal = ({show, onHide}) => {
 
-  const [userId, setUserId] = useState('loserya1234');
+  const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [showLocationInput, setShowLocationInput] = useState(false);
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');
   const [location, setLocation] = useState('');
+
+  const [tabKey, setTabKey] = useState('feed');
 
   // useEffect(()=>{
   //   let user = Session.get("user");
@@ -76,7 +78,7 @@ const CreateFeedModal = ({show, onHide}) => {
     e.preventDefault();
 
     let formData = new FormData();
-    formData.append("id", userId);
+    formData.append("id", cookies.USER_ID);
     formData.append("content",content);
     formData.append("location", location); // 임시
 
@@ -99,62 +101,83 @@ const CreateFeedModal = ({show, onHide}) => {
     centered
   >
     <Container>
-    <Modal.Header closeButton>
-      <Modal.Title id="contained-modal-title-vcenter">
-        Create Feed
-      </Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-    <Form name="frm" onSubmit={submitBtn}>
-      <Form.Group className="mb-3">
-        <CKEditor
-          config={{
-            extraPlugins: [uploadPlugin],
-          }}
-          editor={ClassicEditor}
-          onChange={ (event, editor) => {
-            const data = editor.getData();
-            setContent(data);
-          }}
-        />
-        {/* <Form.Control
-          placeholder="내용을 입력해주세요"
-          onChange={(e)=>{setContent(e.target.value)}}
-          
-          /> */}
-      </Form.Group>
-      <ButtonGroup className="mb-3">
-        <Button variant="secondary" onClick={() => setShowLocationInput(true)}>장소 추가</Button>
-      </ButtonGroup>
-      {showLocationInput && (
-        <Form.Group className="comment-text d-flex align-items-center mb-3">
-          <Form.Control type="text" placeholder="장소를 입력해보세요." value={location} onChange={(e) => setLocation(e.target.value)} />
-          <div className="comment-attagement d-flex">
-                  <a href="javascript:void(0);">
-                    <i className="ri-eraser-line mx-4"
-                        onClick={()=>{
-                          if(location !== "") {
-                            if(window.confirm("입력된 장소를 지우시겠습니까?")) {
-                              setShowLocationInput(false);
-                              setLocation("");
-                            }
-                          } else {
-                            setShowLocationInput(false);
-                            setLocation("");  
-                          }
-                        }}>
-                    </i>
-                  </a>
-          </div>
-        </Form.Group>
-      )}
-      <br />
-      <Button variant="primary" type="submit">작성</Button>
-    </Form>
-    </Modal.Body>
-    <Modal.Footer>
-    </Modal.Footer>
-  </Container>
+    <Tabs
+        id="controlled-tab-example"
+        activeKey={tabKey}
+        onSelect={(e) => setTabKey(e)}
+        className="mt-3 mb-3"
+      >
+        <Tab eventKey="feed" title="게시글">
+          <Modal.Header closeButton style={{padding: "0 1.25rem 0.7rem 1.25rem"}}>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Create Feed
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <Form name="frm" onSubmit={submitBtn}>
+            <Form.Group className="mb-3">
+              <CKEditor
+                config={{
+                  extraPlugins: [uploadPlugin],
+                }}
+                editor={ClassicEditor}
+                onChange={ (event, editor) => {
+                  const data = editor.getData();
+                  setContent(data);
+                }}
+              />
+              {/* <Form.Control
+                placeholder="내용을 입력해주세요"
+                onChange={(e)=>{setContent(e.target.value)}}
+                
+                /> */}
+            </Form.Group>
+            <ButtonGroup className="mb-3">
+              <Button variant="secondary" onClick={() => setShowLocationInput(true)}>장소 추가</Button>
+            </ButtonGroup>
+            {showLocationInput && (
+              <Form.Group className="comment-text d-flex align-items-center mb-3">
+                <Form.Control type="text" placeholder="장소를 입력해보세요." value={location} onChange={(e) => setLocation(e.target.value)} />
+                <div className="comment-attagement d-flex">
+                        <a href="javascript:void(0);">
+                          <i className="ri-eraser-line mx-4"
+                              onClick={()=>{
+                                if(location !== "") {
+                                  if(window.confirm("입력된 장소를 지우시겠습니까?")) {
+                                    setShowLocationInput(false);
+                                    setLocation("");
+                                  }
+                                } else {
+                                  setShowLocationInput(false);
+                                  setLocation("");  
+                                }
+                              }}>
+                          </i>
+                        </a>
+                </div>
+              </Form.Group>
+            )}
+            <br />
+            <Button variant="primary" type="submit">작성</Button>
+          </Form>
+          </Modal.Body>
+          <Modal.Footer>
+          </Modal.Footer>
+        </Tab>
+        <Tab eventKey="pawtens" title="포텐스">
+          <Modal.Header closeButton style={{padding: "0 1.25rem 0.7rem 1.25rem"}}>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Create Pawtens
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <CreatePawtensData />
+          </Modal.Body>
+          <Modal.Footer>
+          </Modal.Footer>
+        </Tab>
+      </Tabs>
+    </Container>
   </Modal>
   )
 }

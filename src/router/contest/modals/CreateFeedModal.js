@@ -100,7 +100,7 @@ const CreateFeedModal = ({show, onHide}) => {
         id="controlled-tab-example"
         activeKey={tabKey}
         onSelect={(e) => setTabKey(e)}
-        className="mb-3"
+        className="mt-3 mb-3"
       >
         <Tab eventKey="feed" title="게시글">
           <Modal.Header closeButton>

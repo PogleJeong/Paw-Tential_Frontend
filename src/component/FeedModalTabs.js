@@ -3,16 +3,6 @@ import { Button } from 'react-bootstrap';
 import { useCookies } from "react-cookie";
 import axios from 'axios';
 
-// 피드 작성
-export const CreateFeedData = (data) => {
-
-    return (
-        <div>
-            
-        </div>
-    );
-};
-
 // 포텐스 작성
 export const CreatePawtensData = () => {
 
@@ -66,8 +56,8 @@ export const CreatePawtensData = () => {
         <div className="createPawtens">
             <div><input type="file" onChange={fileUpload} ref={videoRef} /></div>
             <div className="filePreview">{file.video && <video src={file.url} controls width="700px" />}</div>
-            <textarea cols="90" rows="5" value={content} onChange={(e)=>setContent(e.target.value)} placeholder="포텐스 설명"></textarea>
-            <Button onClick={pawtensWrite}>Submit</Button>
+            <textarea style={{width:"700px", height:"100px"}} value={content} onChange={(e)=>setContent(e.target.value)} placeholder="포텐스 설명"></textarea>
+            <Button className="mt-2" onClick={pawtensWrite}>Submit</Button>
         </div>
     );
 };
