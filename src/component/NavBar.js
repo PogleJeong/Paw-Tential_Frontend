@@ -14,9 +14,10 @@ export default function Navbar() {
     // 로그인
     const [ loginState, setLoginState ] = useState(false);
     const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID"]);
+    
     // 일반 유저인지 관리자인지 확인
     const userId = cookies.USER_ID;
-    
+
     useEffect(()=>{
         cookies.USER_ID ? setLoginState(true) : setLoginState(false)
     },[cookies.USER_ID]);
@@ -185,7 +186,7 @@ export default function Navbar() {
                                             <i className="ri-message-2-line" />
                                         </Link>
                                     </li>
-                                    {userId === "admin5" && (
+                                    {userId === "pawtential" && (
                                     <li> {/*관리자페이지 버튼*/}
                                         <Link to="/admin/admin" target="_blank" className="d-flex align-items-center">
                                             <i className="ri-settings-5-line" />

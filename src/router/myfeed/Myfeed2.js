@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -210,8 +209,8 @@ const Myfeed2 = () => {
                   let petInfoJson = { key, data: response.data.petInfoList[i] };
                   let imageInfoJson = { key, data: response.data.imageList[i] };
                   
-                  setPetInfoList(petInfoList => petInfoList.concat(petInfoJson));
-                  setImageList(imageList => imageList.concat(imageInfoJson));
+                  setPetInfoList(response.data.petInfoList);
+                  setImageList(response.data.imageList);
                   console.log('펫 정보 : '+JSON.stringify(response.data.petInfoList));
                 }
 
@@ -308,11 +307,11 @@ const Myfeed2 = () => {
                                 {showPetInfo && (
   <Slider {...settings}>
     {petInfoList.map((pet, index) => (
-      <div class="col-lg-6">
+      <div className="col-lg-6" key={index}>
       <div class="card mb-3">
       <div className="row no-gutters" key={index}>
         <div className="col-md-4">
-          <img src={`data:image/jpeg;base64,${imageList[index].data}`} />
+        <img src={`data:image/jpeg;base64,${pet.data.image}`} alt={pet.data.name} />
         </div>
         <div className="col-md-8">
           <div className="card-body">

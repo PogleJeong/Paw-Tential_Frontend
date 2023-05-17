@@ -92,7 +92,9 @@ const ChatroomInfo = ({chatInfo, user}) => {
                 <ChatInfoBox>
                     <Profile src={`data:image/jpeg;base64,${profile}`} alt="" />
                     <Nickname>{othersNick}</Nickname><br/>
-                    {notReadChatCount > 0 ? <small>읽지 않은 메세지 {notReadChatCount}</small> : null}
+                    <NoReadCount>
+                        {notReadChatCount > 0 ? <small>읽지 않은 메세지 {notReadChatCount}</small> : null}
+                    </NoReadCount>
                 </ChatInfoBox>
             </Link>
             :

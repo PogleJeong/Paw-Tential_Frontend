@@ -3,7 +3,7 @@ import axios from "axios";
 import Pagination from "react-js-pagination";
 import { PreFeedImage } from "./FeedData";
 import { useNavigate } from 'react-router-dom';
-import FeedDetailModal from "../router/home/modals/FeedDetailModal";
+import FeedDetailModal from "../router/search/modals/FeedDetailModal";
 
 const SearchFeed = (prop) => {
   
@@ -72,7 +72,7 @@ const SearchFeed = (prop) => {
 
   const handleClick = async (seq) => {
     try {
-      const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
+      const response = await axios.get('http://localhost:3000/home/loadPost2', { params: { 'seq': seq } });
       setFeed(response.data);
       getPhoto(response.data.content);
       getNoPhoto(response.data.content);
@@ -138,18 +138,22 @@ const SearchFeed = (prop) => {
         />
       }
       <div class="friend-list-tab">
-          <div class="tab-content">
+          <h3>{ prop.keyword && prop.keyword !== "" ? "ฅ" + prop.keyword + "ฅ" : "인기" } 피드</h3>
+          <div class="tab-content mt-2">
           <div class="tab-pane fade active show" id="photosofyou" role="tabpanel">
               <div class="card-body p-0">
                   <div class="row justify-content-start">
-                    {feedListMap}
+                  { feedList && feedList.length !== 0
+                    ? feedListMap
+                    : <p style={{textAlign:"center"}}>검색 결과가 없습니다.</p>
+                  }
                   </div>
               </div>
           </div>
           </div>
       </div>
       
-      <div className="mt-3">
+      <div className="mt-2">
         <Pagination
             activePage={page}           // 현재 페이지
             itemsCountPerPage={12}      // 보여줄 페이지 수

@@ -210,6 +210,15 @@ const PassRegiBtn = styled.button`
     background-color: teal;
 `
 
+const imgLoadFile = (fileObject) => {
+    // File 객체 읽기
+    let reader = new FileReader();
+    reader.readAsDataURL(fileObject);
+    reader.onloadend = () => {
+        return reader.result;
+    }
+}
+
 /** 만약 반려동물이 있다면 나오는 추가페이지 */
 function RegisterPage3() {
     // 유저 id 정보가져오기
@@ -251,21 +260,14 @@ function RegisterPage3() {
     const imgLoad = () => {
         // 반환값 File 객체(file 변수)
         const file = imgRef.current.files[0];
-        const reader = new FileReader();
+        let reader = new FileReader();
         reader.readAsDataURL(file); // file을 url로 읽고
         reader.onloadend = () => { // 읽기가 끝나면
           setImgFile(reader.result); // reader 결과(이미지)를 img 태그에 설정
         }
     }
     
-    const imgLoadFile = async(fileObject) => {
-        // File 객체 읽기
-        const reader = new FileReader();
-        reader.readAsDataURL(fileObject);
-        reader.onloadend = () => {
-            return reader.result;
-        }
-    }
+   
 
     const registerPet = async() => {
   
@@ -343,6 +345,7 @@ function RegisterPage3() {
         // 초기화
         setCount(prev => prev+1);
     }
+    console.log(imageList);
 
     const removePetInfo = (event) => {
         const removedPetInfoList = petInfoList.filter((petInfo)=> petInfo.key !== event.target.dataset.key);
@@ -384,7 +387,7 @@ function RegisterPage3() {
                         <AddPetInfoWrapper>
                             <PetInfoWrapper>
                                 <ImageBox>
-                                    <Image src={imgLoadFile(imageList[index].data)}></Image>
+                                    <Image src={URL.createObjectURL(imageList[index].data)} />
                                     <br/><RemoveBtn data-key={petInfo.key} onClick={removePetInfo}>정보삭제</RemoveBtn>
                                 </ImageBox>
                                 <InfoBox>
