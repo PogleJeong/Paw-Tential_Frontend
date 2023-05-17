@@ -48,7 +48,7 @@ function Search(){
                     <div class="card">
                     <div class="card-body">
                         {/* 피드 검색 목록 */}
-                        <SearchFeed keyword={searchFeed} />
+                        <SearchFeed keyword={searchFeed}/>
                     </div>
                     </div>
                 </div>

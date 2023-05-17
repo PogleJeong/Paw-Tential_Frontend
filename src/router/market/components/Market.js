@@ -9,7 +9,7 @@ import inactiveHeartIcon from "../../../image/icon/inactive_heart.png"
 import viewIcon from "../../../image/icon/view_icon.png";
 
 const Container =styled.div`
-    margin : 15px;
+    margin : 1%;
     padding: 15px; 
     width: 18%; 
     aspect-ratio: 3/4; 

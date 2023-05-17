@@ -21,11 +21,12 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 
-    margin: 0px;
+    margin: 10px 10%;
     padding: 100px;
     width: 80%;
-    height: 1600px;
+    height: 1900px;
 
     animation: ${fadeIn} 2s;
 `;

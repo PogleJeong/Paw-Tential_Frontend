@@ -22,9 +22,11 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     margin-top: 50px;
+    margin-bottom: 30px;
     width: 90%;
     min-height: 1600px;
     padding-left: 300px;
+    padding-bottom: 50px;
     animation: ${fadeIn} 2s;
 `;
 
