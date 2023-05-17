@@ -205,7 +205,6 @@ const Myfeed = () => {
             if (response.status === 200) {
                 // 랜덤키 생성하여 고유인덱스 키 사용.
                 if (response.data.length === 0) {
-                    alert("등록한 펫정보가 없습니다.");
                     return;
                 }
                 for(let i=0; i<response.data.petInfoList.length; i++) {

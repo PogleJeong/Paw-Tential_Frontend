@@ -56,9 +56,9 @@ const ReportModal = ({ show, onClose, id, userId, type }) => {
               required
             >
               <option value="">선택하세요</option>
-              <option value="spam">스팸</option>
-              <option value="inappropriate_content">부적절한 콘텐츠</option>
-              <option value="etc">기타</option>
+              <option value="스팸">스팸</option>
+              <option value="부적절한 콘텐츠">부적절한 콘텐츠</option>
+              <option value="욕설 및 비방">욕설 및 비방</option>
             </Form.Control>
           </Form.Group>
 

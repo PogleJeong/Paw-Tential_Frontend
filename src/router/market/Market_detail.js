@@ -250,7 +250,7 @@ const MarketDetail = () => {
                     </>
                     : 
                     null}
-                <ReportBtn onClick={clickReportBtn}>신고</ReportBtn>
+                <ReportBtn onClick={clickReportBtn} >신고</ReportBtn>
                 </UserSelfWrapper> 
                 <HeaderWrapper>
                     <ImageBox>
@@ -279,7 +279,7 @@ const MarketDetail = () => {
             </Wrappers>
             
             {activeReportModal ?
-            <MarketReport writer={id} setActiveReportModal={setActiveReportModal}/> : null}
+            <MarketReport writer={id} market_seq={posting} setActiveReportModal={setActiveReportModal}/> : null}
         </Container>
     );
 }
