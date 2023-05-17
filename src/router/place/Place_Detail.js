@@ -10,7 +10,7 @@ import { history } from "../../component/history";
 import { PreFeedImage } from "../../component/FeedData";
 import axios from 'axios';
 import "../../styles/Place.css";
-import FeedDetailModal from "../home/modals/FeedDetailModal";
+import FeedDetailModal from "../place/modals/FeedDetailModal";
 
 const { kakao } = window;
 
@@ -91,13 +91,13 @@ const Place_detail = () => {
     // 리뷰 클릭 시 handler
     const handleClick = async (seq) => {
         try {
-            const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
+            const response = await axios.get('http://localhost:3000/home/loadPost2', { params: { 'seq': seq } });
             setFeed(response.data);
             getPhoto(response.data.content);
             getNoPhoto(response.data.content);
             getCommentList(response.data.seq);
             setFeedDetailModal(true);
-            console.log('피드 데이터:', response.data);
+            console.log('피드 데이터:', response.data.content);
         } catch (error) {
             console.log(error);
         }
