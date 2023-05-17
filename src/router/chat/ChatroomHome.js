@@ -30,15 +30,18 @@ const Container = styled.div`
 
 const Title = styled.h1`
     display: inline-block;
+    font-size: 35px;
+    font-weight: bold;
     text-align: center;
-    width: 100%;
+    margin: 30px;
+    min-width: 100%;
 `
 
 const ChatListContainer = styled.div`
     width: 500px;
-    min-height: 600px;
+    min-height: 800px;
     overflow: scroll;
-    padding: 10px;
+    padding: 20px;
     background-color: white;
     border: none;
     border-radius: 15px;
@@ -85,8 +88,8 @@ const ChatroomHome = () => {
 
     return(
         <Container>
+            <Title>내 채팅 리스트</Title>
             <ChatListContainer>
-                <Title>Paw-tential chat!</Title>
                 { !chatInfoList ? 
                 <h2>채팅내역이 존재하지 않습니다.</h2>
                 :

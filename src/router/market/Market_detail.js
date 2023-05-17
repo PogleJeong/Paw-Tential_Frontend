@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, Link , useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -43,6 +43,7 @@ const UserSelfWrapper = styled.div`
     display: flex;
     justify-content: right;
     align-items: center;
+    margin: 20px 0px;
 `
 
 const HeaderWrapper = styled.div`
@@ -53,32 +54,32 @@ const HeaderWrapper = styled.div`
 
 const ImageBox= styled.div`
     width: 450px;
-    height: 450px;
+    height: 430px;
     text-align: center;
 `;
 
 const Title = styled.h1`
     font-size: 30px;
     text-align: center;
-    padding: 30px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-    background-color: #99FFCC;
+    margin-bottom: 10px;
+    padding: 20px;
+    border-bottom: 3px solid black;
+    
+    color: black;
 `;
 
 const Thumbnail = styled.img`
-    width: 400px;
+    width: 450px;
     height: 400px;
-    border: 5px solid black;
-    border-radius: 40px;
+    border: 5px solid whitesmoke;
 `;
 
 
 const InfoBox = styled.div`
+
     width: 450px;
-    height: 450px;
-    padding-left: 30px;
-    padding-right: 30px;
+    height: 430px;
+    padding: 60px 30px;
 `;
 
 const MsgBox = styled.span`
@@ -133,6 +134,32 @@ const ChatBtn = styled.button`
     }
 `;
 
+const OptionBtn = styled.button`
+    width: 80px;
+    height: 30px;
+    margin: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+
+    transition: background-color 2s;
+    &:hover {
+        background-color: gray;
+    }
+`
+
+const DeleteBtn = styled(OptionBtn)`
+    background-color: rgba(86, 108, 175, 0.8);
+
+`
+
+const UpdateBtn = styled(OptionBtn)`
+    background-color: rgba(255, 155, 71, 0.5);
+`
+
+const ReportBtn = styled(OptionBtn)`
+    background-color: rgba(255, 155, 175, 0.5);
+`
 
 const MarketDetail = () => {
     const location = useLocation();
@@ -143,6 +170,8 @@ const MarketDetail = () => {
     const imgInfo  = location.state.imgInfo;
     const [ activeReportModal, setActiveReportModal ] = useState(false);
     const [ updateActive, setUpdateActive ] = useState(false);
+    const addrRef = useRef();
+
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -216,25 +245,28 @@ const MarketDetail = () => {
                 <UserSelfWrapper>
                 {updateActive ? 
                     <>
-                        <Link to={`/market/update/${posting}`} state={location.state} >수정하기</Link> 
-                        <button onClick={marketDelete}>삭제하기</button>
+                        <Link to={`/market/update/${posting}`} state={location.state} ><UpdateBtn>수정하기</UpdateBtn></Link> 
+                        <DeleteBtn onClick={marketDelete}>삭제하기</DeleteBtn>
                     </>
                     : 
                     null}
-                <button onClick={clickReportBtn}>신고</button>
+                <ReportBtn onClick={clickReportBtn}>신고</ReportBtn>
                 </UserSelfWrapper> 
                 <HeaderWrapper>
                     <ImageBox>
                         <Thumbnail src={`data:image/jpeg;base64,${imgInfo}`} alt="" /><br/>
                     </ImageBox>
                     <InfoBox>
-                        <MsgBox>작성자  | &#9; {`${nickname}(${id})`}</MsgBox>
-                        <MsgBox>작성날짜  | &#9; {wdate}</MsgBox>
-                        <MsgBox>제품명 | &#9; {productName}</MsgBox>
-                        <MsgBox>제품개수 | &#9; {productNumber}</MsgBox>
-                        <MsgBox>제품분류 | &#9; {category}</MsgBox>
-                        {price ? <MsgBox>제품가격 | &#9; {category}원</MsgBox> : null}
-                        <MsgBox>제품상태 | &#9; {conditions}</MsgBox>
+                       
+                        <MsgBox>&nbsp;&nbsp;작성자 &nbsp;&nbsp;| &nbsp; {`${nickname}`}</MsgBox>
+                        <MsgBox>작성날짜  | &nbsp; {wdate}</MsgBox>
+                        <MsgBox>&nbsp;&nbsp;제품명 &nbsp;&nbsp;| &nbsp; {productName}</MsgBox>
+                        <MsgBox>제품개수 | &nbsp; {productNumber}개</MsgBox>
+                        <MsgBox>제품분류 | &nbsp; {category}</MsgBox>
+                        {price ? <MsgBox>제품가격 | &nbsp; {category}원</MsgBox> : null}
+                        <MsgBox>제품상태 | &nbsp; {conditions}</MsgBox>
+                        <MsgBox>주소 | &nbsp;</MsgBox><MsgBox ref={addrRef}></MsgBox>
+                        
                     </InfoBox>
                 </HeaderWrapper>
                 <BodyWrapper dangerouslySetInnerHTML={{__html: `${content}`}}>
@@ -242,7 +274,7 @@ const MarketDetail = () => {
                 <FooterWrapper>
                     { cookies.USER_ID !== id ? <ChatBtn onClick={enterChat}>판매자와 채팅하기</ChatBtn> : null}
                     
-                    <KakaoMapRead geoLat={geoLat} geoLng={geoLng}/>
+                    <KakaoMapRead addrRef={addrRef} geoLat={geoLat} geoLng={geoLng}/>
                 </FooterWrapper>
             </Wrappers>
             

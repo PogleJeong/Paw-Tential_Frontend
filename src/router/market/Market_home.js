@@ -21,9 +21,10 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 80%;
+    margin-top: 50px;
+    width: 90%;
     min-height: 1600px;
-    padding: 50px;
+    padding-left: 300px;
     animation: ${fadeIn} 2s;
 `;
 
@@ -37,10 +38,10 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
-    font-size: 30px;
+    font-size: 45px;
+    font-weight: bold;
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 50px 0px;
 `;
 
 const SearchWrapper = styled.div`
@@ -87,8 +88,9 @@ const MarketWriteBtn = styled.button`
     width: 100px;
     height: 40px;
     border: none;
+    border-radius: 15px;
     margin: 20px;
-    background-color: #FF9933;
+    background-color: #ffd1a7;
 `;
 
 const saleStateContent = ["전체","나눔","판매"];
@@ -108,7 +110,7 @@ const MarketHome = () => {
     useEffect(()=> {
         if (!cookies.USER_ID) {
             alert("로그인 후 이용해주세요.");
-            navigate("/");
+            navigate("/login");
             return;
         }
         callMarketInfo("search");
@@ -120,18 +122,18 @@ const MarketHome = () => {
     },[])
 
     useEffect(()=>{
-        callMarketInfo("scroll");
+        if(pages >= 10){
+            callMarketInfo("scroll");
+        }
+        
     },[pages])
-
 
     // 스크롤 이벤트 추가
     const scrollFunction = () => {
         const scrollHeight = document.documentElement.scrollHeight;
         const scrollTop = document.documentElement.scrollTop;
         const clientHeight = document.documentElement.clientHeight;
-        console.log(scrollHeight, scrollTop, clientHeight);
         if (scrollTop + clientHeight >= scrollHeight-100) {
-            console.log("끝에 도달")
             setPages(pages => pages+20);
         }
     }
@@ -162,11 +164,6 @@ const MarketHome = () => {
                     let addMarketInfoList = wrapperTo2Arrays(marketInfo, imageInfo);
                     // 스크롤을 통해 더 많은 정보를 가져올때
                     if(option === "scroll") {
-                        console.log("무한 스크롤기능을 통해 가져온 게시물입니다.");
-                        console.log("add marketInfoList.length >>",addMarketInfoList.length);
-                        console.log("기존에 있던 게시물 리스트 >> ",marketInfoList);
-                        console.log("추가로 가져온 게시물 리스트 >> ",addMarketInfoList);
-                        console.log([...marketInfoList, ...addMarketInfoList]);
                         setMarketInfoList(marketInfoList => marketInfoList.concat(addMarketInfoList));
                     }
                     // 검색기능을 통해 새로 가져올때.
@@ -182,7 +179,7 @@ const MarketHome = () => {
     return(
         <Container>
             <Wrapper>
-                <Title>Welcome to Paw-tential market!</Title>
+                <Title>마켓 플레이스</Title>
                    {/*  <ul style={{display: "flex"}}>
                     {saleStateContent.map((state, index)=>    
                     (<li key={index} onClick={()=>filterByState(marketInfoList,state)} style={{border: "2px solid gray", padding: "10px", width: "30px", aspectRatio: "4/1"}} >{state}</li>))}

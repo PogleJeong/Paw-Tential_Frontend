@@ -29,14 +29,26 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
-    margin: 0px;
+    flex-wrap: wrap;
+    margin: 50px 10%;
     padding: 100px;
     width: 80%;
-    height: 1600px;
+    height: 1900px;
 
     animation: ${fadeIn} 2s;
 `;
+
+const FlexBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 450px;
+    min-height: 60px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 2px 3px 5px 0px;
+
+`
 
 const Wrappers = styled.div`
     width: 1000px;
@@ -54,17 +66,18 @@ const HeaderWrapper = styled.div`
 
 const ImageBox= styled.div`
     width: 450px;
-    height: 450px;
+    height: 430px;
     text-align: center;
 `;
 
 const Title = styled.h1`
     font-size: 30px;
     text-align: center;
-    padding: 30px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-    background-color: #99FFCC;
+    margin-bottom: 10px;
+    padding: 20px;
+    border-bottom: 3px solid black;
+    
+    color: black;
 `;
 
 const Label = styled.label`
@@ -77,11 +90,10 @@ const Label = styled.label`
 `;
 
 const Thumbnail = styled.img`
-    width: 400px;
+    width: 450px;
     height: 400px;
-    border: 5px solid black;
-    border-radius: 40px;
-`
+    border: 5px solid whitesmoke;
+`;
 
 const FileName = styled.span`
     display: inline-block;
@@ -166,17 +178,25 @@ const BodyWrapper = styled.div`
 
 const FooterWrapper = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    margin: 25px 0px;
     width: 100%;
 `
 
 const WriteBtn = styled.button`
     width: 100px;
+    margin: 0px 60px;
     height: 40px;
     border: none;
     border-radius: 10px;
-    background-color: blue;
+    background-color: saddlebrown;
+
+    transition: scale 1s;
+    &:hover {
+        scale: 0.9;
+        box-shadow: 2px 3px 5px 0px;
+    }
 `;
 
 const stateList = ["-분류-","나눔", "판매"];
@@ -195,7 +215,7 @@ const MarketWrite = () => {
 
 
     const title = useInput("", maxLen, 150);
-    const [ content, setContent ] = useState("<p>Hello from CKEditor 5!</p>"); // api 에서 유효성검사진행
+    const [ content, setContent ] = useState(""); // api 에서 유효성검사진행
     const state = useInput(stateList[0], maxLen, 45);
     const price = useInput("0", maxLen, 7);
     const category = useInput(categories[0], maxLen, 45);
@@ -262,6 +282,11 @@ const MarketWrite = () => {
 
         if (!imgRef.current.files[0]) {
             alert("대표이미지를 입력해주세요");
+            return;
+        }
+
+        if (!geoLat || !geoLng) {
+            alert("장소를 지정해주세요");
             return;
         }
 
@@ -371,9 +396,11 @@ const MarketWrite = () => {
                 </BodyWrapper>
                 <FooterWrapper>
                     <KakaoMapWrite setGeoLat={setGeoLat} setGeoLng={setGeoLng}/>
-                    <WriteBtn onClick={marketUpload}>작성하기</WriteBtn>
                 </FooterWrapper>
             </Wrappers>
+            <FlexBox>
+                <WriteBtn onClick={marketUpload}>작성하기</WriteBtn>
+            </FlexBox>
         </Container>
     );
 }

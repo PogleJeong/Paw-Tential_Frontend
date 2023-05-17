@@ -6,7 +6,7 @@ const { kakao } = window;
 
 const MapContainer = styled.div`
     width: 500px;
-    height: 250px;
+    height: 350px;
     margin: 25px;
     box-shadow: 2px 3px 5px 0px;
 `

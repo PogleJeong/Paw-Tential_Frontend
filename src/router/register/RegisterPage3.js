@@ -202,7 +202,7 @@ function RegisterPage3() {
     // 입력값
     const [ petCategory, setPetCategory ] = useState("반려동물 선택");
     const [ imgFile, setImgFile ] = useState(baseimage);
-    const petName = useInput("", checkRegExp, /^[가-힣a-zA-Z]{0,10}$/);
+    const petName = useInput("", checkRegExp, /^[ㄱ-ㅎ가-힣a-zA-Z]{0,10}$/);
     const petBirth = useInput("", checkRegExp, /^[0-9]{0,8}$/);
     const petIntro = useInput("", maxLen, 100);
     const [ petGender, setPetGender] = useState("");
@@ -218,6 +218,7 @@ function RegisterPage3() {
     const navigate = useNavigate();
 
     const imgLoad = () => {
+        // 반환값 File 객체(file 변수)
         const file = imgRef.current.files[0];
         const reader = new FileReader();
         reader.readAsDataURL(file); // file을 url로 읽고

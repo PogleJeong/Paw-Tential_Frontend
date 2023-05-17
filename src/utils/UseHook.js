@@ -14,7 +14,7 @@ export const useInput = (initValue, validator, valid) => {
         }
         console.log(value);
     }
-    return { value, onChange };
+    return { value, setValue ,onChange };
 }
 
 export const useSaleStateTabs = (initialState, content) => {
