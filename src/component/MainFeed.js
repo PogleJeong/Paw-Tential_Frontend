@@ -175,7 +175,7 @@ const handleCloseReportModal = () => {
                 <div className="w-100">
                   <div className="d-flex justify-content-between">
                     <div>
-                      <h5 className="mb-0 d-inline-block" onClick={() => handleUserClick(props.feedData.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{props.feedData.id}</h5>
+                      <h5 className="mb-0 d-inline-block" onClick={() => handleUserClick(props.feedData.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{props.feedData.nickname}</h5>
                       <p className="mb-0 text-primary">{props.feedData.dateCreated.substring(0,10)}</p>
                     </div>
                     <div className="card-post-toolbar">

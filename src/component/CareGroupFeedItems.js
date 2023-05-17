@@ -111,7 +111,7 @@ export default function CareGroupFeedItems(props){
                     <div className="w-100">
                         <div className="d-flex justify-content-between">
                             <div>
-                                <h5 className="mb-0 d-inline-block">{props.data.careGrpFeedWriter}</h5>
+                                <h5 className="mb-0 d-inline-block">{props.data.nickname}</h5>
                                 <p className="mb-0">{props.data.careGrpFeedWd.substring(0,10)}ㆍ<i className={`ri-${props.data.careGrpFeedSetting === "전체 공개" ? 'lock-fill pe-1' : 'global-line pe-1' }`} /></p>
                             </div>
                             <div className="card-post-toolbar">

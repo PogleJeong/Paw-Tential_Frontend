@@ -33,7 +33,6 @@ export default function NewNewsFeed() {
         axios.get("http://localhost:3000/group/newsFeed", {params:{"memberId":userId}})
         .then(function(res){
             setGroupFeeds(res.data.newsFeed);
-            console.log(res.data.newsFeed);
         })
         .catch(function(err){
             alert(err);
@@ -63,7 +62,7 @@ export default function NewNewsFeed() {
                         <NewsFeedComponent feed={feed}
                                                                     key={i}
                                                                     userId={userId}
-                                                                    fn={getMemberGroupsFeeds}
+                                                                    fn={()=>{getMemberGroupsFeeds();}}
                                                                     />
                                                                     )
                                                                 })}

@@ -7,7 +7,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CreatePawtensData } from '../../../component/FeedModalTabs';
 
-const CreateFeedModal = ({show, onHide}) => {
+const CreateFeedModal = ({show, onHide, fn}) => {
 
   const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
   const [showLocationInput, setShowLocationInput] = useState(false);

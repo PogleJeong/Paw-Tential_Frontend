@@ -41,7 +41,6 @@ const Home = () => {
     axios.get("http://localhost:3000/home/allFeed")
     .then(function(res){
       setFeeds(res.data.feedList);
-      console.log("피드 데이터 : "+res.data);
     })
     .catch(function(err){
       alert(err);
@@ -86,7 +85,8 @@ const Home = () => {
   return (
     <>
     <CreateFeedModal show={createFeedModal}
-                                        onHide={()=>{setCreateFeedModal(false)}}/>
+                                        onHide={()=>{setCreateFeedModal(false)}}
+                                        fn={getAllFeed}/>
     <div id="content-page" className="content-page">
       <div className="container mb-5">
         <div className="row">
@@ -106,7 +106,7 @@ const Home = () => {
                                   size="50"
                                   onKeyDown={()=>{setCreateFeedModal(true)}}
                                   onClick={()=>{setCreateFeedModal(true)}}
-                                  placeholder={`${userId}님, 반려동물과 함께 하는 일상을 그려보세요.`}
+                                  placeholder={`${userInfo.nickname}님, 반려동물과 함께 하는 일상을 그려보세요.`}
                         />
                     </form>
                   </div>
@@ -118,7 +118,7 @@ const Home = () => {
             {visibleFeeds && visibleFeeds.length > 0 ? (
               <>
               {visibleFeeds.map((feed) => (
-                <MainFeed feedData={feed} />
+                <MainFeed feedData={feed} fn={getAllFeed} />
                 ))}
                 {visibleFeeds.length < feeds.length && (
                   <button className="btn mb-1 btn-primary rounded-pill container" onClick={handleLoadMore} style={{width:"100px"}}>더보기</button>
