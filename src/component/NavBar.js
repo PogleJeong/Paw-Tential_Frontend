@@ -48,10 +48,12 @@ export default function Navbar() {
 
     // 로그인 한 유저의 프로필 사진 가져오기
     const [profile, setProfile] = useState('');
+    const [nickName, setNickName] = useState('');
     const getProfile = async () => {
         axios.get("http://localhost:3000/group/getUserProfile", {params:{"id":userId}})
         .then(function(res){
-            setProfile(res.data);
+            setProfile(res.data.profile);
+            setNickName(res.data.nickname);
         })
         .catch(function(err){
             alert(err);
@@ -202,14 +204,14 @@ export default function Navbar() {
                                         >
                                             <img className="img-fluid rounded-circle me-3" src={`http://localhost:3000/${profile}`} alt="" />
                                             <div className="caption">
-                                                <h6 className="mb-0 line-height">{userId}</h6>
+                                                <h6 className="mb-0 line-height">{nickName}</h6>
                                             </div>
                                         </a>
                                         <div className="sub-drop dropdown-menu caption-menu" aria-labelledby="drop-down-arrow">
                                             <div className="card shadow-none m-0">
                                                 <div className="card-header bg-primary">
                                                     <div className="header-title">
-                                                        <h5 className="mb-0 text-white">{userId}님, 안녕하세요!</h5>
+                                                        <h5 className="mb-0 text-white">{nickName}님, 안녕하세요!</h5>
                                                     </div>
                                                 </div>
                                                 <div className="card-body p-0">
@@ -249,6 +251,7 @@ export default function Navbar() {
                         </nav>
                     </div>
                 </div>
+                {userId &&
                 <div className="right-sidebar-mini right-sidebar">
                     <div className="right-sidebar-panel p-0">
                         <div className="card shadow-none">
@@ -272,6 +275,7 @@ export default function Navbar() {
                         </div>
                     </div>
                 </div>
+            }
         </>
     )
 }

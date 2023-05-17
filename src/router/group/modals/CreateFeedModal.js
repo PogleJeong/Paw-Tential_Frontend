@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const CreateFeedModal = ({show, onHide, userId}) => {
+const CreateFeedModal = ({show, onHide, userId, fn}) => {
 
   const [saveFileNameArr, setSaveFileNameArr] = useState([""]);
   const [filePath, setFilePath] = useState('');
@@ -78,7 +78,8 @@ const CreateFeedModal = ({show, onHide, userId}) => {
     axios.post("http://localhost:3000/group/createFeed", formData)
     .then(function(res){
       alert(res.data);
-      window.location.reload();
+      onHide();
+      fn();
     })
     .catch(function(err){
       alert(err);

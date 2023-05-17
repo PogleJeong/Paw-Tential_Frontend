@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { useCookies } from "react-cookie";
 import { Modal, Carousel } from "react-bootstrap";
 import ReactHtmlParser from "react-html-parser";
 import axios from 'axios';
 
-export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto, getComment, profile}) {
-
-    // 임시 ID
-    const userId = "test";
-
+export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto, getComment}) {
+    
+    
+    const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
+    const userId = cookies.USER_ID;
 
     // Carousel Component
     const CarouselComponent = () => {
@@ -134,10 +135,10 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
                 <li className="mb-2" key={key}>
                 <div className="d-flex">
                     <div className="user-img">
-                    <img className="rounded-circle img-fluid" src={`http://localhost:3000/${cmt.profile}`} alt="" style={{width:"60px", height:"60px"}} />
+                        <img className="rounded-circle img-fluid" src={`http://localhost:3000/${cmt.profile}`} alt="" style={{width:"60px", height:"60px"}} />
                     </div>
                     <div className="comment-data-block ms-3">
-                        <h6>{cmt.id}ㆍ{cmt.dateCreated.substring(0,10)}</h6>
+                        <h6>{cmt.nickname}ㆍ{cmt.dateCreated.substring(0,10)}</h6>
                         <span>{cmt.comment}</span>
                         <div className="d-flex flex-wrap align-items-center comment-activity">
                             {cmt.id === userId && (
@@ -165,12 +166,12 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
                         <div className="w-50 ms-3">
                             <div className="d-flex justify-content-between">
                                 <div className="me-2">
-                                    <img className="rounded-circle img-fluid" src={`http://localhost:3000/${profile}`} alt="" style={{width:"60px", height:"55px"}} />
+                                    <img className="rounded-circle img-fluid" src={`http://localhost:3000/${feedData.profile}`} alt="" style={{width:"60px", height:"55px"}} />
                                 </div>
                                 <div className="w-85">
                                     <div className="d-flex justify-content-between">
                                         <div>
-                                            <h5 className="mb-0">{feedData.id}</h5>
+                                            <h5 className="mb-0">{feedData.nickname}</h5>
                                             <span className="mb-0 d-inline-block">{feedData.dateCreated.substring(0,10)}</span>
                                         </div>
                                     </div>

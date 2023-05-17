@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useEffect } from "react";
 import { Carousel } from "react-bootstrap";
 import ReactHtmlParser from "react-html-parser";
+import ModifyFeedModal2 from "../router/group/modals/ModifyFeedModal2";
 
 export default function NewsFeedComponent(props) {
 
@@ -322,7 +323,7 @@ export default function NewsFeedComponent(props) {
 
     return (
         <>
-        <ModifyFeedModal show={modifyFeedModal} onHide={()=>{setModifyFeedModal(false)}} grpFeedNo={selectedGrpFeedId} />
+        <ModifyFeedModal2 show={modifyFeedModal} onHide={()=>{setModifyFeedModal(false)}} grpFeedNo={selectedGrpFeedId} fn={props.fn} />
         <div className="col-sm-12">
             <div className="card card-block card-stretch card-height">
                 <div className="card-body">
@@ -342,7 +343,7 @@ export default function NewsFeedComponent(props) {
                                             <Link to={`/group/GroupFeed/${props.feed.grpNo}/${props.feed.grpName}`}>{props.feed.grpName}</Link>
                                         </h5>
                                         <p className="mb-0 d-inline-block">
-                                        {props.feed.grpFeedId}ㆍ
+                                        {props.feed.nickname}ㆍ
                                         {props.feed.grpFeedWd.substring(0,10)}ㆍ
                                         {props.feed.grpFeedSetting === "전체 공개" ? <i className="ri-global-line pe-1"></i> : <i className="ri-lock-fill pe-1"></i>}
                                         </p>
