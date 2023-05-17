@@ -4,10 +4,11 @@ import { Modal, Carousel } from "react-bootstrap";
 import ReactHtmlParser from "react-html-parser";
 import axios from 'axios';
 
-export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto, getComment}) {
-    
+export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto, getComment, profile}) {
+
     // 임시 ID
     const userId = "test";
+
 
     // Carousel Component
     const CarouselComponent = () => {
@@ -44,12 +45,15 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
         axios.get("http://localhost:3000/home/getCommentList",  {params:{"feedSeq":feedData.seq}})
         .then(function(res){
             setComment(res.data.commentList);
+
         })
         .catch(function(err){
             alert(err);
         })
     }
     
+
+
     useEffect(()=>{
         if(show) {
             getCommentList();
@@ -130,7 +134,7 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
                 <li className="mb-2" key={key}>
                 <div className="d-flex">
                     <div className="user-img">
-                    {cmt.profile === "baseprofile" || cmt.profile === "test" && (<img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />)}
+                    <img className="rounded-circle img-fluid" src={`http://localhost:3000/${cmt.profile}`} alt="" style={{width:"60px", height:"60px"}} />
                     </div>
                     <div className="comment-data-block ms-3">
                         <h6>{cmt.id}ㆍ{cmt.dateCreated.substring(0,10)}</h6>
@@ -161,7 +165,7 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
                         <div className="w-50 ms-3">
                             <div className="d-flex justify-content-between">
                                 <div className="me-2">
-                                    {feedData.profile === "baseprofile" && <img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"55px"}} />}
+                                    <img className="rounded-circle img-fluid" src={`http://localhost:3000/${profile}`} alt="" style={{width:"60px", height:"55px"}} />
                                 </div>
                                 <div className="w-85">
                                     <div className="d-flex justify-content-between">

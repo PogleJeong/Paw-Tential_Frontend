@@ -388,7 +388,7 @@ function PetUpdate() {
     }
 
     const cancelUpdateBtn = () => {
-        navigate("/myfeed");
+        navigate("/myfeed/myfeed");
         return;
     }
     

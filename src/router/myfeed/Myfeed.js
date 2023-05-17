@@ -274,6 +274,7 @@ const Myfeed = () => {
             photo={photo}
             noPhoto={noPhoto}
             getComment={() => getCommentList(feed.seq)}
+            profile={userInfo.profile}
           />
         )}
 
