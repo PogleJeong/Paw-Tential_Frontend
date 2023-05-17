@@ -123,7 +123,7 @@ export default function MainFeedComment(props) {
                 <li key={list.seq} className="mb-2"> 
                 <div className="d-flex">
                     <div className="user-img">
-                    {list.profile === "baseprofile" || "test" && <img className="rounded-circle img-fluid" src="/feedimages/baseprofile.png" alt="" style={{width:"60px", height:"60px"}} />}
+                        <img className="rounded-circle img-fluid" src={`http://localhost:3000/${list.profile}`} alt="" style={{width:"60px", height:"60px"}} />
                     </div>
                     <div className="comment-data-block ms-3">
                         <h6 onClick={() => handleUserClick(list.id)} onMouseOver={(e) => (e.target.style.cursor = 'pointer')}>{list.id}</h6>
