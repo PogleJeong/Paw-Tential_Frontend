@@ -14,10 +14,8 @@ export default function Navbar() {
     // 로그인
     const [ loginState, setLoginState ] = useState(false);
     const [ cookies, setCookies, removeCookies ] = useCookies(["USER_ID"]);
-    // 일반 유저인지 관리자인지 확인
-    const userId = cookies.USER_ID;
     
-    // 임시
+    // 일반 유저인지 관리자인지 확인
     const userId = cookies.USER_ID;
 
     useEffect(()=>{
