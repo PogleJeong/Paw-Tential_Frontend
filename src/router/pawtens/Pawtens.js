@@ -19,7 +19,15 @@ function Pawtens(){
         draggable: true, // 드래그      
         arrows: false, // 좌,우 버튼
         vertical: false, // 세로 캐러셀
-        centerPadding: '0px' // 중앙 컨텐츠 padding 값
+        centerPadding: '0px', // 중앙 컨텐츠 padding 값
+        beforeChange: () => {
+            // 슬라이더 전환 시 이전 영상을 정지
+            const videos = document.querySelectorAll(".pawtensItem video");
+            videos.forEach((video) => {
+              video.pause();
+            });
+          },
+
     };
     // 데이터를 모두 읽을 때까지 rendering 조절하는 변수
     const [loading, setLoading] = useState(false);

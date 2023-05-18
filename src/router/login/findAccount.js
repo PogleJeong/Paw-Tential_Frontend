@@ -7,6 +7,8 @@ const Container = styled.div`
     display: flex;
     max-width: 800px;
     flex-flow : row wrap;
+    margin-top : 50px;
+    margin-left: 300px;
 `;
 
 const Tabs = styled.ul`

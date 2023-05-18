@@ -81,8 +81,8 @@ const LoginForm = () => {
                 }
                 const loginUser = response.data.USER_ID;
                 const loginUserNickname = response.data.USER_NICKNAME;
-                setCookies("USER_ID", loginUser, {path:"/", maxAge: 3600});
-                setCookies("USER_NICKNAME", loginUserNickname, {path:"/", maxAge: 3600});
+                setCookies("USER_ID", loginUser, {path:"/", maxAge: 12000});
+                setCookies("USER_NICKNAME", loginUserNickname, {path:"/", maxAge: 12000});
                 navigate("/home/home");
                 return;
             }
