@@ -4,7 +4,7 @@
 
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 
 export default function MyGroup(){
@@ -17,8 +17,15 @@ export default function MyGroup(){
     const userId = cookies.USER_ID;
     const userNickName = cookies.USER_NICKNAME;
 
+    const navigate = useNavigate();
     useEffect(()=>{
-        getMyGroupList();
+        if (!cookies.USER_ID) {
+            alert("로그인 후 이용해주세요.");
+            navigate("/login");
+            return;
+        } else {
+            getMyGroupList();
+        }
     },[])
 
     // 내가 가입한 그룹 불러오는 함수

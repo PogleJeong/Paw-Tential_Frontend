@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,6 +12,15 @@ import JoinRequestComponent from "../../component/JoinRequest";
 
 
 export default function NewGroupFeed() {
+
+    const navigate = useNavigate();
+    useEffect(()=> {
+        if (!cookies.USER_ID) {
+            alert("로그인 후 이용해주세요.");
+            navigate("/login");
+            return;
+        }
+    },[]);
 
     // parameter 값 조사
     let params = useParams();
@@ -64,6 +73,7 @@ export default function NewGroupFeed() {
         axios.get("http://localhost:3000/group/getGroupInfo", {params:{"grpNo":params.grpNo}})
         .then(function(res){
             setGroupInfo(res.data);
+            console.log(groupInfo);
         })
         .catch(function(err){
             alert(err);
@@ -237,7 +247,7 @@ export default function NewGroupFeed() {
                                 </div>
                             </div>
                         </div>
-                        {userId === groupInfo.grpleader && (
+                        {userId === groupInfo.grpLeader && (
                         <>
                             <div className="col-lg-4">
                                 <div className="card">
