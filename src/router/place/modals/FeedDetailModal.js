@@ -135,7 +135,7 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
                         <img className="rounded-circle img-fluid" src={`http://localhost:3000/${cmt.profile}`} alt="" style={{width:"60px", height:"60px"}} />
                     </div>
                     <div className="comment-data-block ms-3">
-                        <h6>{cmt.nickname}ㆍ{cmt.date_created.substring(0,10)}</h6>
+                        <h6>{cmt.nickname}ㆍ{cmt.dateCreated.substring(0,10)}</h6>
                         <span>{cmt.comment}</span>
                         <div className="d-flex flex-wrap align-items-center comment-activity">
                             {cmt.id === userId && (
@@ -169,7 +169,7 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
                                     <div className="d-flex justify-content-between">
                                         <div>
                                             <h5 className="mb-0">{feedData.nickname}</h5>
-                                            <span className="mb-0 d-inline-block">{feedData.date_created.substring(0,10)}</span>
+                                            <span className="mb-0 d-inline-block">{feedData.dateCreated.substring(0,10)}</span>
                                         </div>
                                     </div>
                                 </div>

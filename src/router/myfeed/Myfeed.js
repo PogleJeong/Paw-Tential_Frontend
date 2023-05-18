@@ -183,7 +183,7 @@ const Myfeed = () => {
 
   const handleClick = async (seq) => {
     try {
-      const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
+      const response = await axios.get('http://localhost:3000/home/loadPost2', { params: { 'seq': seq } });
       const data = response.data;
       console.log('피드 데이터:', data);
       setFeed(response.data);
@@ -271,7 +271,7 @@ const Myfeed = () => {
             photo={photo}
             noPhoto={noPhoto}
             getComment={() => getCommentList(feed.seq)}
-            profile={userInfo.profile}
+            profile={feed.profile}
           />
         )}
 

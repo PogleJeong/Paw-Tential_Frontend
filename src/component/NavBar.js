@@ -75,7 +75,7 @@ export default function Navbar() {
             <>
             <div className="d-flex align-items-center mb-4">
                 <div className="iq-profile">
-                <Link to={`/myfeed/myfeed2/${props.data.id}`}><img className="rounded-circle avatar-50" src={props.data.profile} alt="" /></Link>
+                <Link to={`/myfeed/myfeed2/${props.data.id}`}><img className="rounded-circle avatar-50" src={`http://localhost:3000/${props.data.profile}`} alt="" /></Link>
                 </div>
                 <div className="ms-3">
                     <Link to={`/myfeed/myfeed2/${props.data.id}`}><h6 className="mb-0">{props.data.id}</h6></Link>

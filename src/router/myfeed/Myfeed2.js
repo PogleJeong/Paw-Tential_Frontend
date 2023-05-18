@@ -182,7 +182,7 @@ const Myfeed2 = () => {
 
   const handleClick = async (seq) => {
     try {
-      const response = await axios.get('http://localhost:3000/home/loadPost', { params: { 'seq': seq } });
+      const response = await axios.get('http://localhost:3000/home/loadPost2', { params: { 'seq': seq } });
       const data = response.data;
       console.log('피드 데이터:', data);
       setFeed(response.data);
@@ -236,118 +236,119 @@ const settings = {
 };
   
 
-  return (
-    <div className="container mt-3">
-      {userInfo && (
-        <>
-          <ProfileCard userInfo={userInfo} isCurrentUser={true} />
-        </>
-      )}
-
-          <div className="card">
-        <div className="card-body p-0">
-          <div className="user-tabing">
-            <ul className="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
-              <li className="nav-item col-12 col-sm-3 p-0">
-                <a className="nav-link active" href="#pills-timeline-tab" data-bs-toggle="pill" data-bs-target="#timeline" role="button" onClick={handleHomemarkClick}>피드</a>
-              </li>
-              <li className="nav-item col-12 col-sm-3 p-0">
-                <a className="nav-link" href="#pills-about-tab" data-bs-toggle="pill" data-bs-target="#about" role="button" onClick={handleBookmarkClick}>북마크</a>
-              </li>
-              <li className="nav-item col-12 col-sm-3 p-0">
-              <a className="nav-link" href="#pills-friends-tab" data-bs-toggle="pill" data-bs-target="#friends" role="button" onClick={handlePetInfoClick}>펫 정보</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-
-
-        {feedDetailModal && (
-          <FeedDetailModal
-            show={feedDetailModal}
-            onHide={() => setFeedDetailModal(false)}
-            feedData={feed}
-            photo={photo}
-            noPhoto={noPhoto}
-            getComment={() => getCommentList(feed.seq)}
-          />
-        )}
+return (
+  <div className="container mt-3">
+    {userInfo && (
+      <>
+        <ProfileCard userInfo={userInfo} isCurrentUser={true} />
+      </>
+    )}
 
         <div className="card">
-          <div className="card-body">
-            <div className="friend-list-tab">
-              <div className="tab-content">
-                <div className="tab-pane fade active show" id="photosofyou" role="tabpanel">
-                  <div className="card-body p-0">
-                    <div className="row justify-content-start">
-                      {loadedFeed.map((feedData, i) => {
-                        if (loadedFeed.length === i + 1) {
-                          return (
-                            <div className="myfeeditem col-3 mb-2" key={i}>
-                              <div className="user-images position-relative overflow-hidden" ref={lastFeedElementRef}>
-                                <a href="javascript:void(0);" onClick={() => { handleClick(feedData.seq) }}>
-                                  <PreFeedImage content={feedData.content} />
-                                </a>
-                              </div>
+      <div className="card-body p-0">
+        <div className="user-tabing">
+          <ul className="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
+            <li className="nav-item col-12 col-sm-4 p-0">
+              <a className="nav-link active" href="#pills-timeline-tab" data-bs-toggle="pill" data-bs-target="#timeline" role="button" onClick={handleHomemarkClick}>피드</a>
+            </li>
+            <li className="nav-item col-12 col-sm-4 p-0">
+              <a className="nav-link" href="#pills-about-tab" data-bs-toggle="pill" data-bs-target="#about" role="button" onClick={handleBookmarkClick}>북마크</a>
+            </li>
+            <li className="nav-item col-12 col-sm-4 p-0">
+            <a className="nav-link" href="#pills-friends-tab" data-bs-toggle="pill" data-bs-target="#friends" role="button" onClick={handlePetInfoClick}>펫 정보</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+
+      {feedDetailModal && (
+        <FeedDetailModal
+          show={feedDetailModal}
+          onHide={() => setFeedDetailModal(false)}
+          feedData={feed}
+          photo={photo}
+          noPhoto={noPhoto}
+          getComment={() => getCommentList(feed.seq)}
+          profile={feed.profile}
+        />
+      )}
+
+      <div className="card">
+        <div className="card-body">
+          <div className="friend-list-tab">
+            <div className="tab-content">
+              <div className="tab-pane fade active show" id="photosofyou" role="tabpanel">
+                <div className="card-body p-0">
+                  <div className="row justify-content-start">
+                    {loadedFeed.map((feedData, i) => {
+                      if (loadedFeed.length === i + 1) {
+                        return (
+                          <div className="myfeeditem col-3 mb-2" key={i}>
+                            <div className="user-images position-relative overflow-hidden" ref={lastFeedElementRef}>
+                              <a href="javascript:void(0);" onClick={() => { handleClick(feedData.seq) }}>
+                                <PreFeedImage content={feedData.content} />
+                              </a>
                             </div>
-                          );
-                        } else {
-                          return (
-                            <div className="myfeeditem col-3 mb-2" key={i}>
-                              <div className="user-images position-relative overflow-hidden">
-                                <a href="javascript:void(0);" onClick={() => { handleClick(feedData.seq) }}>
-                                  <PreFeedImage content={feedData.content} />
-                                </a>
-                              </div>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div className="myfeeditem col-3 mb-2" key={i}>
+                            <div className="user-images position-relative overflow-hidden">
+                              <a href="javascript:void(0);" onClick={() => { handleClick(feedData.seq) }}>
+                                <PreFeedImage content={feedData.content} />
+                              </a>
                             </div>
-                          );
-                        }
-                      })}
-                                {/* 반려동물 카드 */}
-                                {showPetInfo && (
-  <Slider {...settings}>
-    {petInfoList.map((pet, index) => (
-      <div class="col-lg-6">
-      <div class="card mb-3">
-      <div className="row no-gutters" key={index}>
-        <div className="col-md-4">
+                          </div>
+                        );
+                      }
+                    })}
+                              {/* 반려동물 카드 */}
+                              {showPetInfo && (
+<Slider {...settings}>
+  {petInfoList.map((pet, index) => (
+    <div class="col-lg-6">
+    <div class="card mb-3">
+    <div className="row no-gutters" key={index}>
+      <div className="col-md-4">
         <img style={{width:"300px"}} src={`data:image/png;base64,${imageList[index].data}`} />
+      </div>
+      <div className="col-md-8">
+        <div className="card-body">
+          <h4 className="card-title"><b>{pet.data.cate}</b></h4>
+          <p className="card-text">이름 : {pet.data.name}</p>
+          <p className="card-text">생년월일 : {pet.data.birth}</p>
+          <p className="card-text">소개 : {pet.data.intro}</p>
         </div>
-        <div className="col-md-8">
-          <div className="card-body">
-            <h4 className="card-title"><b>{pet.data.cate}</b></h4>
-            <p className="card-text">이름 : {pet.data.name}</p>
-            <p className="card-text">생년월일 : {pet.data.birth}</p>
-            <p className="card-text">소개 : {pet.data.intro}</p>
+      </div>
+    </div>
+    </div>
           </div>
-        </div>
-      </div>
-      </div>
-            </div>
-    ))}
-  </Slider>
+  ))}
+</Slider>
 )}
 
 
 
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            {loading && (
-              <div className="loading-container">
-                <div className="loader"></div>
-              </div>
-            )}
           </div>
+
+          {loading && (
+            <div className="loading-container">
+              <div className="loader"></div>
+            </div>
+          )}
         </div>
       </div>
+    </div>
 
-  );
+);
 };
 
 export default Myfeed2;

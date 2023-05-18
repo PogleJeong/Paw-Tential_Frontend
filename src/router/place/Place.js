@@ -508,7 +508,7 @@ const Place = () => {
     }, []);
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-4 mb-5">
             <div>
                 <div className="map_wrap">
                     <div className="option">

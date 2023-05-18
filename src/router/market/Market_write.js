@@ -32,7 +32,7 @@ const Container = styled.div`
     flex-wrap: wrap;
     margin: 50px 10%;
     padding: 100px;
-    width: 80%;
+    width: 60%;
     height: 1900px;
 
     animation: ${fadeIn} 2s;
