@@ -83,6 +83,7 @@ const Place_detail = () => {
         const response = await axios.get("http://localhost:3000/home/getCommentList", { params: { "feedSeq": seq } });
         const data = response.data.commentList;
         setCommentList(data);
+        console.log("댓글 데이터: "+ JSON.stringify(data));
         } catch (error) {
         alert(error);
         }
