@@ -12,7 +12,7 @@ export default function CreateContestModal({ show, onHide, reset }) {
 
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
     // cookie에 저장된 사용자 ID 및 닉네임
-    const userId = 'test2';
+    const userId = 'contestAdmin';
     const userNickName = cookies.USER_NICKNAME;
 
     const [category, setCategory] = useState('콘테스트');

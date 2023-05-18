@@ -5,7 +5,7 @@ import { Modal, Carousel } from "react-bootstrap";
 import ReactHtmlParser from "react-html-parser";
 import axios from 'axios';
 
-export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto, getComment}) {
+export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto, getComment, profile}) {
     
     
     const [cookies, setCookies] = useCookies(["USER_ID","USER_NICKNAME"]);
@@ -46,12 +46,15 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
         axios.get("http://localhost:3000/home/getCommentList",  {params:{"feedSeq":feedData.seq}})
         .then(function(res){
             setComment(res.data.commentList);
+
         })
         .catch(function(err){
             alert(err);
         })
     }
     
+
+
     useEffect(()=>{
         if(show) {
             getCommentList();
@@ -163,7 +166,9 @@ export default function FeedDetailModal({show, onHide, feedData, photo, noPhoto,
                         <div className="w-50 ms-3">
                             <div className="d-flex justify-content-between">
                                 <div className="me-2">
-                                    <img className="rounded-circle img-fluid" src={`http://localhost:3000/${feedData.profile}`} alt="" style={{width:"60px", height:"55px"}} />
+                                    {feedData.profile !== null ?  <img className="rounded-circle img-fluid" src={`http://localhost:3000/${feedData.profile}`} alt="" style={{width:"60px", height:"55px"}} />
+                                    :   <img className="rounded-circle img-fluid" src={`http://localhost:3000/${profile}`} alt="" style={{width:"60px", height:"55px"}} />
+                                }
                                 </div>
                                 <div className="w-85">
                                     <div className="d-flex justify-content-between">

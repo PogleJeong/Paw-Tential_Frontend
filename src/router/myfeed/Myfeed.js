@@ -214,7 +214,7 @@ const Myfeed = () => {
                   
                   setPetInfoList(petInfoList => petInfoList.concat(petInfoJson));
                   setImageList(imageList => imageList.concat(imageInfoJson));
-                  console.log('펫 정보 : '+JSON.stringify(response.data.petInfoList));
+                  console.log('펫 정보 : '+ JSON.stringify(response.data.petInfoList));
                 }
 
 
@@ -225,12 +225,13 @@ const Myfeed = () => {
 },[])
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
+    arrows:false
   };
 
 
@@ -270,6 +271,7 @@ const Myfeed = () => {
             photo={photo}
             noPhoto={noPhoto}
             getComment={() => getCommentList(feed.seq)}
+            profile={userInfo.profile}
           />
         )}
 
@@ -311,7 +313,7 @@ const Myfeed = () => {
       <div class="card mb-3">
       <div className="row no-gutters" key={index}>
         <div className="col-md-4">
-          <img src={`data:image/jpeg;base64,${imageList[index].data}`} />
+          <img style={{width:"300px"}} src={`data:image/png;base64,${imageList[index].data}`} />
         </div>
         <div className="col-md-8">
           <div className="card-body">

@@ -104,21 +104,6 @@ export default function Navbar() {
                                         <i className="las la-search"></i><span>검색</span>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link to="/place">
-                                        <i className="las la-map-marker"></i><span>포텐플레이스</span>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="/market">
-                                        <i className="las la-shopping-bag"></i><span>마켓</span>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to="/pawtens">
-                                        <i className="las la-film"></i><span>포텐스</span>
-                                    </Link>
-                                </li>
                                 <li className="">
                                     <a href="#group" data-bs-toggle="collapse" className="   collapsed" aria-expanded="false">
                                         <i className="las la-users" /><span>그룹</span><i className="ri-arrow-right-s-line iq-arrow-right" />
@@ -145,6 +130,21 @@ export default function Navbar() {
                                             </Link>
                                         </li>
                                     </ul>
+                                </li>
+                                <li>
+                                    <Link to="/pawtens">
+                                        <i className="las la-film"></i><span>포텐스</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/place">
+                                        <i className="las la-map-marker"></i><span>포텐플레이스</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/market">
+                                        <i className="las la-shopping-bag"></i><span>마켓</span>
+                                    </Link>
                                 </li>
                             </ul>
                         </nav>

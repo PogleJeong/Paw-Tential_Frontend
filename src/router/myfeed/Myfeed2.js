@@ -199,19 +199,21 @@ const Myfeed2 = () => {
   //펫정보 불러오기
   useEffect(()=>{
     const getPetInfoList = async() => {
-        await axios.post("http://localhost:3000/get/petInfo", null, {params: { id: userId }})
+        await axios.post("http://localhost:3000/get/petInfo", null, {params: { id: userId}})
         .then((response)=> {
             if (response.status === 200) {
                 // 랜덤키 생성하여 고유인덱스 키 사용.
-
+                if (response.data.length === 0) {
+                    return;
+                }
                 for(let i=0; i<response.data.petInfoList.length; i++) {
                   let key = Math.random().toString(36).substring(2, 11);
                   let petInfoJson = { key, data: response.data.petInfoList[i] };
                   let imageInfoJson = { key, data: response.data.imageList[i] };
                   
-                  setPetInfoList(response.data.petInfoList);
-                  setImageList(response.data.imageList);
-                  console.log('펫 정보 : '+JSON.stringify(response.data.petInfoList));
+                  setPetInfoList(petInfoList => petInfoList.concat(petInfoJson));
+                  setImageList(imageList => imageList.concat(imageInfoJson));
+                  console.log('펫 정보 : '+ JSON.stringify(response.data.petInfoList));
                 }
 
 
@@ -223,15 +225,15 @@ const Myfeed2 = () => {
 
   
   
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-  };
-  
+const settings = {
+  dots: false,
+  infinite: true,
+  speed: 1000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  arrows:false
+};
   
 
   return (
@@ -307,11 +309,11 @@ const Myfeed2 = () => {
                                 {showPetInfo && (
   <Slider {...settings}>
     {petInfoList.map((pet, index) => (
-      <div className="col-lg-6" key={index}>
+      <div class="col-lg-6">
       <div class="card mb-3">
       <div className="row no-gutters" key={index}>
         <div className="col-md-4">
-        <img src={`data:image/jpeg;base64,${pet.data.image}`} alt={pet.data.name} />
+        <img style={{width:"300px"}} src={`data:image/png;base64,${imageList[index].data}`} />
         </div>
         <div className="col-md-8">
           <div className="card-body">

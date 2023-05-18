@@ -27,7 +27,7 @@ import MarketHome from "./router/market/Market_home";
 import MarketWrite from "./router/market/Market_write";
 import MarketUpdate from "./router/market/Market_update";
 import MarketDetail from "./router/market/Market_detail";
-import FindAccount from './router/login/findAccount';
+import findAccount from './router/login/findAccount';
 
 import Admin from './router/admin/Admin';
 import QnA from './router/admin/QnA';
@@ -66,7 +66,7 @@ function App() {
           {/* 사이드메뉴 */}
           {window.location.pathname.startsWith("/admin") ? <AdminSidebar /> : <Navbar />}
           {/*쳇봇*/}
-          {/* <ThemedExample/> */}
+          <ThemedExample/>
 
           <Routes>
             {/* home */}
@@ -79,7 +79,7 @@ function App() {
 
             {/* 로그인/회원가입 */}
             <Route path="/login" element={<Login />} />
-            <Route path="/login/findAccount" element={<FindAccount />} />
+            <Route path="/login/findAccount" element={<findAccount />} />
             <Route path="/register" element={<RegisterPage1 />} />
             <Route path="/register/petHave" element={<RegisterPage2 />} />
             <Route path="register/petInfo" element={<RegisterPage3 />} />

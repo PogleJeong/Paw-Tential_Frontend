@@ -58,7 +58,10 @@ const ThemedExample = () => {
         botFontColor: "#fff",
         userBubbleColor: "#fff",
         userFontColor: "#4a4a4a",
+        
     };
+
+    
     const steps = [
         {
             id: "1",
@@ -214,9 +217,10 @@ const ThemedExample = () => {
             style={{
                 cursor: isDragging ? "grabbing" : "default",
                 position: "fixed",
-                bottom: "0",
+                bottom: "80px",
                 right: "0",
                 margin: "20px",
+                zIndex : 999
             }}
         >
             {!showChatbot && (
@@ -227,11 +231,12 @@ const ThemedExample = () => {
                         border: "none",
                         padding: "0",
                         margin: "0",
+                        bottom: "100px",
                         cursor: "pointer",
                     }}
                 >
                     <img
-                        src="feedimages/logo.png"
+                        src="/feedimages/logo.png"
                         alt="열기 아이콘"
                         style={{ width: "100px", height: "100px" }}
                     />
@@ -257,16 +262,17 @@ const ThemedExample = () => {
                             padding: "0",
                             margin: "0",
                             cursor: "pointer",
+                            bottom: "100px",
                         }}
                     >
                         <img
-                            src="feedimages/icon2.png"
+                            src="/feedimages/icon2.png"
                             alt="닫기 아이콘"
                             style={{
                                 width: "100px",
                                 height: "100px",
                                 position: "fixed",
-                                bottom: "0",
+                                bottom: "100px",
                                 right: "0",
                                 margin: "20px",
                             }}
@@ -277,8 +283,8 @@ const ThemedExample = () => {
                             speechSynthesis={{ enable: true, lang: "ko" }}
                             steps={steps}
                             headerTitle="PetTalk♡"
-                            botAvatar="feedimages/logo.png"
-                            userAvatar="feedimages/cat.jpg"
+                            botAvatar="/feedimages/logo.png"
+                            userAvatar="/feedimages/cat.jpg"
                         />
                     </ThemeProvider>
                 </div>
